@@ -28,7 +28,11 @@ public class Player {
 		Cell nextCell = cell.getNeighbor(direction);
 		if (nextCell == null)
 			return false;
-		lostEnergy += nextCell.getEnergy();
+		int energy = nextCell.getEnergy();
+		if (energy > 0)
+			earnedEnergy += energy;
+		else
+			lostEnergy += energy;
 		cell = nextCell;
 	}
 	
@@ -40,6 +44,41 @@ public class Player {
 	 */
 	public boolean canCancel() {
 		return cancelAmount < maxCancelAmount;
+	}
+	
+	/**
+	 * @return cellule où positionné le personnage
+	 */
+	public Cell getCell() {
+		return cell;
+	}
+	
+	/**
+	 * @return nombre d'annulation de mouvement déjà utilisées
+	 */
+	public int getCancelAmount() {
+		return cancelAmount;
+	}
+	
+	/**
+	 * @return nombre d'énergie intiale
+	 */
+	public int getInitialEnergy() {
+		return initialEnergy;
+	}
+	
+	/**
+	 * @return nombre d'énergie gagnée
+	 */
+	public int getEarnedEnergy() {
+		return earnedEnergy;
+	}
+	
+	/**
+	 * @return nombre d'énergie dépensée
+	 */
+	public int getLostEnergy() {
+		return lostEnergy;
 	}
 	
 }
