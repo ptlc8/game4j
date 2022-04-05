@@ -32,7 +32,7 @@ public class Player {
 		if (energy > 0)
 			earnedEnergy += energy;
 		else
-			lostEnergy += energy;
+			lostEnergy += -energy;
 		cell = nextCell;
 	}
 	
