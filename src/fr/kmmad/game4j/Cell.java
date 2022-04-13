@@ -1,4 +1,4 @@
-package Game4j;
+package game4j;
 
 public class Cell {
 

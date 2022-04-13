@@ -22,7 +22,22 @@ public class Map2D {
 		
 	}
 	public int GenerateMatDist() {
-		
+		private int[10][10] matDist;
+		for (int i=0; i<matrix.length; i ++) {
+			for (int j=0; j<matrix.length; j ++) {
+				for (int k=0; k<matrix.length; k ++) {
+					for (int l=0; l<matrix.length; l++) {
+						if (matrix[i][j]==matrix[k][l]) {
+							matDist[i*10+j][k*10+l]=0;
+						}
+						
+						else {
+							matDist[i*10+j][k*10+l]=matrix[i][j].getDist(matrix[k][l]);
+						}
+					}
+				}
+			}
+		}
 	}
 	
 	
