@@ -10,7 +10,6 @@ public class Cell {
 	private int y;
 	private int x;
 	private double id;
-	protected int energy;
 	private Type initCellType;
 	private Neighbor nn;
 	private Neighbor ne;
@@ -18,12 +17,11 @@ public class Cell {
 	private Neighbor ns;
 	private Type type;
 	
-	public Cell(int x, int y, double id,Type initCellType, int energy, Type type) {
+	public Cell(int x, int y, double id,Type initCellType, Type type) {
 		this.x = x;
 		this.y = y;
 		this.id = id;
 		this.initCellType = initCellType;
-		this.energy = energy;
 		this.type = type;
 	}
 	
