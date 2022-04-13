@@ -27,6 +27,7 @@ public class Game {
 	}
 	
 	public void display() {
+		System.out.println("Energie : "+player.getEnergy());
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 10; j++) {
 				if (player.getCell() == map.getCell(i, j))
