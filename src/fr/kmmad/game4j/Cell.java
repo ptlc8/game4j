@@ -60,7 +60,7 @@ public class Cell {
 			return 9;
 		}else 
 		if(type == Type.OBSTACLE) {
-		return -5;
+		return -10;
 		}else
 		return -1;
 	} 
