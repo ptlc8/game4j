@@ -11,20 +11,24 @@ public class Cell {
 	private int x;
 	private double id;
 	protected int energy;
-	private String initCellType;
+	private Type initCellType;
 	private Neighbor nn;
 	private Neighbor ne;
 	private Neighbor nw;
 	private Neighbor ns;
 	private Type type;
 	
-	public Cell(int x, int y, double id,String initCellType, int energy, Type type) {
+	public Cell(int x, int y, double id,Type initCellType, int energy, Type type) {
 		this.x = x;
 		this.y = y;
 		this.id = id;
 		this.initCellType = initCellType;
 		this.energy = energy;
 		this.type = type;
+	}
+	
+	public Type getType() {
+		return this.initCellType;
 	}
 
 	public int getCoordY() {
@@ -56,7 +60,7 @@ public class Cell {
 			return 9;
 		}else 
 		if(type == Type.OBSTACLE) {
-		return -5;
+		return -10;
 		}else
 		return -1;
 	} 
@@ -77,20 +81,19 @@ public class Cell {
 		this.ns = ns;
 	}
 	
-	
 	public int getDist(Cell c1) {
 		if(c1 == this.nn.getCell()) {
 			return(nn.getDist());
 		}else
 		if (c1 == this.ne.getCell()) {
-		return(ne.getDist());
+			return(ne.getDist());
 		}else
 		if (c1 == this.nw.getCell()) {
-		return(nw.getDist());
-		}else
-		return(ns.getDist());
+			return(nw.getDist());
+		}else if(c1 == this.ns.getCell()) {
+			return(ns.getDist());
+		}else 
+			return Integer.MAX_VALUE;
 	}
 	
-	//add commit pull push
-
 }
