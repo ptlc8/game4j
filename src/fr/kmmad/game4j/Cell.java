@@ -1,4 +1,4 @@
-package game4j;
+package fr.kmmad.game4j;
 
 public class Cell {
 
