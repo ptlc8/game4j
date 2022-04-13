@@ -53,6 +53,20 @@ public class Cell {
 		return this.nn;
 	}
 	
+	public Neighbor getNeigh(Direction direction) {
+		switch (direction) {
+		case EAST:
+			return ne;
+		case NORTH:
+			return nn;
+		case SOUTH:
+			return ns;
+		case WEST:
+			return nw;
+		}
+		return null;
+	}
+	
 	public int getEnergy() {
 		if(type == Type.BONUS) {
 			return 9;
