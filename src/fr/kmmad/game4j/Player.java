@@ -25,15 +25,16 @@ public class Player {
 	 * @see Player
 	 */
 	public boolean move(Direction direction) {
-		Cell nextCell = cell.getNeighbor(direction);
-		if (nextCell == null)
+		Neighbor neighbor = cell.getNeigh(direction);
+		if (neighbor == null)
 			return false;
-		int energy = nextCell.getEnergy();
+		int energy = neighbor.getCell().getEnergy();
 		if (energy > 0)
 			earnedEnergy += energy;
 		else
 			lostEnergy += -energy;
-		cell = nextCell;
+		cell = neighbor.getCell();
+		return true;
 	}
 	
 	/**
