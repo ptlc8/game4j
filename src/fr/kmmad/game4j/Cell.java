@@ -17,12 +17,12 @@ public class Cell {
 	private Neighbor ns;
 	private Type type;
 	
-	public Cell(int x, int y, double id,Type initCellType, Type type) {
+	public Cell(int x, int y, double id, Type type) {
 		this.x = x;
 		this.y = y;
 		this.id = id;
-		this.initCellType = initCellType;
-		this.type = type;
+		this.initCellType = type;
+		this.type = initCellType;
 	}
 	
 	public Type getType() {
