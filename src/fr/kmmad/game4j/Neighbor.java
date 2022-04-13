@@ -5,8 +5,8 @@ public class Neighbor {
 	private Cell cell;
 	private int dist;
 	
-	public Neighbor(Cell n, int dist) {
-		this.n = n;
+	public Neighbor(Cell cell, int dist) {
+		this.cell = cell;
 		this.dist = dist;
 	}
 	
