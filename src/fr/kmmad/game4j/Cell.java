@@ -94,15 +94,16 @@ public class Cell {
 	}
 	
 	public int getDist(Cell c1) {
-		if(c1 == this.nn.getCell()) {
+			if(nn!=null && c1 == this.nn.getCell()) {
 			return(nn.getDist());
 		}else
-		if (c1 == this.ne.getCell()) {
+			if (ne!=null && c1 == this.ne.getCell()) {
 			return(ne.getDist());
 		}else
-		if (c1 == this.nw.getCell()) {
+			if (nw!=null && c1 == this.nw.getCell()) {
 			return(nw.getDist());
-		}else if(c1 == this.ns.getCell()) {
+		}else 
+			if(ns!=null && c1 == this.ns.getCell()) {
 			return(ns.getDist());
 		}else 
 			return Integer.MAX_VALUE;
