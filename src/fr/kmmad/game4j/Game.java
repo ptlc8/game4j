@@ -33,16 +33,17 @@ public class Game {
 					System.out.println("*");
 				else switch (map.getCell(i, j).getType()) {
 				case BONUS:
-					System.out.println("🍏");
+					System.out.print("🍏");
 					break;
 				case EMPTY:
-					System.out.println(" ");
+					System.out.print("_");
 					break;
 				case OBSTACLE:
-					System.out.println("X");
+					System.out.print("X");
 					break;
 				}
 			}
+			System.out.println("");
 		}
 	}
 	
