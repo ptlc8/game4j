@@ -13,6 +13,18 @@ public class Map2D {
 			matrix[i][j] = new Cell(i,j, i*10+j,Type.EMPTY);
 			}
 		}
+		for (int i=0; i<matrix.length; i ++) {
+			for (int j=0; j<matrix.length; j ++) {
+				if (i > 0)
+					matrix[i][j].setNeighN(new Neighbor(matrix[i-1][j], 1));
+				if (j > 0)
+					matrix[i][j].setNeighW(new Neighbor(matrix[i][j-1], 1));
+				if (i < 9)
+					matrix[i][j].setNeighS(new Neighbor(matrix[i+1][j], 1));
+				if (j < 9)
+					matrix[i][j].setNeighE(new Neighbor(matrix[i][j+1], 1));
+			}
+		}
 	}
 	
 	public Cell getCell(int x,int y) {

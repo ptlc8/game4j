@@ -26,6 +26,8 @@ public class Player {
 	 */
 	public boolean move(Direction direction) {
 		Neighbor neighbor = cell.getNeigh(direction);
+		if (getEnergy() <= 0)
+			return false;
 		if (neighbor == null)
 			return false;
 		int energy = neighbor.getCell().getEnergy();
@@ -80,6 +82,10 @@ public class Player {
 	 */
 	public int getLostEnergy() {
 		return lostEnergy;
+	}
+	
+	public int getEnergy() {
+		return initialEnergy+earnedEnergy-lostEnergy;
 	}
 	
 }
