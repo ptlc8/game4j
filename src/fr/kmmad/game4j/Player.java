@@ -7,7 +7,7 @@ package fr.kmmad.game4j;
  */
 public class Player {
 	
-	public static final int maxCancelAmount = 10;
+	public static final int maxCancelAmount = 6;
 	private int initialEnergy, lostEnergy = 0, earnedEnergy = 0;
 	private int cancelAmount = 0;
 	private Cell cell;
@@ -32,7 +32,7 @@ public class Player {
 		if (energy > 0)
 			earnedEnergy += energy;
 		else
-			lostEnergy += energy;
+			lostEnergy += -energy;
 		cell = nextCell;
 	}
 	
