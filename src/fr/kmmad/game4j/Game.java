@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import fr.kmmad.game4j.Cell.Type;
+
 public class Game {
 	
 	private Date date;
@@ -48,9 +50,42 @@ public class Game {
 		}
 	}
 	
-	public void move(Direction direction) {
-		player.move(direction);
+	public boolean move(Direction direction) {
+		if (!player.canMove())
+			return false;
+		Neighbor neighbor = player.getCell().getNeigh(direction);
+		if (neighbor == null)
+			return false;
+		Cell cell = neighbor.getCell();
+		if (cell.getType() == Type.OBSTACLE)
+			return false;
+		int energy = cell.getEnergy();
+		if (energy > 0)
+			player.earnEnergy(energy);
+		else
+			player.loseEnergy(-energy);
+		if (cell.getType() == Type.BONUS)
+			cell.setNextType(Type.EMPTY);
+		else cell.setNextType(cell.getType());
+		player.setCell(cell);
 		path.add(direction);
+		return true;
+	}
+	
+	public boolean cancelMove() {
+		if (!player.canCancelMove())
+			return false;
+		player.increaseCancelAmount();
+		Direction direction = path.remove(path.size()-1);
+		Cell cell = player.getCell();
+		player.setCell(cell.getNeigh(direction.getOpposite()).getCell());
+		cell.resetPreviousType();
+		int energy = cell.getEnergy();
+		if (energy > 0)
+			player.unearnEnergy(energy);
+		else
+			player.unloseEnergy(-energy);
+		return true;
 	}
 	
 	public Date getDate() {

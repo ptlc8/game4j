@@ -18,25 +18,13 @@ public class Player {
 	}
 	
 	/**
-	 * Déplace le personnage sur une case adjacente
-	 * @param direction Direction souhaitée
-	 * @return vrai si l'action à pu être effectuée
+	 * Permet de savoir si on peut se déplacer
 	 * @author Kévin
 	 * @see Player
+	 * @return vrai si un mouvement peut être annulé
 	 */
-	public boolean move(Direction direction) {
-		Neighbor neighbor = cell.getNeigh(direction);
-		if (getEnergy() <= 0)
-			return false;
-		if (neighbor == null)
-			return false;
-		int energy = neighbor.getCell().getEnergy();
-		if (energy > 0)
-			earnedEnergy += energy;
-		else
-			lostEnergy += -energy;
-		cell = neighbor.getCell();
-		return true;
+	public boolean canMove() {
+		return getEnergy() > 0;
 	}
 	
 	/**
@@ -45,7 +33,7 @@ public class Player {
 	 * @see Player
 	 * @return vrai si un mouvement peut être annulé
 	 */
-	public boolean canCancel() {
+	public boolean canCancelMove() {
 		return cancelAmount < maxCancelAmount;
 	}
 	
@@ -57,10 +45,24 @@ public class Player {
 	}
 	
 	/**
+	 * Modifie la cellule où positionné le personnage
+	 */
+	public void setCell(Cell cell) {
+		this.cell = cell;
+	}
+	
+	/**
 	 * @return nombre d'annulation de mouvement déjà utilisées
 	 */
 	public int getCancelAmount() {
 		return cancelAmount;
+	}
+	
+	/**
+	 * augmente le nombre d'annulation de 1
+	 */
+	public void increaseCancelAmount() {
+		cancelAmount++;
 	}
 	
 	/**
@@ -84,8 +86,39 @@ public class Player {
 		return lostEnergy;
 	}
 	
+	/**
+	 * @return nombre d'énergie actuelle
+	 */
 	public int getEnergy() {
 		return initialEnergy+earnedEnergy-lostEnergy;
+	}
+	
+	/**
+	 * ajoute de l'énergie gagnée
+	 */
+	public void earnEnergy(int energy) {
+		earnedEnergy += energy;
+	}
+	
+	/**
+	 * supprime de l'énergie gagnée
+	 */
+	public void unearnEnergy(int energy) {
+		earnedEnergy += energy;
+	}
+	
+	/**
+	 * ajoute de l'énergie perdue
+	 */
+	public void loseEnergy(int energy) {
+		lostEnergy += energy;
+	}
+	
+	/**
+	 * supprime de l'énergie perdue
+	 */
+	public void unloseEnergy(int energy) {
+		lostEnergy += energy;
 	}
 	
 }
