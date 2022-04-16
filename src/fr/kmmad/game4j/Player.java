@@ -59,6 +59,13 @@ public class Player {
 	}
 	
 	/**
+	 * @return nombre d'annulation de mouvement restantes
+	 */
+	public int getAvailableCancelAmount() {
+		return maxCancelAmount - cancelAmount;
+	}
+	
+	/**
 	 * augmente le nombre d'annulation de 1
 	 */
 	public void increaseCancelAmount() {

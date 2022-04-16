@@ -24,16 +24,9 @@ public class Game {
 		path = new ArrayList<>();
 	}
 	
-	public void start() {
-		
-	}
-	
-	public void stop() {
-		
-	}
-	
 	public void display() {
 		System.out.println("Energie : "+player.getEnergy());
+		System.out.println("Annulations : "+player.getAvailableCancelAmount());
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 10; j++) {
 				if (player.getCell() == map.getCell(i, j))
@@ -77,6 +70,8 @@ public class Game {
 	}
 	
 	public boolean cancelMove() {
+		if (path.size() == 0)
+			return false;
 		if (!player.canCancelMove())
 			return false;
 		player.increaseCancelAmount();
