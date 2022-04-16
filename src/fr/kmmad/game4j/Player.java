@@ -104,7 +104,7 @@ public class Player {
 	 * supprime de l'énergie gagnée
 	 */
 	public void unearnEnergy(int energy) {
-		earnedEnergy += energy;
+		earnedEnergy -= energy;
 	}
 	
 	/**
@@ -118,7 +118,7 @@ public class Player {
 	 * supprime de l'énergie perdue
 	 */
 	public void unloseEnergy(int energy) {
-		lostEnergy += energy;
+		lostEnergy -= energy;
 	}
 	
 }

@@ -11,15 +11,15 @@ public class Game {
 	private int bnsRate;
 	private int obsRate;
 	private Date date;
-	Map2D map;
-	Player player;
-	List<Direction> path;
+	private Map2D map;
+	private Player player;
+	private List<Direction> path;
 	
 	public Game(int bnsRate, int obsRate) {
 		this.obsRate = obsRate;
 		this.bnsRate = bnsRate;
 		date = new Date();
-		map = new Map2D(bnsRate,obsRate);
+		map = new Map2D(bnsRate, obsRate);
 		player = new Player(map.getCell(0, 0), 10);
 		path = new ArrayList<>();
 	}
@@ -40,7 +40,7 @@ public class Game {
 					System.out.print("* ");
 				else switch (map.getCell(i, j).getType()) {
 				case BONUS:
-					System.out.print("N ");
+					System.out.print("+ ");
 					break;
 				case EMPTY:
 					System.out.print("_ ");

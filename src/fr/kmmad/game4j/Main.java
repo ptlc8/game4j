@@ -4,10 +4,15 @@ import java.util.Scanner;
 
 
 public class Main {
-
+	
 	public static void main(String[] args) {
-			
-		Game game = new Game(5,20);
+		System.out.println("Contrôles :");
+		System.out.println("     ↑     ");
+		System.out.println("     8     ");
+		System.out.println(" ← 4   6 → ");
+		System.out.println("     2     ");
+		System.out.println("     ↓   0 annuler");
+		Game game = new Game(5, 20);
 		Scanner sc = new Scanner(System.in);
 		game.display();
 		String line;
@@ -25,6 +30,8 @@ public class Main {
 			case "6":
 				game.move(Direction.EAST);
 				break;
+			case "0":
+				game.cancelMove();
 			}
 			game.display();
 		}
