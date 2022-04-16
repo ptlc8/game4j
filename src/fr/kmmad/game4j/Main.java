@@ -2,10 +2,12 @@ package fr.kmmad.game4j;
 
 import java.util.Scanner;
 
+
 public class Main {
 
 	public static void main(String[] args) {
-		Game game = new Game();
+			
+		Game game = new Game(5,20);
 		Scanner sc = new Scanner(System.in);
 		game.display();
 		String line;

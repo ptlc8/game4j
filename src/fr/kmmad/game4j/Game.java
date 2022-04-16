@@ -8,14 +8,18 @@ import fr.kmmad.game4j.Cell.Type;
 
 public class Game {
 	
+	private int bnsRate;
+	private int obsRate;
 	private Date date;
 	Map2D map;
 	Player player;
 	List<Direction> path;
 	
-	public Game() {
+	public Game(int bnsRate, int obsRate) {
+		this.obsRate = obsRate;
+		this.bnsRate = bnsRate;
 		date = new Date();
-		map = new Map2D();
+		map = new Map2D(bnsRate,obsRate);
 		player = new Player(map.getCell(0, 0), 10);
 		path = new ArrayList<>();
 	}
