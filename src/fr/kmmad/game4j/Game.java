@@ -13,17 +13,31 @@ import java.util.List;
 
 import fr.kmmad.game4j.Cell.Type;
 
+/**
+ * Cette classe représente un partie : le joueur, le plateau, le chemin emprunté, ses pourcentages d'obtables et de bonus et sa date
+ * @author Kévin
+ * @see Game4J
+ * @see Game#Game(int, int)
+ * @see Game#load(File)
+ */
 public class Game implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private int bnsRate;
-	private int obsRate;
-	private Date date;
 	private Map2D map;
 	private Player player;
 	private List<Direction> path;
+	private int bnsRate;
+	private int obsRate;
+	private Date date;
 	
+	/**
+	 * Crée une partie
+	 * @author Kévin
+	 * @see Game#load(File)
+	 * @param bnsRate poucentage de bonus sur le plateau
+	 * @param obsRate poucentage d'obstacles sur le plateau
+	 */
 	public Game(int bnsRate, int obsRate) {
 		this.obsRate = obsRate;
 		this.bnsRate = bnsRate;
@@ -33,6 +47,14 @@ public class Game implements Serializable {
 		path = new ArrayList<>();
 	}
 	
+	/**
+	 * Charge une partie depuis un fichier
+	 * @author Kévin
+	 * @see Game#save(File)
+	 * @see Game#Game(int, int)
+	 * @param inputFile fichier dans lequel est sérialisée la partie
+	 * @return la partie chargée ou null si une erreur a eu lieu
+	 */
 	public static Game load(File inputFile) {
 		ObjectInputStream ois;
 		try {
@@ -45,7 +67,15 @@ public class Game implements Serializable {
 		}
 		return null;
 	}
-	
+
+	/**
+	 * Affiche la partie sommairement dans la console :
+	 * les X sont des obstacles,
+	 * les + sont des bonus,
+	 * les _ sont des cases vides
+	 * @author Kévin
+	 * @see Game
+	 */
 	public void display() {
 		System.out.println("Energie : "+player.getEnergy());
 		System.out.println("Annulations : "+player.getAvailableCancelAmount());
@@ -68,7 +98,14 @@ public class Game implements Serializable {
 			System.out.println("");
 		}
 	}
-	
+
+	/**
+	 * Déplace le joueur dans une direction si possible,
+	 * pour cela il doit y avoir une case dans la direction précisé qui ne doit pas être un obstable, assez d'énergie
+	 * @author Kévin
+	 * @param direction direction dans la quel le joueur doit être déplacé
+	 * @return true si il a pu être déplacé, sinon false
+	 */
 	public boolean move(Direction direction) {
 		if (!player.canMove())
 			return false;
@@ -90,7 +127,13 @@ public class Game implements Serializable {
 		path.add(direction);
 		return true;
 	}
-	
+
+	/**
+	 * Annule le dernier mouvement effectué possible et remet l'état du plateau précédent,
+	 * pour cela il faut qu'il y ait un mouvement a annulé et il doit y avoir assez d'annulation
+	 * @author Kévin
+	 * @return true si un mouvement a pu être annulé, sinon false
+	 */
 	public boolean cancelMove() {
 		if (path.size() == 0)
 			return false;
@@ -108,11 +151,14 @@ public class Game implements Serializable {
 			player.unloseEnergy(-energy);
 		return true;
 	}
-	
-	public Date getDate() {
-		return date;
-	}
-	
+
+	/**
+	 * Enregistre la partie dans un fichier si possible
+	 * @author Kévin
+	 * @see Game#load(File)
+	 * @param outputFile fichier dans lequel enregistrer
+	 * @return true si la partie à correctement été enregistrée, sinon false
+	 */
 	public boolean save(File outputFile) {
 		try {
 			if (!outputFile.exists())
@@ -125,6 +171,27 @@ public class Game implements Serializable {
 			return false;
 		}
 		return true;
+	}
+	
+	/**
+	 * @return date de création de la partie
+	 */
+	public Date getDate() {
+		return date;
+	}
+	
+	/**
+	 * @return pourcentage d'obstacles utilisé pour créer le plateau
+	 */
+	public int getObstacleRate() {
+		return obsRate;
+	}
+	
+	/**
+	 * @return pourcentage de bonus utilisé pour créer le plateau
+	 */
+	public int getBonusRate() {
+		return bnsRate;
 	}
 	
 }

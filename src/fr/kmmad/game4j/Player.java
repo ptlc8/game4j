@@ -6,6 +6,7 @@ import java.io.Serializable;
  * Cette classe représente un personnage : son énergie, sa position, et sa possibilité de revenir en arrière
  * @author Kévin
  * @see Game
+ * @see Player#Player(Cell, int)
  */
 public class Player implements Serializable {
 	
@@ -16,6 +17,12 @@ public class Player implements Serializable {
 	private int cancelAmount = 0;
 	private Cell cell;
 	
+	/**
+	 * Crée un joueur
+	 * @author Kévin
+	 * @param startCell cellule où le joueur est positionné
+	 * @param initialEnergy énergie initiale du joueur
+	 */
 	public Player(Cell startCell, int initialEnergy) {
 		cell = startCell;
 		this.initialEnergy = initialEnergy;
@@ -24,7 +31,6 @@ public class Player implements Serializable {
 	/**
 	 * Permet de savoir si on peut se déplacer
 	 * @author Kévin
-	 * @see Player
 	 * @return vrai si un mouvement peut être annulé
 	 */
 	public boolean canMove() {
@@ -34,7 +40,6 @@ public class Player implements Serializable {
 	/**
 	 * Permet de savoir si on peut annuler un mouvement
 	 * @author Kévin
-	 * @see Player
 	 * @return vrai si un mouvement peut être annulé
 	 */
 	public boolean canCancelMove() {
