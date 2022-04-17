@@ -92,12 +92,12 @@ public class Map2D implements Serializable {
 		int[][] graph = GenerateMatDist();
 		int[] preced = new int[graph.length];
 		int[] distOrigin = new int[graph.length];
-		for(int i=0; i<matrix.length; i++) {  //initialisation
+		for(int i=0; i<graph.length; i++) {  //initialisation
 			distOrigin[i] = Integer.MAX_VALUE; 
-			}
+		}
 		distOrigin[c1.getId()]=0;
-		for(int i=0; i<matrix.length; i++) {
-			for(int j=0; j<matrix.length; j++) {
+		for(int i=0; i<graph.length; i++) {
+			for(int j=0; j<graph.length; j++) {
 				if (graph[i][j] < Integer.MAX_VALUE) {
 					if (graph[i][j] + distOrigin[i] < distOrigin[j]) {
 						distOrigin[j]= graph[i][j] + distOrigin[i];
@@ -113,13 +113,6 @@ public class Map2D implements Serializable {
 			idt = preced[idt];
 		}
 		return shortPath;
-		
-		
-			
-		
-		
-		
-		
 	}
 
 }
