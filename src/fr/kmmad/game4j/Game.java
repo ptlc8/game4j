@@ -1,12 +1,21 @@
 package fr.kmmad.game4j;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import fr.kmmad.game4j.Cell.Type;
 
-public class Game {
+public class Game implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
 	
 	private int bnsRate;
 	private int obsRate;
@@ -22,6 +31,19 @@ public class Game {
 		map = new Map2D(bnsRate, obsRate);
 		player = new Player(map.getCell(0, 0), 10);
 		path = new ArrayList<>();
+	}
+	
+	public static Game load(File inputFile) {
+		ObjectInputStream ois;
+		try {
+			ois = new ObjectInputStream(new FileInputStream(inputFile));
+			Game game = (Game) ois.readObject();
+			ois.close();
+			return game;
+		} catch (IOException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	public void display() {
@@ -89,6 +111,20 @@ public class Game {
 	
 	public Date getDate() {
 		return date;
+	}
+	
+	public boolean save(File outputFile) {
+		try {
+			if (!outputFile.exists())
+				outputFile.createNewFile();
+			ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(outputFile));
+			oos.writeObject(this);
+			oos.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
 	}
 	
 }

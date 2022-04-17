@@ -1,13 +1,17 @@
 package fr.kmmad.game4j;
 
+import java.io.Serializable;
+
 /**
  * Cette classe représente un personnage : son énergie, sa position, et sa possibilité de revenir en arrière
  * @author Kévin
  * @see Game
  */
-public class Player {
+public class Player implements Serializable {
 	
+	private static final long serialVersionUID = 1L;
 	public static final int maxCancelAmount = 6;
+	
 	private int initialEnergy, lostEnergy = 0, earnedEnergy = 0;
 	private int cancelAmount = 0;
 	private Cell cell;

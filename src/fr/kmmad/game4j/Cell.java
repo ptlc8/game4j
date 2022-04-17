@@ -1,9 +1,12 @@
 package fr.kmmad.game4j;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Cell {
+public class Cell implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
 
 	public enum Type{
 		EMPTY,BONUS,OBSTACLE

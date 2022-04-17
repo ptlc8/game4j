@@ -1,10 +1,14 @@
 package fr.kmmad.game4j;
 
+import java.io.Serializable;
 import java.util.Random;
 
 import fr.kmmad.game4j.Cell.Type;
 
-public class Map2D {
+public class Map2D implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
+	
 	private Cell[][] matrix;
 	Random rn = new Random();
 
