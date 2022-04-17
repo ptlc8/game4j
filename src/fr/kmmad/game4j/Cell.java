@@ -1,5 +1,8 @@
 package fr.kmmad.game4j;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Cell {
 
 	public enum Type{
@@ -10,23 +13,30 @@ public class Cell {
 	private int y;
 	private int x;
 	private double id;
-	private Type initCellType;
+	private List<Type> type = new ArrayList<>();
 	private Neighbor nn;
 	private Neighbor ne;
 	private Neighbor nw;
 	private Neighbor ns;
-	private Type type;
 	
 	public Cell(int x, int y, double id, Type type) {
 		this.x = x;
 		this.y = y;
 		this.id = id;
-		this.initCellType = type;
-		this.type = initCellType;
+		this.type.add(type);
 	}
 	
 	public Type getType() {
-		return this.initCellType;
+		return type.get(type.size()-1);
+	}
+	
+	void setNextType(Type type) {
+		this.type.add(type);
+	}
+	
+	void resetPreviousType() {
+		if (type.size() > 1)
+			type.remove(type.size()-1);
 	}
 
 	public int getCoordY() {
@@ -68,10 +78,10 @@ public class Cell {
 	}
 	
 	public int getEnergy() {
-		if(type == Type.BONUS) {
+		if(getType() == Type.BONUS) {
 			return 9;
 		}else 
-		if(type == Type.OBSTACLE) {
+		if(getType() == Type.OBSTACLE) {
 		return -10;
 		}else
 		return -1;
@@ -94,15 +104,16 @@ public class Cell {
 	}
 	
 	public int getDist(Cell c1) {
-		if(c1 == this.nn.getCell()) {
+			if(nn!=null && c1 == this.nn.getCell()) {
 			return(nn.getDist());
 		}else
-		if (c1 == this.ne.getCell()) {
+			if (ne!=null && c1 == this.ne.getCell()) {
 			return(ne.getDist());
 		}else
-		if (c1 == this.nw.getCell()) {
+			if (nw!=null && c1 == this.nw.getCell()) {
 			return(nw.getDist());
-		}else if(c1 == this.ns.getCell()) {
+		}else 
+			if(ns!=null && c1 == this.ns.getCell()) {
 			return(ns.getDist());
 		}else 
 			return Integer.MAX_VALUE;
