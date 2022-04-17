@@ -44,12 +44,25 @@ public class Map2D {
 		return matDist;
 	}
 	
-	
-	
-	
-	
-	
-	
-	
+	public int[][] GenerateMatEnergy() {
+		int[][] matEnergy = new int[10][10];
+		for (int i=0; i<matrix.length; i ++) {
+			matEnergy[i]= new int[10];
+			for (int j=0; j<matrix.length; j ++) {
+				matEnergy[i][j]=matrix[i][j].getEnergy();	
+			}
+		}
+		return matEnergy;
+	}
 
 }
+
+
+
+
+
+
+
+
+
+
