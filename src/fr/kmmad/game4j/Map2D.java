@@ -1,6 +1,7 @@
 package fr.kmmad.game4j;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Random;
 
 import fr.kmmad.game4j.Cell.Type;
@@ -46,6 +47,12 @@ public class Map2D implements Serializable {
 		
 	}
 	
+	public Cell getCell(int id) {
+		return matrix[id/10][id%10];
+		
+	}
+	
+	
 	public void refreshMap() {
 		
 	}
@@ -70,12 +77,59 @@ public class Map2D implements Serializable {
 		return matDist;
 	}
 	
+	public int[][] GenerateMatEnergy() {
+		int[][] matEnergy = new int[10][10];
+		for (int i=0; i<matrix.length; i ++) {
+			matEnergy[i]= new int[10];
+			for (int j=0; j<matrix.length; j ++) {
+				matEnergy[i][j]=matrix[i][j].getEnergy();	
+			}
+		}
+		return matEnergy;
+	}
 	
-	
-	
-	
-	
-	
-	
+	public ArrayList<Cell> shortPath(Cell c1, Cell c2) {
+		int[][] graph = GenerateMatDist();
+		int[] preced = new int[graph.length];
+		int[] distOrigin = new int[graph.length];
+		for(int i=0; i<matrix.length; i++) {  //initialisation
+			distOrigin[i] = Integer.MAX_VALUE; 
+			}
+		distOrigin[c1.getId()]=0;
+		for(int i=0; i<matrix.length; i++) {
+			for(int j=0; j<matrix.length; j++) {
+				if (graph[i][j] < Integer.MAX_VALUE) {
+					if (graph[i][j] + distOrigin[i] < distOrigin[j]) {
+						distOrigin[j]= graph[i][j] + distOrigin[i];
+						preced[j]=i;
+					}
+				}
+			}
+		}
+		ArrayList<Cell> shortPath = new ArrayList<Cell>();
+		int idt = c2.getId();
+		while (idt != c1.getId()) {
+			shortPath.add(getCell(preced[idt]));
+			idt = preced[idt];
+		}
+		return shortPath;
+		
+		
+			
+		
+		
+		
+		
+	}
 
 }
+
+
+
+
+
+
+
+
+
+

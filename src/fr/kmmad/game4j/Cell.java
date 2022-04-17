@@ -15,18 +15,22 @@ public class Cell implements Serializable {
 	
 	private int y;
 	private int x;
-	private double id;
+	private int id;
 	private List<Type> type = new ArrayList<>();
 	private Neighbor nn;
 	private Neighbor ne;
 	private Neighbor nw;
 	private Neighbor ns;
 	
-	public Cell(int x, int y, double id, Type type) {
+	public Cell(int x, int y, int id, Type type) {
 		this.x = x;
 		this.y = y;
 		this.id = id;
 		this.type.add(type);
+	}
+	
+	public int getId() {
+		return id;
 	}
 	
 	public Type getType() {
