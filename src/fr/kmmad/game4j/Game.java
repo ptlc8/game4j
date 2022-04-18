@@ -14,7 +14,7 @@ import java.util.List;
 import fr.kmmad.game4j.Cell.Type;
 
 /**
- * Cette classe représente un partie : le joueur, le plateau, le chemin emprunté, ses pourcentages d'obtables et de bonus et sa date
+ * Cette classe représente un partie : le joueur, la carte, le chemin emprunté, ses pourcentages d'obtables et de bonus et sa date
  * @author Kévin
  * @see Game4J
  * @see Game#Game(int, int)
@@ -35,8 +35,8 @@ public class Game implements Serializable {
 	 * Crée une partie
 	 * @author Kévin
 	 * @see Game#load(File)
-	 * @param bnsRate poucentage de bonus sur le plateau
-	 * @param obsRate poucentage d'obstacles sur le plateau
+	 * @param bnsRate poucentage de bonus sur la carte
+	 * @param obsRate poucentage d'obstacles sur la carte
 	 */
 	public Game(int bnsRate, int obsRate) {
 		this.obsRate = obsRate;
@@ -45,6 +45,7 @@ public class Game implements Serializable {
 		map = new Map2D(bnsRate, obsRate);
 		player = new Player(map.getCell(0, 0), 10);
 		path = new ArrayList<>();
+		System.out.println(map.shortPath(map.getCell(0), map.getCell(99)).size());
 	}
 	
 	/**
@@ -56,6 +57,8 @@ public class Game implements Serializable {
 	 * @return la partie chargée ou null si une erreur a eu lieu
 	 */
 	public static Game load(File inputFile) {
+		if (!inputFile.exists())
+			return null;
 		ObjectInputStream ois;
 		try {
 			ois = new ObjectInputStream(new FileInputStream(inputFile));
@@ -72,7 +75,8 @@ public class Game implements Serializable {
 	 * Affiche la partie sommairement dans la console :
 	 * les X sont des obstacles,
 	 * les + sont des bonus,
-	 * les _ sont des cases vides
+	 * les _ sont des cases vides,
+	 * le * est l'emplacement du joueur
 	 * @author Kévin
 	 * @see Game
 	 */
@@ -129,7 +133,7 @@ public class Game implements Serializable {
 	}
 
 	/**
-	 * Annule le dernier mouvement effectué possible et remet l'état du plateau précédent,
+	 * Annule le dernier mouvement effectué possible et remet l'état de la carte précédent,
 	 * pour cela il faut qu'il y ait un mouvement a annulé et il doit y avoir assez d'annulation
 	 * @author Kévin
 	 * @return true si un mouvement a pu être annulé, sinon false
@@ -174,6 +178,13 @@ public class Game implements Serializable {
 	}
 	
 	/**
+	 * @return carte du jeu
+	 */
+	public Map2D getMap() {
+		return map;
+	}
+	
+	/**
 	 * @return date de création de la partie
 	 */
 	public Date getDate() {
@@ -181,14 +192,14 @@ public class Game implements Serializable {
 	}
 	
 	/**
-	 * @return pourcentage d'obstacles utilisé pour créer le plateau
+	 * @return pourcentage d'obstacles utilisé pour créer la carte
 	 */
 	public int getObstacleRate() {
 		return obsRate;
 	}
 	
 	/**
-	 * @return pourcentage de bonus utilisé pour créer le plateau
+	 * @return pourcentage de bonus utilisé pour créer la carte
 	 */
 	public int getBonusRate() {
 		return bnsRate;
