@@ -19,7 +19,7 @@ public class Main {
 			if (line.equals("1"))
 				game = new Game(5, 20);
 			else if (line.equals("2")) {
-				game = Game.load(new String(new FileInputStream(new File("save")).readAllBytes()));
+				game = Game.loadSave(new String(new FileInputStream(new File("save")).readAllBytes()));
 			} if (game != null)
 				break;
 		}
@@ -50,7 +50,7 @@ public class Main {
 				game.cancelMove();
 				break;
 			case "s":
-				String save = game.save();
+				String save = game.createSave();
 				if (save != null) {
 					PrintWriter writer = new PrintWriter(new FileOutputStream(new File("save")));
 					writer.write(save);
