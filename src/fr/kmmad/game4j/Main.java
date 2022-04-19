@@ -1,11 +1,15 @@
 package fr.kmmad.game4j;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Scanner;
 
 public class Main {
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		Scanner sc = new Scanner(System.in);
 		Game game = null;
 		while (true) {
@@ -14,9 +18,9 @@ public class Main {
 			String line = sc.next();
 			if (line.equals("1"))
 				game = new Game(5, 20);
-			else if (line.equals("2"))
-				game = Game.load(new File("save"));
-			if (game != null)
+			else if (line.equals("2")) {
+				game = Game.load(new String(new FileInputStream(new File("save")).readAllBytes()));
+			} if (game != null)
 				break;
 		}
 		System.out.println("Contrôles :");
@@ -46,8 +50,14 @@ public class Main {
 				game.cancelMove();
 				break;
 			case "s":
-				if (game.save(new File("save")))
+				String save = game.save();
+				if (save != null) {
+					PrintWriter writer = new PrintWriter(new FileOutputStream(new File("save")));
+					writer.write(save);
+					writer.flush();
+					writer.close();
 					System.out.println("Sauvegarde réussi !");
+				}
 				break;
 			}
 			game.display();

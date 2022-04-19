@@ -1,16 +1,17 @@
 package fr.kmmad.game4j;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
-
 import fr.kmmad.game4j.Cell.Type;
 
 /**
@@ -18,7 +19,7 @@ import fr.kmmad.game4j.Cell.Type;
  * @author Kévin
  * @see Game4J
  * @see Game#Game(int, int)
- * @see Game#load(File)
+ * @see Game#load(String)
  */
 public class Game implements Serializable {
 	
@@ -34,7 +35,7 @@ public class Game implements Serializable {
 	/**
 	 * Crée une partie
 	 * @author Kévin
-	 * @see Game#load(File)
+	 * @see Game#load(String)
 	 * @param bnsRate poucentage de bonus sur la carte
 	 * @param obsRate poucentage d'obstacles sur la carte
 	 */
@@ -49,19 +50,16 @@ public class Game implements Serializable {
 	}
 	
 	/**
-	 * Charge une partie depuis un fichier
+	 * Charge une sauvegarde de partie en décodant base64 puis en désérialisant si possible
 	 * @author Kévin
-	 * @see Game#save(File)
+	 * @see Game#save()
 	 * @see Game#Game(int, int)
-	 * @param inputFile fichier dans lequel est sérialisée la partie
+	 * @param save la sauvegarde sous forme de chaîne de caractères
 	 * @return la partie chargée ou null si une erreur a eu lieu
 	 */
-	public static Game load(File inputFile) {
-		if (!inputFile.exists())
-			return null;
-		ObjectInputStream ois;
+	public static Game loadSave(String save) {
 		try {
-			ois = new ObjectInputStream(new FileInputStream(inputFile));
+			ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(Base64.getDecoder().decode(save)));
 			Game game = (Game) ois.readObject();
 			ois.close();
 			return game;
@@ -157,24 +155,22 @@ public class Game implements Serializable {
 	}
 
 	/**
-	 * Enregistre la partie dans un fichier si possible
+	 * Crée une sauvegarde de la partie en sérialisant si possible puis en encodant base64
 	 * @author Kévin
-	 * @see Game#load(File)
-	 * @param outputFile fichier dans lequel enregistrer
-	 * @return true si la partie à correctement été enregistrée, sinon false
+	 * @see Game#load(String)
+	 * @return la sauvegarde sous forme de chaîne de caractère, sinon null
 	 */
-	public boolean save(File outputFile) {
+	public String createSave() {
 		try {
-			if (!outputFile.exists())
-				outputFile.createNewFile();
-			ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(outputFile));
+			ByteArrayOutputStream bytesStream = new ByteArrayOutputStream();
+			ObjectOutputStream oos = new ObjectOutputStream(bytesStream);
 			oos.writeObject(this);
 			oos.close();
+			return Base64.getEncoder().encodeToString(bytesStream.toByteArray());
 		} catch (IOException e) {
 			e.printStackTrace();
-			return false;
 		}
-		return true;
+		return null;
 	}
 	
 	/**
