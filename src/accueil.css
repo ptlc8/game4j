@@ -1,6 +1,6 @@
-#grid{
-    -fx-background-color: black;
+#grid_home{
     -fx-background-image: url("home.gif");
+    -fx-background-size:  cover;
 }
 
 
