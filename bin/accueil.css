@@ -1,0 +1,15 @@
+#grid_home{
+    -fx-background-image: url("../bin/home.gif");
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: cover;
+    -fx-background-position: center center;
+}
+
+.button{
+    -fx-align-content: center;
+    -fx-cursor: hand;
+}
+
+#play_button{
+
+}
