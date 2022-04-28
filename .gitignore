@@ -1,2 +1,4 @@
 .settings
 bin
+save
+src/fr/kmmad/game4j/Credentials.java

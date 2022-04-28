@@ -1,6 +1,6 @@
 #grid{
-    //-fx-background-color: black;
-    -fx-background-image: url("../bin/home.gif");
+    -fx-background-color: black;
+    -fx-background-image: url("home.gif");
 }
 
 

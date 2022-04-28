@@ -8,4 +8,16 @@ package fr.kmmad.game4j;
  */
 public enum Direction {
 	NORTH, SOUTH, EAST, WEST;
+	
+	Direction getOpposite() {
+		if (this == SOUTH)
+			return NORTH;
+		if (this == NORTH)
+			return SOUTH;
+		if (this == EAST)
+			return WEST;
+		if (this == WEST)
+			return EAST;
+		return null;
+	}
 }
