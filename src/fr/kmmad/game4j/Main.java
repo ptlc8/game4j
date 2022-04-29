@@ -14,12 +14,10 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Scanner;
+
+import fr.kmmad.game4j.Cell.Type;
 
 
 
@@ -27,69 +25,16 @@ public class Main extends Application {
 	
 	public static void main(String[] args) throws IOException {
 		Application.launch(args);
-		Scanner sc = new Scanner(System.in);
-		Game game = null;
-		while (true) {
-			System.out.println("1 : Nouvelle partie");
-			System.out.println("2 : Charger la sauvegarde");
-			String line = sc.next();
-			if (line.equals("1"))
-				game = new Game(5, 20);
-			else if (line.equals("2")) {
-				game = Game.loadSave(new String(new FileInputStream(new File("save")).readAllBytes()));
-			} if (game != null)
-				break;
-		}
-		System.out.println("Contrôles :");
-		System.out.println("     ↑     ");
-		System.out.println("     8     ");
-		System.out.println(" ← 4   6 → ");
-		System.out.println("     2      s sauvegarder");
-		System.out.println("     ↓      0 annuler");
-		System.out.println("Nombre de déplacements pour le plus court chemin possible : "+game.getMap().shortPath(game.getMap().getCell(0), game.getMap().getCell(99)).size());
-		game.display();
-		String line;
-		while ((line = sc.next()) != null) {
-			switch (line.toLowerCase()) {
-			case "8": 
-				game.move(Direction.NORTH);
-				break;
-			case "4":
-				game.move(Direction.WEST);
-				break;
-			case "2":
-				game.move(Direction.SOUTH);
-				break;
-			case "6":
-				game.move(Direction.EAST);
-				break;
-			case "0":
-				game.cancelMove();
-				break;
-			case "s":
-				String save = game.createSave();
-				if (save != null) {
-					PrintWriter writer = new PrintWriter(new FileOutputStream(new File("save")));
-					writer.write(save);
-					writer.flush();
-					writer.close();
-					System.out.println("Sauvegarde réussi !");
-				}
-				break;
-			}
-			game.display();
-		}
-		sc.close();
 
 	}
 
 	@Override
 	public void start(Stage stage) throws Exception {
-
+		
 		// Text for upper part of the vertical box
-		Text game = new Text();
-		game.setText("GAME4J");
-		game.setFont(new Font(70));
+		Text title = new Text();
+		title.setText("GAME4J");
+		title.setFont(new Font(70));
 
 		// Buttons in horizontal box
 		//Button play
@@ -127,37 +72,58 @@ public class Main extends Application {
 		grid_home.setVgap(50);
 
 		grid_home.setAlignment(Pos.CENTER);
-		grid_home.add(game, 0, 0);
+		grid_home.add(title, 0, 0);
 		grid_home.add(play_button, 0, 1);
 		grid_home.add(replay_button, 0, 2);
 		grid_home.add(histo_button, 0, 3);
 		grid_home.add(option_button, 0, 4);
-		grid_home.setHalignment(game, HPos.CENTER);
-		grid_home.setValignment(game, VPos.CENTER);
-		grid_home.setHalignment(play_button, HPos.CENTER);
-		grid_home.setValignment(play_button, VPos.CENTER);
-		grid_home.setHalignment(replay_button, HPos.CENTER);
-		grid_home.setValignment(replay_button, VPos.CENTER);
-		grid_home.setHalignment(histo_button, HPos.CENTER);
-		grid_home.setValignment(histo_button, VPos.CENTER);
-		grid_home.setHalignment(option_button, HPos.CENTER);
-		grid_home.setValignment(option_button, VPos.CENTER);
+		GridPane.setHalignment(title, HPos.CENTER);
+		GridPane.setValignment(title, VPos.CENTER);
+		GridPane.setHalignment(play_button, HPos.CENTER);
+		GridPane.setValignment(play_button, VPos.CENTER);
+		GridPane.setHalignment(replay_button, HPos.CENTER);
+		GridPane.setValignment(replay_button, VPos.CENTER);
+		GridPane.setHalignment(histo_button, HPos.CENTER);
+		GridPane.setValignment(histo_button, VPos.CENTER);
+		GridPane.setHalignment(option_button, HPos.CENTER);
+		GridPane.setValignment(option_button, VPos.CENTER);
 
 
 		Scene scene_home = new Scene(grid_home);
 		scene_home.getStylesheets().add("accueil.css");
 
 
+		
+		
+		
+		
 
 		// NEW SCENE == IN GAME
 		
+		Game game = new Game(5,20);
+		
 		//Text in game
 		Text in_game = new Text();
-		in_game.setText("Welcome inside the game !");
-		in_game.setFont(new Font(50));
+		in_game.setText("Try to escape !");
+		in_game.setFont(new Font(25));
 		in_game.setX(50);
 		in_game.setY(50);
-
+		
+		//Text Energy
+		Text energy = new Text();
+		energy.setText("Energy = "+game.getPlayer().getEnergy());
+		energy.setFont(new Font(25));
+		energy.setX(50);
+		energy.setY(75);
+		
+		//Button previous movement
+		Button previous = new Button();
+		previous.setFont(new Font(40));
+		previous.setText("Previous !");
+		previous.setLayoutX(900);
+		previous.setLayoutY(100);
+		
+		
 		//Grid of the game
 		GridPane grid_in_game = new GridPane();
 		grid_in_game.setId("grid_in_game");
@@ -166,35 +132,48 @@ public class Main extends Application {
 		grid_in_game.setLayoutY(50);
 		
 		
-		int count = 0;
 		int s = 80;
-		for(int i = 1; i<11; i++) {
-			count++;
+		for(int i = 0; i<10; i++) {
 			for(int j = 0; j<10; j++) {
 				Rectangle r = new Rectangle(s, s, s, s);
-				if (count % 2 == 0)
-		          r.setFill(Color.WHITE);
-		        grid_in_game.add(r, j, i);
-		        count++;
+				if (game.getMap().getCell(i,j).getType() == Type.BONUS)
+					r.setFill(Color.GREEN);
+				else if (game.getMap().getCell(i,j).getType() == Type.OBSTACLE)
+					r.setFill(Color.RED);
+				else if (game.getPlayer().getCell().getCoordX() == i && game.getPlayer().getCell().getCoordY() == j)
+					r.setFill(Color.YELLOW);
+				else r.setFill(Color.BLACK);
+				grid_in_game.add(r, j, i+1);
 			}
 		}
 		
 		
 		Group group = new Group();
 		group.getChildren().add(in_game);
+		group.getChildren().add(energy);
+		//group.getChildren().add(previous); // ICI EST LE PROBLEME !!!!
 		group.getChildren().add(grid_in_game);		
 
 		Scene scene_in_game = new Scene(group, 1000, 1000);
 		scene_in_game.getStylesheets().add("in_game.css");
-
+		
+		GetGameEventHandler getGameEvent = new GetGameEventHandler(game, grid_in_game, energy, previous);
+		scene_in_game.setOnKeyPressed(getGameEvent);
+		scene_in_game.setOnMouseClicked(getGameEvent);
+		
+		// Home buttons
+		
 		play_button.setOnMouseClicked(event -> {
 			stage.setScene(scene_in_game);
 		});
 
 		histo_button.setOnMouseClicked(event -> {
-			grid_home.getChildren().remove(game);
+			grid_home.getChildren().remove(title);
 			grid_home.getChildren().remove(play_button);
 		});
+		
+		
+		
 
 		Image icon = new Image("icon.png");
 		stage.getIcons().add(icon);

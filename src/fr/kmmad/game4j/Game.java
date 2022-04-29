@@ -2,8 +2,6 @@ package fr.kmmad.game4j;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -199,6 +197,10 @@ public class Game implements Serializable {
 	 */
 	public int getBonusRate() {
 		return bnsRate;
+	}
+	
+	public Player getPlayer() {
+		return player;
 	}
 	
 }
