@@ -32,65 +32,65 @@ public class Main extends Application {
 	public void start(Stage stage) throws Exception {
 		
 		// Text for upper part of the vertical box
-		Text title = new Text();
-		title.setText("GAME4J");
-		title.setFont(new Font(70));
+		Text titleHome = new Text();
+		titleHome.setText("GAME4J");
+		titleHome.setFont(new Font(70));
 
 		// Buttons in horizontal box
 		//Button play
-		Button play_button = new Button();
-		play_button.getStyleClass().add("button");
-		play_button.setId("play_button");
-		play_button.setFont(new Font(40));
-		play_button.setText("Jouer !");
+		Button playButton = new Button();
+		playButton.getStyleClass().add("button");
+		playButton.setId("playButton");
+		playButton.setFont(new Font(40));
+		playButton.setText("Jouer !");
 
 		//Button replay
-		Button replay_button = new Button();
-		replay_button.getStyleClass().add("button");
-		replay_button.setId("replay_button");
-		replay_button.setFont(new Font(40));
-		replay_button.setText("Reprendre !");
+		Button replayButton = new Button();
+		replayButton.getStyleClass().add("button");
+		replayButton.setId("replayButton");
+		replayButton.setFont(new Font(40));
+		replayButton.setText("Reprendre !");
 
 		//Button histo
-		Button histo_button = new Button();
-		histo_button.getStyleClass().add("button");
-		histo_button.setId("histo_button");
-		histo_button.setFont(new Font(40));
-		histo_button.setText("Historique");
+		Button histoButton = new Button();
+		histoButton.getStyleClass().add("button");
+		histoButton.setId("histoButton");
+		histoButton.setFont(new Font(40));
+		histoButton.setText("Historique");
 
 		//Button options
-		Button option_button = new Button();
-		option_button.getStyleClass().add("button");
-		option_button.setId("option_button");
-		option_button.setFont(new Font(40));
-		option_button.setText("Options");
+		Button optionButton = new Button();
+		optionButton.getStyleClass().add("button");
+		optionButton.setId("optionButton");
+		optionButton.setFont(new Font(40));
+		optionButton.setText("Options");
 
 		//Grid of the menu
-		GridPane grid_home = new GridPane();
-		grid_home.setId("grid_home");
-		grid_home.setMinSize(1000, 700);
-		grid_home.setVgap(50);
+		GridPane gridHome = new GridPane();
+		gridHome.setId("gridHome");
+		gridHome.setMinSize(1000, 700);
+		gridHome.setVgap(50);
 
-		grid_home.setAlignment(Pos.CENTER);
-		grid_home.add(title, 0, 0);
-		grid_home.add(play_button, 0, 1);
-		grid_home.add(replay_button, 0, 2);
-		grid_home.add(histo_button, 0, 3);
-		grid_home.add(option_button, 0, 4);
-		GridPane.setHalignment(title, HPos.CENTER);
-		GridPane.setValignment(title, VPos.CENTER);
-		GridPane.setHalignment(play_button, HPos.CENTER);
-		GridPane.setValignment(play_button, VPos.CENTER);
-		GridPane.setHalignment(replay_button, HPos.CENTER);
-		GridPane.setValignment(replay_button, VPos.CENTER);
-		GridPane.setHalignment(histo_button, HPos.CENTER);
-		GridPane.setValignment(histo_button, VPos.CENTER);
-		GridPane.setHalignment(option_button, HPos.CENTER);
-		GridPane.setValignment(option_button, VPos.CENTER);
+		gridHome.setAlignment(Pos.CENTER);
+		gridHome.add(titleHome, 0, 0);
+		gridHome.add(playButton, 0, 1);
+		gridHome.add(replayButton, 0, 2);
+		gridHome.add(histoButton, 0, 3);
+		gridHome.add(optionButton, 0, 4);
+		GridPane.setHalignment(titleHome, HPos.CENTER);
+		GridPane.setValignment(titleHome, VPos.CENTER);
+		GridPane.setHalignment(playButton, HPos.CENTER);
+		GridPane.setValignment(playButton, VPos.CENTER);
+		GridPane.setHalignment(replayButton, HPos.CENTER);
+		GridPane.setValignment(replayButton, VPos.CENTER);
+		GridPane.setHalignment(histoButton, HPos.CENTER);
+		GridPane.setValignment(histoButton, VPos.CENTER);
+		GridPane.setHalignment(optionButton, HPos.CENTER);
+		GridPane.setValignment(optionButton, VPos.CENTER);
 
 
-		Scene scene_home = new Scene(grid_home);
-		scene_home.getStylesheets().add("accueil.css");
+		Scene sceneHome = new Scene(gridHome);
+		sceneHome.getStylesheets().add("accueil.css");
 
 
 		
@@ -103,33 +103,33 @@ public class Main extends Application {
 		Game game = new Game(5,20);
 		
 		//Text in game
-		Text in_game = new Text();
-		in_game.setText("Try to escape !");
-		in_game.setFont(new Font(25));
-		in_game.setX(50);
-		in_game.setY(50);
+		Text inGameText = new Text();
+		inGameText.setText("Try to escape !");
+		inGameText.setFont(new Font(25));
+		inGameText.setX(50);
+		inGameText.setY(50);
 		
 		//Text Energy
-		Text energy = new Text();
-		energy.setText("Energy = "+game.getPlayer().getEnergy());
-		energy.setFont(new Font(25));
-		energy.setX(50);
-		energy.setY(75);
+		Text energyText = new Text();
+		energyText.setText("Energy = "+game.getPlayer().getEnergy());
+		energyText.setFont(new Font(25));
+		energyText.setX(50);
+		energyText.setY(75);
 		
 		//Button previous movement
-		Button previous = new Button();
-		previous.setFont(new Font(40));
-		previous.setText("Previous !");
-		previous.setLayoutX(900);
-		previous.setLayoutY(100);
+		Button previousButton = new Button();
+		previousButton.setFont(new Font(40));
+		previousButton.setText("Previous !");
+		previousButton.setLayoutX(900);
+		previousButton.setLayoutY(100);
 		
 		
 		//Grid of the game
-		GridPane grid_in_game = new GridPane();
-		grid_in_game.setId("grid_in_game");
-		grid_in_game.setMinSize(1000, 900);
-		grid_in_game.setAlignment(Pos.CENTER);
-		grid_in_game.setLayoutY(50);
+		GridPane gridInGame = new GridPane();
+		gridInGame.setId("gridInGame");
+		gridInGame.setMinSize(1000, 900);
+		gridInGame.setAlignment(Pos.CENTER);
+		gridInGame.setLayoutY(50);
 		
 		
 		int s = 80;
@@ -143,33 +143,33 @@ public class Main extends Application {
 				else if (game.getPlayer().getCell().getCoordX() == i && game.getPlayer().getCell().getCoordY() == j)
 					r.setFill(Color.YELLOW);
 				else r.setFill(Color.BLACK);
-				grid_in_game.add(r, j, i+1);
+				gridInGame.add(r, j, i+1);
 			}
 		}
 		
 		
 		Group group = new Group();
-		group.getChildren().add(in_game);
-		group.getChildren().add(energy);
-		//group.getChildren().add(previous); // ICI EST LE PROBLEME !!!!
-		group.getChildren().add(grid_in_game);		
+		group.getChildren().add(inGameText);
+		group.getChildren().add(energyText);
+		group.getChildren().add(previousButton);
+		group.getChildren().add(gridInGame);		
 
-		Scene scene_in_game = new Scene(group, 1000, 1000);
-		scene_in_game.getStylesheets().add("in_game.css");
+		Scene sceneInGame = new Scene(group, 1000, 1000);
+		sceneInGame.getStylesheets().add("inGame.css");
 		
-		GetGameEventHandler getGameEvent = new GetGameEventHandler(game, grid_in_game, energy, previous);
-		scene_in_game.setOnKeyPressed(getGameEvent);
-		scene_in_game.setOnMouseClicked(getGameEvent);
+		GameEventHandler gameEventHandler = new GameEventHandler(game, gridInGame, energyText, previousButton);
+		previousButton.setOnMouseClicked(gameEventHandler::cancel);
+		sceneInGame.setOnKeyPressed(gameEventHandler::move);
 		
 		// Home buttons
 		
-		play_button.setOnMouseClicked(event -> {
-			stage.setScene(scene_in_game);
+		playButton.setOnMouseClicked(event -> {
+			stage.setScene(sceneInGame);
 		});
 
-		histo_button.setOnMouseClicked(event -> {
-			grid_home.getChildren().remove(title);
-			grid_home.getChildren().remove(play_button);
+		histoButton.setOnMouseClicked(event -> {
+			gridHome.getChildren().remove(titleHome);
+			gridHome.getChildren().remove(playButton);
 		});
 		
 		
@@ -177,7 +177,7 @@ public class Main extends Application {
 
 		Image icon = new Image("icon.png");
 		stage.getIcons().add(icon);
-		stage.setScene(scene_home);
+		stage.setScene(sceneHome);
 		stage.setTitle("GAME4J");
 		stage.setResizable(false);
 		stage.show();
