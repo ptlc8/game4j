@@ -25,6 +25,7 @@ public class Main extends Application {
 	
 	public static void main(String[] args) throws IOException {
 		Application.launch(args);
+		
 
 	}
 
@@ -99,7 +100,7 @@ public class Main extends Application {
 		
 
 		// NEW SCENE == IN GAME
-		
+
 		Game game = new Game(5,20);
 		
 		//Text in game
@@ -117,20 +118,24 @@ public class Main extends Application {
 		energyText.setY(75);
 		
 		//Button previous movement
-		Button previousButton = new Button();
+		Rectangle previousButton = new Rectangle(50,50,50,50);
+		previousButton.setFill(Color.GREEN);
+		
+		
+		/*Button previousButton = new Button();
 		previousButton.setFont(new Font(40));
 		previousButton.setText("Previous !");
 		previousButton.setLayoutX(900);
-		previousButton.setLayoutY(100);
+		previousButton.setLayoutY(100);*/
 		
 		
 		//Grid of the game
 		GridPane gridInGame = new GridPane();
 		gridInGame.setId("gridInGame");
-		gridInGame.setMinSize(1000, 900);
+		gridInGame.setMinSize(800, 800);
 		gridInGame.setAlignment(Pos.CENTER);
-		gridInGame.setLayoutY(50);
-		
+		gridInGame.setLayoutX(100);
+		gridInGame.setLayoutY(100);
 		
 		int s = 80;
 		for(int i = 0; i<10; i++) {
@@ -147,24 +152,48 @@ public class Main extends Application {
 			}
 		}
 		
-		
 		Group group = new Group();
 		group.getChildren().add(inGameText);
 		group.getChildren().add(energyText);
+		group.getChildren().add(gridInGame);	
 		group.getChildren().add(previousButton);
-		group.getChildren().add(gridInGame);		
+			
 
 		Scene sceneInGame = new Scene(group, 1000, 1000);
 		sceneInGame.getStylesheets().add("inGame.css");
 		
-		GameEventHandler gameEventHandler = new GameEventHandler(game, gridInGame, energyText, previousButton);
+		
+		
+		GameEventHandler gameEventHandler = new GameEventHandler(game){
+			@Override
+			public void refresh(Game game) {
+				energyText.setText("Energy = "+ game.getPlayer().getEnergy());
+		    	int s = 80;
+				for(int i = 0; i<10; i++) {
+					for(int j = 0; j<10; j++) {
+						Rectangle r = new Rectangle(s, s, s, s);
+						if (game.getMap().getCell(i,j).getType() == Type.BONUS)
+							r.setFill(Color.GREEN);
+						else if (game.getMap().getCell(i,j).getType() == Type.OBSTACLE)
+							r.setFill(Color.RED);
+						else if (game.getPlayer().getCell().getCoordX() == i && game.getPlayer().getCell().getCoordY() == j)
+							r.setFill(Color.YELLOW);
+						else r.setFill(Color.BLACK);
+						gridInGame.add(r, j, i+1);
+					}
+				}
+			}
+		};
+		
 		previousButton.setOnMouseClicked(gameEventHandler::cancel);
 		sceneInGame.setOnKeyPressed(gameEventHandler::move);
+		
 		
 		// Home buttons
 		
 		playButton.setOnMouseClicked(event -> {
 			stage.setScene(sceneInGame);
+			group.requestFocus();
 		});
 
 		histoButton.setOnMouseClicked(event -> {
