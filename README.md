@@ -11,8 +11,16 @@
 
 ## Récuperation et compilaition
 
-Cloner le projet
-Télécharger le [SDK JavaFX](https://gluonhq.com/products/javafx/) correspondant à votre environnement
+- Cloner le projet
+- Créer un fichier `Credentials.java` dans [/src/fr/kmmad/game4j](/src/fr/kmmad/game4j) de la forme :
+```java
+package fr.kmmad.game4j;
+public class Credentials {
+	static final String DB_USERNAME = "nom d'utilisateur mysql ici";
+	static final String DB_PASSWORD = "mot de passe mysql à mettre ici";
+}
+```
+- Télécharger le [SDK JavaFX](https://gluonhq.com/products/javafx/) correspondant à votre environnement
 
 ### Eclipse
 
