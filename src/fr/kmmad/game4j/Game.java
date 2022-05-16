@@ -2,8 +2,6 @@ package fr.kmmad.game4j;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -220,6 +218,13 @@ public class Game implements Serializable {
 	 */
 	public boolean isDefeat() {
 		return player.getEnergy() == 0 && player.getAvailableCancelAmount() == 0;
+	}
+	
+	/**
+	 * @return le joueur
+	 */
+	public Player getPlayer() {
+		return player;
 	}
 	
 }
