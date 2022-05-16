@@ -14,6 +14,13 @@ public class Map2D implements Serializable {
 	Random rn = new Random();
 
 	public Map2D(int bnsRate, int obsRate) {
+		generateMap(bnsRate, obsRate);
+		while (shortPath(getCell(0,0),getCell(9,9)) == null) {
+			generateMap(bnsRate, obsRate);
+		}
+	}	
+	
+	private void generateMap(int bnsRate, int obsRate) {
 		matrix = new Cell[10][10];
 		for (int i=0; i<matrix.length; i ++) {
 			matrix[i] = new Cell[10];
@@ -88,20 +95,23 @@ public class Map2D implements Serializable {
 		return matEnergy;
 	}
 	
-	public ArrayList<Cell> shortPath(Cell c1, Cell c2) {
+	public ArrayList<Cell> shortPath(Cell c1, Cell c2) { // c1 cell de départ et c2 arrivée
 		int[][] graph = GenerateMatDist();
 		int[] preced = new int[graph.length];
 		int[] distOrigin = new int[graph.length];
-		for(int i=0; i<graph.length; i++) {  //initialisation
-			distOrigin[i] = Integer.MAX_VALUE; 
+		for(int i=0; i<matrix.length; i++) {  //initialisation
+			distOrigin[i] = Integer.MAX_VALUE;
+			preced[i] = -1;
 		}
 		distOrigin[c1.getId()]=0;
-		for(int i=0; i<graph.length; i++) {
-			for(int j=0; j<graph.length; j++) {
-				if (graph[i][j] < Integer.MAX_VALUE) {
-					if (graph[i][j] + distOrigin[i] < distOrigin[j]) {
-						distOrigin[j]= graph[i][j] + distOrigin[i];
-						preced[j]=i;
+		for(int i=0; i<matrix.length; i++) {
+			if (!getCell(i).getType().equals(Cell.Type.OBSTACLE)) { // test si la case est un obstacle
+				for(int j=0; j<matrix.length; j++) {
+					if (graph[i][j] < Integer.MAX_VALUE) {
+						if (graph[i][j] + distOrigin[i] < distOrigin[j]) {
+							distOrigin[j]= graph[i][j] + distOrigin[i];
+							preced[j]=i;
+						}
 					}
 				}
 			}
@@ -109,8 +119,13 @@ public class Map2D implements Serializable {
 		ArrayList<Cell> shortPath = new ArrayList<Cell>();
 		int idt = c2.getId();
 		while (idt != c1.getId()) {
-			shortPath.add(getCell(preced[idt]));
-			idt = preced[idt];
+			if (preced[idt] == -1) {
+				return null;
+			}
+			else {
+				shortPath.add(getCell(preced[idt]));
+				idt = preced[idt];
+			}
 		}
 		return shortPath;
 	}
