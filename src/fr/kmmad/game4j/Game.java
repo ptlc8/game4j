@@ -201,4 +201,25 @@ public class Game implements Serializable {
 		return bnsRate;
 	}
 	
+	/**
+	 * @return true si la partie est terminée sinon false
+	 */
+	public boolean isFinished() {
+		return isVictory() || isDefeat();
+	}
+	
+	/**
+	 * @return true si la partie est gangée sinon false
+	 */
+	public boolean isVictory() {
+		return player.getCell() == map.getCell(10, 10);
+	}
+	
+	/**
+	 * @return true si la partie est perdue sinon false
+	 */
+	public boolean isDefeat() {
+		return player.getEnergy() == 0 && player.getAvailableCancelAmount() == 0;
+	}
+	
 }
