@@ -1,11 +1,15 @@
 package fr.kmmad.game4j;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 
 import fr.kmmad.game4j.Cell.Type;
 
-public class Map2D {
+public class Map2D implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
+	
 	private Cell[][] matrix;
 	Random rn = new Random();
 
@@ -98,7 +102,7 @@ public class Map2D {
 		for(int i=0; i<matrix.length; i++) {  //initialisation
 			distOrigin[i] = Integer.MAX_VALUE;
 			preced[i] = -1;
-			}
+		}
 		distOrigin[c1.getId()]=0;
 		for(int i=0; i<matrix.length; i++) {
 			if (!getCell(i).getType().equals(Cell.Type.OBSTACLE)) { // test si la case est un obstacle
@@ -123,7 +127,7 @@ public class Map2D {
 				idt = preced[idt];
 			}
 		}
-		return shortPath;			
+		return shortPath;
 	}
 
 }

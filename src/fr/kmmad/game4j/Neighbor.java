@@ -1,7 +1,11 @@
 package fr.kmmad.game4j;
 
-public class Neighbor {
+import java.io.Serializable;
 
+public class Neighbor implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
+	
 	private Cell cell;
 	private int dist;
 	
