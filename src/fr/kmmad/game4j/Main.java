@@ -7,15 +7,19 @@ import javafx.geometry.VPos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
+import javafx.scene.media.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 import fr.kmmad.game4j.Cell.Type;
 
@@ -32,39 +36,45 @@ public class Main extends Application {
 	@Override
 	public void start(Stage stage) throws Exception {
 		
+		
+		//NEW SCENE == MENU
+		
+		
+		//Music theme
+		String ssoundFrigidaire = new File("/home/cytech/game4j/bin/assets/frigidaire.mp3").toURI().toString();
+		Media soundFrigidaire = new Media(ssoundFrigidaire);
+		MediaPlayer playerFrigidaire = new MediaPlayer(soundFrigidaire);
+		MediaView viewPlayer = new MediaView(playerFrigidaire);
+		playerFrigidaire.play();
+		
+		
 		// Text for upper part of the vertical box
-		Text titleHome = new Text();
-		titleHome.setText("GAME4J");
+		Text titleHome = new Text("GAME4J");
 		titleHome.setFont(new Font(70));
 
-		// Buttons in horizontal box
 		//Button play
-		Button playButton = new Button();
+		Button playButton = new Button("Play");
 		playButton.getStyleClass().add("button");
 		playButton.setId("playButton");
 		playButton.setFont(new Font(40));
-		playButton.setText("Jouer !");
 
 		//Button replay
-		Button replayButton = new Button();
+		Button replayButton = new Button("Replay");
 		replayButton.getStyleClass().add("button");
 		replayButton.setId("replayButton");
 		replayButton.setFont(new Font(40));
-		replayButton.setText("Reprendre !");
 
 		//Button histo
-		Button histoButton = new Button();
+		Button histoButton = new Button("Historique");
 		histoButton.getStyleClass().add("button");
 		histoButton.setId("histoButton");
 		histoButton.setFont(new Font(40));
-		histoButton.setText("Historique");
 
 		//Button options
-		Button optionButton = new Button();
+		Button optionButton = new Button("Options");
 		optionButton.getStyleClass().add("button");
 		optionButton.setId("optionButton");
 		optionButton.setFont(new Font(40));
-		optionButton.setText("Options");
 
 		//Grid of the menu
 		GridPane gridHome = new GridPane();
@@ -91,7 +101,7 @@ public class Main extends Application {
 
 
 		Scene sceneHome = new Scene(gridHome);
-		sceneHome.getStylesheets().add("accueil.css");
+		sceneHome.getStylesheets().add("assets/accueil.css");
 
 
 		
@@ -99,43 +109,84 @@ public class Main extends Application {
 		
 		
 
-		// NEW SCENE == IN GAME
+		// NE == IN GAME
 
 		Game game = new Game(5,20);
 		
+		
 		//Text in game
-		Text inGameText = new Text();
-		inGameText.setText("Try to escape !");
+		Text inGameText = new Text("Try to escape !");
 		inGameText.setFont(new Font(25));
-		inGameText.setX(50);
-		inGameText.setY(50);
+		inGameText.setId("inGameText");
 		
-		//Text Energy
-		Text energyText = new Text();
-		energyText.setText("Energy = "+game.getPlayer().getEnergy());
-		energyText.setFont(new Font(25));
-		energyText.setX(50);
-		energyText.setY(75);
 		
-		//Button previous movement
+		//Home button
+		Rectangle homeButton = new Rectangle(50,50,50,50);
+		homeButton.setFill(Color.BROWN);
+		homeButton.setId("homeButton");
+		
+		//Vertical box left part
+		VBox leftPart = new VBox();
+		leftPart.getChildren().add(homeButton);		
+		
+		
+		//Cancel move button
 		Rectangle previousButton = new Rectangle(50,50,50,50);
 		previousButton.setFill(Color.GREEN);
+		previousButton.setId("previousButton");
+		
+		//Save button
+		Rectangle saveButton = new Rectangle(50,50,50,50);
+		saveButton.setFill(Color.RED);
+		saveButton.setId("saveButton");
+		
+		//Horizontal box buttons right
+		HBox buttonsRight = new HBox();
+		buttonsRight.getChildren().add(previousButton);
+		buttonsRight.getChildren().add(saveButton);
 		
 		
-		/*Button previousButton = new Button();
-		previousButton.setFont(new Font(40));
-		previousButton.setText("Previous !");
-		previousButton.setLayoutX(900);
-		previousButton.setLayoutY(100);*/
+		//Image Energy
+		Rectangle energyImage = new Rectangle(50,50,50,50);
+		energyImage.setFill(Color.RED);
+		energyImage.setId("energyImage");
+
+		//Text Energy
+		Text energyAmount = new Text(""+game.getPlayer().getEnergy());
+		energyAmount.setFont(new Font(25));
+		
+		//Horizontal box energy
+		HBox energyHBox = new HBox();
+		energyHBox.getChildren().add(energyImage);
+		energyHBox.getChildren().add(energyAmount);
+		
+		
+		//Image Cancel
+		Rectangle cancelImage = new Rectangle(50,50,50,50);
+		cancelImage.setFill(Color.RED);
+		cancelImage.setId("cancelImage");
+		
+		//Text Cancel
+		Text cancelAmount = new Text(""+game.getPlayer().getAvailableCancelAmount());
+		cancelAmount.setFont(new Font(25));
+		
+		//Horizontal box Cancel
+		HBox cancelHBox = new HBox();
+		cancelHBox.getChildren().add(cancelImage);
+		cancelHBox.getChildren().add(cancelAmount);
+		
+		
+		//Vertical box of the Right part in game
+		VBox rightPart = new VBox();
+		rightPart.getChildren().add(buttonsRight);
+		rightPart.getChildren().add(energyHBox);
+		rightPart.getChildren().add(cancelHBox);
 		
 		
 		//Grid of the game
 		GridPane gridInGame = new GridPane();
 		gridInGame.setId("gridInGame");
-		gridInGame.setMinSize(800, 800);
 		gridInGame.setAlignment(Pos.CENTER);
-		gridInGame.setLayoutX(100);
-		gridInGame.setLayoutY(100);
 		
 		int s = 80;
 		for(int i = 0; i<10; i++) {
@@ -152,22 +203,46 @@ public class Main extends Application {
 			}
 		}
 		
-		Group group = new Group();
-		group.getChildren().add(inGameText);
-		group.getChildren().add(energyText);
-		group.getChildren().add(gridInGame);	
-		group.getChildren().add(previousButton);
+		//Victory text
+		Text victoryText = new Text("Well done you won !");
+		victoryText.setFill(Color.BLUE);
+		victoryText.setVisible(false);
+	
+		
+		//Defeat text
+		Text defeatText = new Text("Oh no you lose...");
+		defeatText.setFill(Color.BLUE);
+		defeatText.setVisible(false);
+		
+		//Pile sur la grille
+		StackPane gameStack = new StackPane();
+		gameStack.getChildren().add(gridInGame);
+		gameStack.getChildren().add(victoryText);
+		gameStack.getChildren().add(defeatText);
+		
+		
+		BorderPane borderPane = new BorderPane(gameStack);
+		borderPane.setTop(inGameText);
+		BorderPane.setAlignment(inGameText, Pos.CENTER);
+		borderPane.setRight(rightPart);
+		borderPane.setLeft(leftPart);
 			
 
-		Scene sceneInGame = new Scene(group, 1000, 1000);
-		sceneInGame.getStylesheets().add("inGame.css");
-		
+		Scene sceneInGame = new Scene(borderPane, 1000, 1000);
+		sceneInGame.getStylesheets().add("assets/inGame.css");
 		
 		
 		GameEventHandler gameEventHandler = new GameEventHandler(game){
 			@Override
 			public void refresh(Game game) {
-				energyText.setText("Energy = "+ game.getPlayer().getEnergy());
+				if(game.isVictory()) {
+					victoryText.setVisible(true);
+				}
+				if(game.isDefeat()) {
+					defeatText.setVisible(true);
+				}
+				energyAmount.setText(""+game.getPlayer().getEnergy());
+				cancelAmount.setText(""+ game.getPlayer().getAvailableCancelAmount());
 		    	int s = 80;
 				for(int i = 0; i<10; i++) {
 					for(int j = 0; j<10; j++) {
@@ -188,23 +263,144 @@ public class Main extends Application {
 		previousButton.setOnMouseClicked(gameEventHandler::cancel);
 		sceneInGame.setOnKeyPressed(gameEventHandler::move);
 		
+		//Game Buttons
+		
+		homeButton.setOnMouseClicked(event -> {
+			stage.setScene(sceneHome);
+		});
+		
+		
+		
+		//NEW scene == REPLAY
+		
+		//Home button
+		Rectangle homeButton2 = new Rectangle(50,50,50,50);
+		homeButton2.setFill(Color.BROWN);
+		homeButton2.setId("homeButton");
+
+		
+		Text replayTitle = new Text("Replay");
+		replayTitle.setFont(new Font(50));
+		
+		VBox menuReplay = new VBox();
+		menuReplay.getChildren().add(homeButton2);
+		menuReplay.getChildren().add(replayTitle);
+		
+		Scene sceneReplay = new Scene(menuReplay, 1000, 700);
+		
+		homeButton2.setOnMouseClicked(event -> {
+			stage.setScene(sceneHome);
+		});
+		
+		
+		
+		
+		// NEW SCENE == HISTO
+		
+		//Home button
+		Rectangle homeButton3 = new Rectangle(50,50,50,50);
+		homeButton3.setFill(Color.BROWN);
+		homeButton3.setId("homeButton");
+		
+		//Histo title
+		Text histoTitle = new Text("Historique");
+		histoTitle.setFont(new Font(50));
+		
+		
+		VBox histoMenu = new VBox();
+		histoMenu.getChildren().add(homeButton3);
+		histoMenu.getChildren().add(histoTitle);
+		
+		Scene sceneHisto = new Scene(histoMenu, 1000, 700);
+		
+		
+		homeButton3.setOnMouseClicked(event -> {
+			stage.setScene(sceneHome);
+		});
+		
+		
+		// NEW SCENE == OPTIONS
+		
+		
+		//Home button
+		Rectangle homeButton4 = new Rectangle(50,50,50,50);
+		homeButton4.setFill(Color.BROWN);
+		homeButton4.setId("homeButton");
+		
+		Text optionTitle = new Text("OPTIONS");
+		optionTitle.setFont(new Font(50));
+		
+		Text soundTitle = new Text("Sound");
+		soundTitle.setFont(new Font(50));
+		
+		Text musicTitle = new Text("Music");
+		musicTitle.setFont(new Font(50));
+		
+		Slider musicSlider = new Slider();
+		musicSlider.setMin(0);
+		musicSlider.setMax(100);
+		musicSlider.setShowTickLabels(false);
+		
+		Text effectTitle = new Text("Effects");
+		effectTitle.setFont(new Font(50));
+		
+		Slider effectSlider = new Slider();
+		effectSlider.setMin(0);
+		effectSlider.setMax(100);
+		effectSlider.setShowTickLabels(false);
+		
+		Text clearHisto = new Text("Clear historique");
+		clearHisto.setFont(new Font(50));
+		
+		
+		
+		VBox optionVBox = new VBox();
+		optionVBox.getChildren().add(homeButton4);
+		optionVBox.getChildren().add(optionTitle);
+		optionVBox.getChildren().add(soundTitle);
+		optionVBox.getChildren().add(musicTitle);
+		optionVBox.getChildren().add(musicSlider);
+		optionVBox.getChildren().add(effectTitle);
+		optionVBox.getChildren().add(effectSlider);
+		optionVBox.getChildren().add(clearHisto);
+		optionVBox.setAlignment(Pos.CENTER);
+		
+		
+		Scene sceneOptions = new Scene(optionVBox, 1000, 700);
+		sceneInGame.getStylesheets().add("assets/options.css");
+		
+		//option buttons
+		
+		homeButton4.setOnMouseClicked(event -> {
+			stage.setScene(sceneHome);
+		});
+		
+		clearHisto.setOnMouseClicked(event -> {
+			
+		});
+		
+		
 		
 		// Home buttons
 		
 		playButton.setOnMouseClicked(event -> {
 			stage.setScene(sceneInGame);
-			group.requestFocus();
+			borderPane.requestFocus();
+		});
+		
+		replayButton.setOnMouseClicked(event -> {
+			stage.setScene(sceneReplay);
 		});
 
 		histoButton.setOnMouseClicked(event -> {
-			gridHome.getChildren().remove(titleHome);
-			gridHome.getChildren().remove(playButton);
+			stage.setScene(sceneHisto);
 		});
 		
-		
-		
+		optionButton.setOnMouseClicked(event -> {
+			stage.setScene(sceneOptions);
+		});
 
-		Image icon = new Image("icon.png");
+		Image icon = new Image("assets/icon.png");
 		stage.getIcons().add(icon);
 		stage.setScene(sceneHome);
 		stage.setTitle("GAME4J");

@@ -210,7 +210,7 @@ public class Game implements Serializable {
 	 * @return true si la partie est gangée sinon false
 	 */
 	public boolean isVictory() {
-		return player.getCell() == map.getCell(10, 10);
+		return player.getCell() == map.getCell(9, 9);
 	}
 	
 	/**

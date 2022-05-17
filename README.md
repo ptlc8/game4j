@@ -28,7 +28,7 @@ Créer une JRE :
  - `Window` > `Preferences` > `Java` > `Installed JREs`
  - Sélectionner le JRE par défaut > `Dupplicate` > `Edit`
  - Mettre `javafx-jre-15` comme nom
- - Mettre `--module-path "/path/to/javafx-sdk-17/lib" --add-modules javafx.controls,javafx.fxml` dans les arguments par défaut (en remplaçcant `/path/to/javafx-sdk-17` par le chemin d'accès vers JavaFX téléchargé et dézippé précédemment)
+ - Mettre `--module-path "/path/to/javafx-sdk-17/lib" --add-modules javafx.controls,javafx.fxml,javafx.media` dans les arguments par défaut (en remplaçcant `/path/to/javafx-sdk-17` par le chemin d'accès vers JavaFX téléchargé et dézippé précédemment)
  - `Add External JARs` > Sélectionner tous les .jar dans le dossier lib du dossier JavaFX dézippé > `Open`
  - `Finish`
 
