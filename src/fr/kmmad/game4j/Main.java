@@ -4,7 +4,6 @@ import javafx.application.Application;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
@@ -17,9 +16,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
+import java.net.URL;
 
 import fr.kmmad.game4j.Cell.Type;
 
@@ -41,10 +39,10 @@ public class Main extends Application {
 		
 		
 		//Music theme
-		String ssoundFrigidaire = new File("/home/cytech/game4j/bin/assets/frigidaire.mp3").toURI().toString();
+		URL frigidaireUrl = ClassLoader.getSystemResource("assets/frigidaire.mp3");
+		String ssoundFrigidaire = frigidaireUrl.getProtocol()+":"+frigidaireUrl.getPath().toString();
 		Media soundFrigidaire = new Media(ssoundFrigidaire);
 		MediaPlayer playerFrigidaire = new MediaPlayer(soundFrigidaire);
-		MediaView viewPlayer = new MediaView(playerFrigidaire);
 		playerFrigidaire.play();
 		
 		
