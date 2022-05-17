@@ -2,8 +2,6 @@ package fr.kmmad.game4j;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -199,6 +197,34 @@ public class Game implements Serializable {
 	 */
 	public int getBonusRate() {
 		return bnsRate;
+	}
+	
+	/**
+	 * @return true si la partie est terminée sinon false
+	 */
+	public boolean isFinished() {
+		return isVictory() || isDefeat();
+	}
+	
+	/**
+	 * @return true si la partie est gangée sinon false
+	 */
+	public boolean isVictory() {
+		return player.getCell() == map.getCell(9, 9);
+	}
+	
+	/**
+	 * @return true si la partie est perdue sinon false
+	 */
+	public boolean isDefeat() {
+		return player.getEnergy() == 0 && player.getAvailableCancelAmount() == 0;
+	}
+	
+	/**
+	 * @return le joueur
+	 */
+	public Player getPlayer() {
+		return player;
 	}
 	
 }
