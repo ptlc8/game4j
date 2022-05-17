@@ -1,0 +1,11 @@
+#gridHome{
+    -fx-background-image: url("home.gif");
+    -fx-background-size:  cover;
+}
+
+
+.button{
+    -fx-background-color: red;
+    -fx-text-fill: blue;
+    -fx-cursor : hand;
+}
