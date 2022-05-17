@@ -13,11 +13,13 @@ import com.mysql.cj.jdbc.Driver;
 public class Game4j {
 	public static void main(String[] args) throws SQLException {
 		Game4j game4j = new Game4j();
+		int a = game4j.getHistory().size();
+		System.out.println(a);
 	}
 	private Connection bdd ;
 	Game4j() throws SQLException{
 		//DriverManager.registerDriver(new Driver());
-		bdd = DriverManager.getConnection("jdbc:mysql://localhost:3306/game4j", Credentials.DB_USERNAME, Credentials.DB_PASSWORD);
+		bdd = DriverManager.getConnection("jdbc:mysql://localhost:"+Credentials.DB_PORT+"/game4j", Credentials.DB_USERNAME, Credentials.DB_PASSWORD);
 	}
 	
 	// recuperer parties finies de l'historique 
@@ -55,16 +57,14 @@ public class Game4j {
 	// Ajouter une partie finie et la mettre dans l'historique
 	void addGameHistory(Game game) throws SQLException {
 		Statement statement = bdd.createStatement();
-		ResultSet rs = statement.executeQuery("Insert " +game+" to history");
+		ResultSet rs = statement.executeQuery("Insert into history(date, game) values("+game.getDate()+","+game.createSave()+")");
 		rs.next();
-		System.out.println(rs.getInt("id"));
 	}
 	
 	// Ajouter une partie en cours dans la sauvegarde 
 	void addGameSave(Game game) throws SQLException {
 		Statement statement = bdd.createStatement();
-		ResultSet rs = statement.executeQuery("Insert "+game+ " to saves");
+		ResultSet rs = statement.executeQuery("Insert into saves(date, game, id) values)"+game.getDate()+","+game.createSave()+")");
 		rs.next();
-		System.out.println(rs.getInt("id"));
 	}
 }
