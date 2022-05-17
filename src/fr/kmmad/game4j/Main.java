@@ -41,7 +41,7 @@ public class Main extends Application {
 		
 		
 		//Music theme
-		String ssoundFrigidaire = new File("/home/cytech/game4j/bin/assets/frigidaire.mp3").toURI().toString();
+		String ssoundFrigidaire = new File("bin/assets/frigidaire.mp3").toURI().toString();
 		Media soundFrigidaire = new Media(ssoundFrigidaire);
 		MediaPlayer playerFrigidaire = new MediaPlayer(soundFrigidaire);
 		MediaView viewPlayer = new MediaView(playerFrigidaire);

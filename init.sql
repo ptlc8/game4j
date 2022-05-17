@@ -8,5 +8,5 @@ create table saves
 (
 	date DATE, 
 	game TEXT,
-	name VARCHAR(20) KEY NOT NULL 
+	name VARCHAR(20) PRIMARY KEY NOT NULL 
 );

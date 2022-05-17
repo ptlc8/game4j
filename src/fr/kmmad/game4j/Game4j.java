@@ -28,8 +28,8 @@ public class Game4j {
 		ResultSet rs = statement.executeQuery("Select * From history");
 		List<Game> recupGameFinish = new ArrayList<Game>(); 
 		for (int i=0; i <= rs.getFetchSize() ; i++) {
-			recupGameFinish.add(Game.loadSave(rs.getString("game")));
 			rs.next();
+			recupGameFinish.add(Game.loadSave(rs.getString("game")));
 		}
 		return recupGameFinish;
 	}
