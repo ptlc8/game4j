@@ -339,6 +339,8 @@ public class Main extends Application {
 		musicSlider.setMax(100);
 		musicSlider.setShowTickLabels(false);
 		
+		
+		
 		Text effectTitle = new Text("Effects");
 		effectTitle.setFont(new Font(50));
 		
