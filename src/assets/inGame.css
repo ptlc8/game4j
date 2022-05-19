@@ -1,19 +1,15 @@
 #inGameText{
-	margin : 200px;
-	color: red;
+	-fx-font-size : 20px;
+	-fx-fill: #ff0000;
+	-fx-translate-y : 50px;
 }
 
-#homeButton{
-	-fx-background-image: url("homeButton.svg");
+
+#inGame{
+    -fx-background-image: url("home.gif");
     -fx-background-size:  cover;
 }
 
-#previousButton{
-	-fx-background-image: url("returnButton.png");
-    -fx-background-size:  cover;
-}
-
-#saveButton{
-	-fx-background-image: url("saveButton.png");
-    -fx-background-size:  cover;
+#gidInGame{
+	-fx-lines-visible : true;
 }

@@ -1,10 +1,10 @@
-package fr.kmmad.game4j;
+package fr.kmmad.game4j.javafx;
 
-import fr.kmmad.game4j.Cell.Type;
+import fr.kmmad.game4j.*;
+
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
-import javafx.scene.text.Text;
+
 
 public abstract class GameEventHandler{
 	private final Game game;
@@ -45,7 +45,6 @@ public abstract class GameEventHandler{
     public void cancel(MouseEvent event) {
     	game.cancelMove();
     	refresh(game);
-    	
     }
     
     public abstract void refresh(Game game);
