@@ -49,9 +49,13 @@ public class Game4j {
 	// R�cup�rer une partie en cours dans la sauvegarde � partir de son nom
 	Game getSave(String nameSave) throws SQLException {
 		Statement statement = bdd.createStatement();
-		ResultSet rs = statement.executeQuery("Select " +nameSave+ " From saves");
+		ResultSet rs = statement.executeQuery("Select name From saves Where name LIKE "+nameSave+"");
 		System.out.println(rs.getInt("id"));
-		return null;
+		if (rs.getFetchSize()==0) {
+			return null;
+		}
+		rs.next();
+		return Game.loadSave(rs.getString("game"));
 	}
 
 	// Ajouter une partie finie et la mettre dans l'historique
@@ -64,7 +68,7 @@ public class Game4j {
 	// Ajouter une partie en cours dans la sauvegarde 
 	void addGameSave(Game game) throws SQLException {
 		Statement statement = bdd.createStatement();
-		ResultSet rs = statement.executeQuery("Insert into saves(date, game, id) values)"+game.getDate()+","+game.createSave()+")");
+		ResultSet rs = statement.executeQuery("Insert into saves(date, game) values("+game.getDate()+","+game.createSave()+")");
 		rs.next();
 	}
 }
