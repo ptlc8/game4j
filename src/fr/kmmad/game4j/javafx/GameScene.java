@@ -1,9 +1,15 @@
 package fr.kmmad.game4j.javafx;
 
 import fr.kmmad.game4j.Game;
+import fr.kmmad.game4j.Game4j;
+
+import java.sql.SQLException;
+import java.util.Random;
+
 import fr.kmmad.game4j.Cell.Type;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.CheckBox;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -20,33 +26,41 @@ public abstract class GameScene extends Scene{
 	private Text victoryText, defeatText, energyAmount, cancelAmount;
 	private GridPane gridInGame;
 	
-	public GameScene() {
+	public GameScene(Game game) {
 		super(new VBox(), 1000, 1000);
 
-		Game game = new Game(5,20);
+		//Game game = new Game(5,20);
 		
-		//Text in game
 		Text inGameText = new Text("Try to escape !");
 		inGameText.setId("inGameText");
 		
-		//Home image
 		ImageView homeButtonView = new ImageView(Main.homeImage);
 		homeButtonView.setPickOnBounds(true);
-		//Cancel move button
 		ImageView cancelButtonView = new ImageView(Main.cancelImage);
 		cancelButtonView.setPickOnBounds(true);
-		//Save button
 		ImageView saveButtonView = new ImageView(Main.saveImage);
 		saveButtonView.setPickOnBounds(true);
-		//Image Energy
 		ImageView energyImageView = new ImageView(Main.energyImage);
-		//Image Cancel
 		ImageView cancelImageView = new ImageView(Main.cancelImage);
 		
+		Text shortestPathText = new Text("Shortest path");
+		CheckBox shortestCheckBox = new CheckBox();
+		HBox shortestHBox = new HBox();
+		shortestHBox.getChildren().add(shortestPathText);
+		shortestHBox.getChildren().add(shortestCheckBox);
+		
+		
+		Text gamePathText = new Text("My path"); 
+		CheckBox gameCheckBox = new CheckBox();
+		HBox gameHBox = new HBox();
+		gameHBox.getChildren().add(gamePathText);
+		gameHBox.getChildren().add(gameCheckBox);
 		
 		//Vertical box left part
 		VBox leftPart = new VBox();
-		leftPart.getChildren().add(homeButtonView);		
+		leftPart.getChildren().add(homeButtonView);
+		leftPart.getChildren().add(shortestHBox);
+		leftPart.getChildren().add(gameHBox);
 		
 		//Horizontal box buttons right
 		HBox buttonsRight = new HBox();
@@ -131,9 +145,21 @@ public abstract class GameScene extends Scene{
 			switchToHomeScene();
 		});
 		
+		saveButtonView.setOnMouseClicked(event -> {
+			try {
+				Game4j game4j = new Game4j();
+				game4j.addGameSave(game, "uwu"+new Random().nextInt(5));
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		});
 
 		parent.requestFocus();
 		
+	}
+	
+	public GameScene() {
+		this(new Game(5,20));
 	}
 	
 	protected abstract void switchToHomeScene();
@@ -157,6 +183,8 @@ public abstract class GameScene extends Scene{
 				else r.setFill(Color.WHITE);
 				gridInGame.add(r, j, i+1);
 			}
+		}
+		if(game.isFinished()) {
 		}
 	}
 	

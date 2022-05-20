@@ -1,5 +1,7 @@
 package fr.kmmad.game4j.javafx;
 
+import java.sql.SQLException;
+
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
@@ -87,16 +89,25 @@ public abstract class HomeScene extends Scene{
 				public void switchToHomeScene() {
 					switchToScene(HomeScene.this);
 				}
+				@Override
+				public void switchToScene(Scene scene) {
+					HomeScene.this.switchToScene(scene);
+				}
 			});
 		});
 
 		histoButton.setOnMouseClicked(event -> {
-			switchToScene(new HistoScene() {
-				@Override
-				public void switchToHomeScene() {
-					switchToScene(HomeScene.this);
-				}
-			});
+			try {
+				switchToScene(new HistoScene() {
+					@Override
+					public void switchToHomeScene() {
+						switchToScene(HomeScene.this);
+					}
+				});
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		});
 		
 		optionButton.setOnMouseClicked(event -> {
