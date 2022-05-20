@@ -10,13 +10,14 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
@@ -26,7 +27,7 @@ public abstract class GameScene extends Scene{
 	private GridPane gridInGame;
 	
 	public GameScene(Game game) {
-		super(new VBox(), 1000, 1000);
+		super(new VBox(), 1000, 700);
 		
 		Text inGameText = new Text("Try to escape !");
 		inGameText.setId("inGameText");
@@ -95,6 +96,8 @@ public abstract class GameScene extends Scene{
 		gridInGame = new GridPane();
 		gridInGame.setId("gridInGame");
 		gridInGame.setAlignment(Pos.CENTER);
+		gridInGame.setHgap(1);
+		gridInGame.setVgap(1);
 		
 		
 		//Victory text
@@ -166,21 +169,21 @@ public abstract class GameScene extends Scene{
 		defeatText.setVisible(game.isDefeat());
 		energyAmount.setText(""+game.getPlayer().getEnergy());
 		cancelAmount.setText(""+ game.getPlayer().getAvailableCancelAmount());
-    	gridInGame.getChildren().removeAll();
-		int s = 80;
+    	gridInGame.getChildren().clear();
 		for(int i = 0; i<game.getMap().getSize(); i++) {
 			for(int j = 0; j<game.getMap().getSize(); j++) {
-				Rectangle r = new Rectangle(s, s, s, s);
+				ImageView cellView;
 				if (game.getMap().getCell(i,j).getType() == Type.BONUS)
-					r.setFill(Color.GREEN);
+					cellView = new ImageView(Main.carrotOnFieldImage);
 				else if (game.getMap().getCell(i,j).getType() == Type.OBSTACLE)
-					r.setFill(Color.RED);
-				else if (game.getPlayer().getCell().getCoordX() == i && game.getPlayer().getCell().getCoordY() == j)
-					r.setFill(Color.YELLOW);
-				else r.setFill(Color.WHITE);
-				gridInGame.add(r, j, i+1);
+					cellView = new ImageView(Main.cornFieldImage);
+				else
+					cellView = new ImageView(Main.emptyFieldImage);
+				gridInGame.add(cellView, j, i);
 			}
 		}
+		ImageView playerView = new ImageView(Main.rabbitImage);
+		gridInGame.add(playerView, game.getPlayer().getCell().getCoordY(), game.getPlayer().getCell().getCoordX());
 		if(game.isFinished()) {
 		}
 	}
