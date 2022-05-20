@@ -15,10 +15,15 @@ public class Main extends Application {
 		Application.launch(args);
 	}
 	
-	public final  static Image homeImage = (loadImage("/assets/homeButton.png", 50, 50));
-	public final  static Image cancelImage = (loadImage("/assets/cancelButton.png", 50, 50));
-	public final  static Image saveImage = (loadImage("/assets/saveButton.png", 50, 50));
-	public final  static Image energyImage = (loadImage("/assets/boltImage.png", 50, 50));
+	public final static Image homeImage = loadImage("/assets/homeButton.png", 50, 50);
+	public final static Image cancelImage = loadImage("/assets/cancelButton.png", 50, 50);
+	public final static Image saveImage = loadImage("/assets/saveButton.png", 50, 50);
+	public final static Image energyImage = loadImage("/assets/boltImage.png", 50, 50);
+	public final static Image replayImage = loadImage("/assets/replayButton.png", 50, 50);
+	public final static Image cornFieldImage = loadImage("/assets/corn_field.png", 48, 48, false);
+	public final static Image emptyFieldImage = loadImage("/assets/empty_field.png", 48, 48, false);
+	public final static Image carrotOnFieldImage = loadImage("/assets/carrot_on_field.png", 48, 48, false);
+	public final static Image rabbitImage = loadImage("/assets/rabbit.gif", 48, 48, false);
 	
 	@Override
 	public void start(Stage stage) throws Exception {
@@ -31,7 +36,6 @@ public class Main extends Application {
 		
 		
 		stage.setScene(new HomeScene(playerFrigidaire) {
-			@Override
 			public void switchToScene(Scene scene) {
 				stage.setScene(scene);
 			}
@@ -46,8 +50,12 @@ public class Main extends Application {
 	}
 	
 	public static Image loadImage(String imageString, int w, int h) {
+		return loadImage(imageString, w, h, false);
+	}
+	
+	public static Image loadImage(String imageString, int w, int h, boolean smooth) {
 		InputStream stream = Main.class.getResourceAsStream(imageString);
-		return new Image(stream, w,h,true, true);
+		return new Image(stream, w, h, true, smooth);
 	}
 	
 }

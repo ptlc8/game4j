@@ -17,7 +17,7 @@ public class ConsoleMain {
 			System.out.println("2 : Charger la sauvegarde");
 			String line = sc.next();
 			if (line.equals("1"))
-				game = new Game(5, 20);
+				game = new Game(10,5,20);
 			else if (line.equals("2")) {
 				game = Game.loadSave(new String(new FileInputStream(new File("save")).readAllBytes()));
 			} if (game != null)
@@ -61,8 +61,11 @@ public class ConsoleMain {
 				break;
 			}
 			game.display();
+			if (game.isFinished())
+				break;
 		}
 		sc.close();
+		DataMining.getQI(game);
 	}
 
 }

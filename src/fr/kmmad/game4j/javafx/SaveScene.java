@@ -1,7 +1,5 @@
 package fr.kmmad.game4j.javafx;
 
-import java.sql.SQLException;
-
 import fr.kmmad.game4j.Game;
 import fr.kmmad.game4j.Game4j;
 import javafx.scene.Scene;
@@ -12,23 +10,25 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
-public abstract class HistoScene extends Scene{
+public abstract class SaveScene extends Scene{
+	
+	
 
-	public HistoScene() throws SQLException {
+	public SaveScene() {
 		super(new VBox(), 1000, 700);
-		
+
 		ImageView homeButtonView = new ImageView(Main.homeImage);
 		homeButtonView.setPickOnBounds(true);
 		
-		Text histoTitle = new Text("History");
-		histoTitle.setFont(new Font(50));
+		Text saveTitle = new Text("Saves");
+		saveTitle.setFont(new Font(50));
 		
 		VBox scrollVBox = new VBox();
-		ScrollPane histoScroll = new ScrollPane();
-		histoScroll.setContent(scrollVBox);
+		ScrollPane saveScroll = new ScrollPane();
+		saveScroll.setContent(scrollVBox);
 		
 		Game4j game4j = new Game4j();
-		for(Game game : game4j.getHistory()) {
+		for(Game game : game4j.getAllSaves()) {
 			HBox gameHBox = new HBox();
 			Text gameText = new Text(game.getDate()+"");
 			if(game.isVictory()) {
@@ -43,37 +43,38 @@ public abstract class HistoScene extends Scene{
 			}
 			Text movesText = new Text(10+""/*game.getPath().size()*/);
 			Text energyText = new Text(game.getPlayer().getEnergy()+"");
-			ImageView replayButtonView = new ImageView(Main.replayImage);
-			replayButtonView.setPickOnBounds(true);
-			replayButtonView.setOnMouseClicked(event ->{
+			ImageView saveButtonView = new ImageView(Main.replayImage);
+			saveButtonView.setPickOnBounds(true);
+			saveButtonView.setOnMouseClicked(event ->{
 				switchToScene(new GameScene(game) {
 					@Override
 					public void switchToHomeScene() {
-						HistoScene.this.switchToHomeScene();
+						SaveScene.this.switchToHomeScene();
 					}
 				});
 			});
 			gameHBox.getChildren().add(gameText);
 			gameHBox.getChildren().add(movesText);
 			gameHBox.getChildren().add(energyText);
-			gameHBox.getChildren().add(replayButtonView);
+			gameHBox.getChildren().add(saveButtonView);
 			scrollVBox.getChildren().add(gameHBox);
 		}
 		
-		VBox menuHisto = new VBox();
-		menuHisto.getChildren().add(homeButtonView);
-		menuHisto.getChildren().add(histoTitle);
-		menuHisto.getChildren().add(histoScroll);
-		menuHisto.setId("histo");
-		setRoot(menuHisto);
+		VBox menuSave = new VBox();
+		menuSave.getChildren().add(homeButtonView);
+		menuSave.getChildren().add(saveTitle);
+		menuSave.getChildren().add(saveScroll);
+		menuSave.setId("save");
+		setRoot(menuSave);
 		
-		getStylesheets().add("assets/histo.css");
+		getStylesheets().add("assets/save.css");
 		
 		homeButtonView.setOnMouseClicked(event -> {
 			switchToHomeScene();
 		});
 	}
 	public abstract void switchToScene(Scene scene);
-	
+
 	protected abstract void switchToHomeScene();
+
 }

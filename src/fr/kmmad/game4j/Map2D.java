@@ -12,26 +12,28 @@ public class Map2D implements Serializable {
 	
 	private Cell[][] matrix;
 	Random rn = new Random();
+	private int size;
 
-	public Map2D(int bnsRate, int obsRate) {
+	public Map2D(int size, int bnsRate, int obsRate) {
+		this.size = size;
 		generateMap(bnsRate, obsRate);
-		while (shortPath(getCell(0,0),getCell(9,9)) == null) {
+		while (shortPath(getCell(0,0),getCell(size -1,size -1)) == null) { // s'assurer qu'un plus court chemin existe
 			generateMap(bnsRate, obsRate);
 		}
 	}	
 	
 	private void generateMap(int bnsRate, int obsRate) {
-		matrix = new Cell[10][10];
+		matrix = new Cell[size][size]; // initialisation du plateau
 		for (int i=0; i<matrix.length; i ++) {
-			matrix[i] = new Cell[10];
+			matrix[i] = new Cell[size];
 			for (int j=0; j<matrix.length; j ++) {	
 				int rand = rn.nextInt(100) + 1;
 				if(rand<bnsRate) {
-					matrix[i][j] = new Cell(i,j, i*10+j,Type.BONUS);
+					matrix[i][j] = new Cell(i,j, i*size+j,Type.BONUS);
 				}else if(bnsRate<rand && rand<bnsRate+obsRate) {
-					matrix[i][j] = new Cell(i,j, i*10+j,Type.OBSTACLE);
+					matrix[i][j] = new Cell(i,j, i*size+j,Type.OBSTACLE);
 				}else {
-					matrix[i][j] = new Cell(i,j, i*10+j,Type.EMPTY);
+					matrix[i][j] = new Cell(i,j, i*size+j,Type.EMPTY);
 				}
 			}
 		}
@@ -41,9 +43,9 @@ public class Map2D implements Serializable {
 					matrix[i][j].setNeighN(new Neighbor(matrix[i-1][j], 1));
 				if (j > 0)
 					matrix[i][j].setNeighW(new Neighbor(matrix[i][j-1], 1));
-				if (i < 9)
+				if (i < size-1)
 					matrix[i][j].setNeighS(new Neighbor(matrix[i+1][j], 1));
-				if (j < 9)
+				if (j < size-1)
 					matrix[i][j].setNeighE(new Neighbor(matrix[i][j+1], 1));
 			}
 		}
@@ -55,27 +57,22 @@ public class Map2D implements Serializable {
 	}
 	
 	public Cell getCell(int id) {
-		return matrix[id/10][id%10];
+		return matrix[id/size][id%size];
 		
 	}
-	
-	
-	public void refreshMap() {
-		
-	}
-	public int[][] GenerateMatDist() {
-		int[][] matDist = new int[100][100];
+	public int[][] generateMatDist() {
+		int[][] matDist = new int[size*size][size*size];
 		for (int i=0; i<matrix.length; i ++) {
 			for (int j=0; j<matrix.length; j ++) {
-				matDist[i*10+j]= new int[100];
+				matDist[i*size+j]= new int[size*size];
 				for (int k=0; k<matrix.length; k ++) {
 					for (int l=0; l<matrix.length; l++) {
 						if (matrix[i][j]==matrix[k][l]) {
-							matDist[i*10+j][k*10+l]=0;
+							matDist[i*size+j][k*size+l]=0;
 						}
 						
 						else {
-							matDist[i*10+j][k*10+l]=matrix[i][j].getDist(matrix[k][l]);
+							matDist[i*size+j][k*size+l]=matrix[i][j].getDist(matrix[k][l]);
 						}
 					}
 				}
@@ -84,10 +81,10 @@ public class Map2D implements Serializable {
 		return matDist;
 	}
 	
-	public int[][] GenerateMatEnergy() {
-		int[][] matEnergy = new int[10][10];
+	public int[][] generateMatEnergy() { // initialisation de la matrice d'énergie 
+		int[][] matEnergy = new int[size][size];
 		for (int i=0; i<matrix.length; i ++) {
-			matEnergy[i]= new int[10];
+			matEnergy[i]= new int[size];
 			for (int j=0; j<matrix.length; j ++) {
 				matEnergy[i][j]=matrix[i][j].getEnergy();	
 			}
@@ -95,22 +92,24 @@ public class Map2D implements Serializable {
 		return matEnergy;
 	}
 	
-	public ArrayList<Cell> shortPath(Cell c1, Cell c2) { // c1 cell de départ et c2 arrivée
-		int[][] graph = GenerateMatDist();
+	public ArrayList<Cell> shortPath(Cell c1, Cell c2) { // c1 cell de départ et c2 cell d'arrivée
+		int[][] graph = generateMatDist(); // graph représente le plus court chemin
 		int[] preced = new int[graph.length];
 		int[] distOrigin = new int[graph.length];
-		for(int i=0; i<matrix.length; i++) {  //initialisation
+		for(int i=0; i<graph.length; i++) {  //initialisation
 			distOrigin[i] = Integer.MAX_VALUE;
 			preced[i] = -1;
 		}
 		distOrigin[c1.getId()]=0;
-		for(int i=0; i<matrix.length; i++) {
-			if (!getCell(i).getType().equals(Cell.Type.OBSTACLE)) { // test si la case est un obstacle
-				for(int j=0; j<matrix.length; j++) {
-					if (graph[i][j] < Integer.MAX_VALUE) {
-						if (graph[i][j] + distOrigin[i] < distOrigin[j]) {
-							distOrigin[j]= graph[i][j] + distOrigin[i];
-							preced[j]=i;
+		for(int i=0; i<graph.length; i++) {
+			if (!getCell(i).getType().equals(Cell.Type.OBSTACLE)) { // test si la case n'est pas un obstacle
+				for(int j=0; j<graph.length; j++) {
+					if (!getCell(j).getType().equals(Cell.Type.OBSTACLE)) {
+						if (graph[i][j] < Integer.MAX_VALUE && distOrigin[i]<Integer.MAX_VALUE) {
+							if (graph[i][j] + distOrigin[i] < distOrigin[j]) {
+								distOrigin[j]= graph[i][j] + distOrigin[i];
+								preced[j]=i;
+							}
 						}
 					}
 				}
@@ -129,7 +128,10 @@ public class Map2D implements Serializable {
 		}
 		return shortPath;
 	}
-
+	
+	public int getSize() {
+		return this.size;
+	}
 }
 
 

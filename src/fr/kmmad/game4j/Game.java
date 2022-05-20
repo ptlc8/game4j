@@ -41,16 +41,20 @@ public class Game implements Serializable {
 	 * @param bnsRate poucentage de bonus sur la carte
 	 * @param obsRate poucentage d'obstacles sur la carte
 	 */
-	public Game(int bnsRate, int obsRate) {
+	public Game(int size, int bnsRate, int obsRate) {
 		this.obsRate = obsRate;
 		this.bnsRate = bnsRate;
 		date = new Date();
-		map = new Map2D(bnsRate, obsRate);
+		map = new Map2D(size, bnsRate, obsRate);
 		player = new Player(map.getCell(0, 0), 10);
 		path = new ArrayList<>();
+<<<<<<< HEAD
 		pathCell = new ArrayList<>();
 		loop = new ArrayList<>();
 		System.out.println(map.shortPath(map.getCell(0), map.getCell(99)).size());
+=======
+		System.out.println(map.shortPath(map.getCell(0), map.getCell(size*size -1)).size());
+>>>>>>> 9dbdd9774d011a142765fbb47d83613aee2f7e19
 	}
 	
 	/**
@@ -127,7 +131,10 @@ public class Game implements Serializable {
 		else
 			player.loseEnergy(-energy);
 		if (cell.getType() == Type.BONUS)
+		{
 			cell.setNextType(Type.EMPTY);
+			player.setNumberBonus(player.getNumberBonus()+1);
+		}
 		else cell.setNextType(cell.getType());
 		player.setCell(cell);
 		path.add(direction);
@@ -155,6 +162,9 @@ public class Game implements Serializable {
 		Direction direction = path.remove(path.size()-1);
 		pathCell.remove(pathCell.size()-1);
 		Cell cell = player.getCell();
+		if (cell.getType().equals(Type.BONUS)) {
+			player.setNumberBonus(player.getNumberBonus()-1);
+		}
 		player.setCell(cell.getNeigh(direction.getOpposite()).getCell());
 		cell.resetPreviousType();
 		int energy = cell.getEnergy();
@@ -233,4 +243,35 @@ public class Game implements Serializable {
 		return bnsRate;
 	}
 	
+<<<<<<< HEAD
+=======
+	/**
+	 * @return true si la partie est terminée sinon false
+	 */
+	public boolean isFinished() {
+		return isVictory() || isDefeat();
+	}
+	
+	/**
+	 * @return true si la partie est gangée sinon false
+	 */
+	public boolean isVictory() {
+		return player.getCell() == map.getCell(map.getSize()-1, map.getSize()-1);
+	}
+	
+	/**
+	 * @return true si la partie est perdue sinon false
+	 */
+	public boolean isDefeat() {
+		return player.getEnergy() == 0 && player.getAvailableCancelAmount() == 0;
+	}
+	
+	/**
+	 * @return le joueur
+	 */
+	public Player getPlayer() {
+		return player;
+	}
+	
+>>>>>>> 9dbdd9774d011a142765fbb47d83613aee2f7e19
 }

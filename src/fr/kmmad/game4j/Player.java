@@ -16,6 +16,7 @@ public class Player implements Serializable {
 	private int initialEnergy, lostEnergy = 0, earnedEnergy = 0;
 	private int cancelAmount = 0;
 	private Cell cell;
+	private int numberBonus = 0;
 
 	/**
 	 * Crée un joueur
@@ -26,6 +27,13 @@ public class Player implements Serializable {
 	public Player(Cell startCell, int initialEnergy) {
 		cell = startCell;
 		this.initialEnergy = initialEnergy;
+		this.numberBonus  = 0;
+	}
+	public int getNumberBonus() {
+		return this.numberBonus;
+	}
+	public void setNumberBonus(int numberBonus) {
+		this.numberBonus = numberBonus;
 	}
 
 	/**

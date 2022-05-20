@@ -1,17 +1,23 @@
 package fr.kmmad.game4j.javafx;
 
 import fr.kmmad.game4j.Game;
+import fr.kmmad.game4j.Game4j;
+
+import java.util.Random;
+
 import fr.kmmad.game4j.Cell.Type;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.CheckBox;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
@@ -20,33 +26,39 @@ public abstract class GameScene extends Scene{
 	private Text victoryText, defeatText, energyAmount, cancelAmount;
 	private GridPane gridInGame;
 	
-	public GameScene() {
-		super(new VBox(), 1000, 1000);
-
-		Game game = new Game(5,20);
+	public GameScene(Game game) {
+		super(new VBox(), 1000, 700);
 		
-		//Text in game
 		Text inGameText = new Text("Try to escape !");
 		inGameText.setId("inGameText");
 		
-		//Home image
 		ImageView homeButtonView = new ImageView(Main.homeImage);
 		homeButtonView.setPickOnBounds(true);
-		//Cancel move button
 		ImageView cancelButtonView = new ImageView(Main.cancelImage);
 		cancelButtonView.setPickOnBounds(true);
-		//Save button
 		ImageView saveButtonView = new ImageView(Main.saveImage);
 		saveButtonView.setPickOnBounds(true);
-		//Image Energy
 		ImageView energyImageView = new ImageView(Main.energyImage);
-		//Image Cancel
 		ImageView cancelImageView = new ImageView(Main.cancelImage);
 		
+		Text shortestPathText = new Text("Shortest path");
+		CheckBox shortestCheckBox = new CheckBox();
+		HBox shortestHBox = new HBox();
+		shortestHBox.getChildren().add(shortestPathText);
+		shortestHBox.getChildren().add(shortestCheckBox);
+		
+		
+		Text gamePathText = new Text("My path"); 
+		CheckBox gameCheckBox = new CheckBox();
+		HBox gameHBox = new HBox();
+		gameHBox.getChildren().add(gamePathText);
+		gameHBox.getChildren().add(gameCheckBox);
 		
 		//Vertical box left part
 		VBox leftPart = new VBox();
-		leftPart.getChildren().add(homeButtonView);		
+		leftPart.getChildren().add(homeButtonView);
+		leftPart.getChildren().add(shortestHBox);
+		leftPart.getChildren().add(gameHBox);
 		
 		//Horizontal box buttons right
 		HBox buttonsRight = new HBox();
@@ -84,6 +96,8 @@ public abstract class GameScene extends Scene{
 		gridInGame = new GridPane();
 		gridInGame.setId("gridInGame");
 		gridInGame.setAlignment(Pos.CENTER);
+		gridInGame.setHgap(1);
+		gridInGame.setVgap(1);
 		
 		
 		//Victory text
@@ -131,9 +145,21 @@ public abstract class GameScene extends Scene{
 			switchToHomeScene();
 		});
 		
+		saveButtonView.setOnMouseClicked(event -> {
+			Game4j game4j = new Game4j();
+			if(game.isFinished()) {
+				game4j.addGameHistory(game);
+			}else if (!game.isFinished()) {
+				game4j.addGameSave(game, "uwu"+new Random().nextInt(5));
+			}
+		});
 
 		parent.requestFocus();
 		
+	}
+	
+	public GameScene() {
+		this(new Game(10,5,20));
 	}
 	
 	protected abstract void switchToHomeScene();
@@ -143,20 +169,22 @@ public abstract class GameScene extends Scene{
 		defeatText.setVisible(game.isDefeat());
 		energyAmount.setText(""+game.getPlayer().getEnergy());
 		cancelAmount.setText(""+ game.getPlayer().getAvailableCancelAmount());
-    	gridInGame.getChildren().removeAll();
-		int s = 80;
-		for(int i = 0; i<10; i++) {
-			for(int j = 0; j<10; j++) {
-				Rectangle r = new Rectangle(s, s, s, s);
+    	gridInGame.getChildren().clear();
+		for(int i = 0; i<game.getMap().getSize(); i++) {
+			for(int j = 0; j<game.getMap().getSize(); j++) {
+				ImageView cellView;
 				if (game.getMap().getCell(i,j).getType() == Type.BONUS)
-					r.setFill(Color.GREEN);
+					cellView = new ImageView(Main.carrotOnFieldImage);
 				else if (game.getMap().getCell(i,j).getType() == Type.OBSTACLE)
-					r.setFill(Color.RED);
-				else if (game.getPlayer().getCell().getCoordX() == i && game.getPlayer().getCell().getCoordY() == j)
-					r.setFill(Color.YELLOW);
-				else r.setFill(Color.WHITE);
-				gridInGame.add(r, j, i+1);
+					cellView = new ImageView(Main.cornFieldImage);
+				else
+					cellView = new ImageView(Main.emptyFieldImage);
+				gridInGame.add(cellView, j, i);
 			}
+		}
+		ImageView playerView = new ImageView(Main.rabbitImage);
+		gridInGame.add(playerView, game.getPlayer().getCell().getCoordY(), game.getPlayer().getCell().getCoordX());
+		if(game.isFinished()) {
 		}
 	}
 	
