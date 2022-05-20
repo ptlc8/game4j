@@ -35,9 +35,8 @@ public class Game4j {
 		Statement statement = bdd.createStatement();
 		ResultSet rs = statement.executeQuery("Select * From saves");
 		List<Game> recupSaves = new ArrayList<Game>(); 
-		for (int i=0; i <= rs.getFetchSize() ; i++) {
+		while (rs.next()) {
 			recupSaves.add(Game.loadSave(rs.getString("game")));
-			rs.next();
 		}
 		return recupSaves;
 	}	
@@ -47,10 +46,9 @@ public class Game4j {
 		Statement statement = bdd.createStatement();
 		ResultSet rs = statement.executeQuery("Select name From saves Where name LIKE "+nameSave+"");
 		System.out.println(rs.getInt("id"));
-		if (rs.getFetchSize()==0) {
+		if (!rs.next()) {
 			return null;
 		}
-		rs.next();
 		return Game.loadSave(rs.getString("game"));
 	}
 
@@ -62,8 +60,8 @@ public class Game4j {
 	}
 	
 	// Ajouter une partie en cours dans la sauvegarde 
-	public void addGameSave(Game game) throws SQLException {
+	public void addGameSave(Game game, String name) throws SQLException {
 		Statement statement = bdd.createStatement();
-		statement.executeUpdate("Insert into saves(date, game) values("+new Date(game.getDate().getTime())+","+game.createSave()+")");
+		statement.executeUpdate("Insert into saves(date, game, name) values('"+new Date(game.getDate().getTime())+"','"+game.createSave()+"','"+name+"')");
 	}
 }
