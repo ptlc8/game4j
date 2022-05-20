@@ -1,5 +1,9 @@
 package fr.kmmad.game4j;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
 public class DataMining{
 	
 	
@@ -22,7 +26,18 @@ public class DataMining{
 		// on divise par 10 le pourcentage et c'est le nombre de point que l'on donne au qi 
 		int percentageObstacles = game.getPlayer().getNumberBonus()/10;
 		qi = qi + percentageObstacles;
+		
+		try {
+			FileWriter fw = new FileWriter("data.csv",true);
+			fw.write(qi);
+			fw.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("echec");
+		
+		}
 
+		System.out.println("partie finit");
 		if (qi >= 8 ){
 			System.out.println("QI HAUT");
 		}else if (qi >= 5) {
