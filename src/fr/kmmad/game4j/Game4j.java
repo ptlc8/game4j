@@ -14,13 +14,13 @@ public class Game4j {
 		System.out.println(a);
 	}
 	private Connection bdd ;
-	Game4j() throws SQLException{
+	public Game4j() throws SQLException{
 		//DriverManager.registerDriver(new Driver());
 		bdd = DriverManager.getConnection("jdbc:mysql://localhost:"+Credentials.DB_PORT+"/game4j", Credentials.DB_USERNAME, Credentials.DB_PASSWORD);
 	}
 	
 	// recuperer parties finies de l'historique
-	List<Game> getHistory() throws SQLException{
+	public List<Game> getHistory() throws SQLException{
 		Statement statement = bdd.createStatement();
 		ResultSet rs = statement.executeQuery("Select * From history");
 		List<Game> recupGameFinish = new ArrayList<Game>();
@@ -31,7 +31,7 @@ public class Game4j {
 	}
 
 	// recuperer toutes les parties en cours de la sauvegarde 
-	List<Game> getAllSaves() throws SQLException{
+	public List<Game> getAllSaves() throws SQLException{
 		Statement statement = bdd.createStatement();
 		ResultSet rs = statement.executeQuery("Select * From saves");
 		List<Game> recupSaves = new ArrayList<Game>(); 
@@ -43,7 +43,7 @@ public class Game4j {
 	}	
 	
 	// R�cup�rer une partie en cours dans la sauvegarde � partir de son nom
-	Game getSave(String nameSave) throws SQLException {
+	public Game getSave(String nameSave) throws SQLException {
 		Statement statement = bdd.createStatement();
 		ResultSet rs = statement.executeQuery("Select name From saves Where name LIKE "+nameSave+"");
 		System.out.println(rs.getInt("id"));
@@ -55,14 +55,14 @@ public class Game4j {
 	}
 
 	// Ajouter une partie finie et la mettre dans l'historique
-	void addGameHistory(Game game) throws SQLException {
+	public void addGameHistory(Game game) throws SQLException {
 		Statement statement = bdd.createStatement();
 		System.out.println("Insert into history(date, game) values('"+new Date(game.getDate().getTime())+"','"+game.createSave()+"')");
 		statement.executeUpdate("Insert into history(date, game) values('"+new Date(game.getDate().getTime())+"','"+game.createSave()+"')");
 	}
 	
 	// Ajouter une partie en cours dans la sauvegarde 
-	void addGameSave(Game game) throws SQLException {
+	public void addGameSave(Game game) throws SQLException {
 		Statement statement = bdd.createStatement();
 		statement.executeUpdate("Insert into saves(date, game, id) values)"+game.getDate()+","+game.createSave()+")");
 	}
