@@ -1,5 +1,6 @@
 package fr.kmmad.game4j.javafx;
 
+import fr.kmmad.game4j.Game4j;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Slider;
@@ -13,6 +14,8 @@ public abstract class OptionsScene extends Scene{
 
 	public OptionsScene(MediaPlayer player) {
 		super(new VBox(), 1000, 700);
+		
+		Game4j game4j = new Game4j();
 		
 		ImageView homeButtonView = new ImageView(Main.homeImage);
 		homeButtonView.setPickOnBounds(true);
@@ -44,8 +47,11 @@ public abstract class OptionsScene extends Scene{
 		effectSlider.setMax(100);
 		effectSlider.setShowTickLabels(false);
 		
-		Text clearHisto = new Text("Clear historique");
+		Text clearHisto = new Text("Clear Histo");
 		clearHisto.setFont(new Font(50));
+		
+		Text clearSave = new Text("Clear Saves");
+		clearSave.setFont(new Font(50));
 		
 		
 		
@@ -58,7 +64,9 @@ public abstract class OptionsScene extends Scene{
 		optionVBox.getChildren().add(effectTitle);
 		optionVBox.getChildren().add(effectSlider);
 		optionVBox.getChildren().add(clearHisto);
+		optionVBox.getChildren().add(clearSave);
 		optionVBox.setAlignment(Pos.CENTER);
+		optionVBox.setId("option");
 		setRoot(optionVBox);
 		
 		getStylesheets().add("assets/options.css");
@@ -70,7 +78,11 @@ public abstract class OptionsScene extends Scene{
 		});
 		
 		clearHisto.setOnMouseClicked(event -> {
-			
+			game4j.deleteHistory();
+		});
+		
+		clearSave.setOnMouseClicked(event -> {
+			game4j.deleteSave();
 		});
 		
 	}

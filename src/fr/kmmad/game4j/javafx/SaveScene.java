@@ -10,22 +10,22 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
-public abstract class ReplayScene extends Scene{
+public abstract class SaveScene extends Scene{
 	
 	
 
-	public ReplayScene() {
+	public SaveScene() {
 		super(new VBox(), 1000, 700);
 
 		ImageView homeButtonView = new ImageView(Main.homeImage);
 		homeButtonView.setPickOnBounds(true);
 		
-		Text replayTitle = new Text("Replay");
-		replayTitle.setFont(new Font(50));
+		Text saveTitle = new Text("Saves");
+		saveTitle.setFont(new Font(50));
 		
 		VBox scrollVBox = new VBox();
-		ScrollPane replayScroll = new ScrollPane();
-		replayScroll.setContent(scrollVBox);
+		ScrollPane saveScroll = new ScrollPane();
+		saveScroll.setContent(scrollVBox);
 		
 		Game4j game4j = new Game4j();
 		for(Game game : game4j.getAllSaves()) {
@@ -43,27 +43,31 @@ public abstract class ReplayScene extends Scene{
 			}
 			Text movesText = new Text(10+""/*game.getPath().size()*/);
 			Text energyText = new Text(game.getPlayer().getEnergy()+"");
-			ImageView replayButtonView = new ImageView(Main.replayImage);
-			replayButtonView.setOnMouseClicked(event ->{
+			ImageView saveButtonView = new ImageView(Main.replayImage);
+			saveButtonView.setPickOnBounds(true);
+			saveButtonView.setOnMouseClicked(event ->{
 				switchToScene(new GameScene(game) {
 					@Override
 					public void switchToHomeScene() {
-						switchToScene(ReplayScene.this);
+						SaveScene.this.switchToHomeScene();
 					}
 				});
 			});
 			gameHBox.getChildren().add(gameText);
 			gameHBox.getChildren().add(movesText);
 			gameHBox.getChildren().add(energyText);
-			gameHBox.getChildren().add(replayButtonView);
+			gameHBox.getChildren().add(saveButtonView);
 			scrollVBox.getChildren().add(gameHBox);
 		}
 		
-		VBox menuReplay = new VBox();
-		menuReplay.getChildren().add(homeButtonView);
-		menuReplay.getChildren().add(replayTitle);
-		menuReplay.getChildren().add(replayScroll);
-		setRoot(menuReplay);
+		VBox menuSave = new VBox();
+		menuSave.getChildren().add(homeButtonView);
+		menuSave.getChildren().add(saveTitle);
+		menuSave.getChildren().add(saveScroll);
+		menuSave.setId("save");
+		setRoot(menuSave);
+		
+		getStylesheets().add("assets/save.css");
 		
 		homeButtonView.setOnMouseClicked(event -> {
 			switchToHomeScene();

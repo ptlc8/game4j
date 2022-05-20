@@ -29,10 +29,10 @@ public abstract class HomeScene extends Scene{
 		playButton.setFont(new Font(40));
 
 		//Button replay
-		Button replayButton = new Button("Replay");
-		replayButton.getStyleClass().add("button");
-		replayButton.setId("replayButton");
-		replayButton.setFont(new Font(40));
+		Button saveButton = new Button("Saves");
+		saveButton.getStyleClass().add("button");
+		saveButton.setId("replayButton");
+		saveButton.setFont(new Font(40));
 
 		//Button histo
 		Button histoButton = new Button("Historique");
@@ -55,15 +55,15 @@ public abstract class HomeScene extends Scene{
 		gridHome.setAlignment(Pos.CENTER);
 		gridHome.add(titleHome, 0, 0);
 		gridHome.add(playButton, 0, 1);
-		gridHome.add(replayButton, 0, 2);
+		gridHome.add(saveButton, 0, 2);
 		gridHome.add(histoButton, 0, 3);
 		gridHome.add(optionButton, 0, 4);
 		GridPane.setHalignment(titleHome, HPos.CENTER);
 		GridPane.setValignment(titleHome, VPos.CENTER);
 		GridPane.setHalignment(playButton, HPos.CENTER);
 		GridPane.setValignment(playButton, VPos.CENTER);
-		GridPane.setHalignment(replayButton, HPos.CENTER);
-		GridPane.setValignment(replayButton, VPos.CENTER);
+		GridPane.setHalignment(saveButton, HPos.CENTER);
+		GridPane.setValignment(saveButton, VPos.CENTER);
 		GridPane.setHalignment(histoButton, HPos.CENTER);
 		GridPane.setValignment(histoButton, VPos.CENTER);
 		GridPane.setHalignment(optionButton, HPos.CENTER);
@@ -83,8 +83,8 @@ public abstract class HomeScene extends Scene{
 			});
 		});
 		
-		replayButton.setOnMouseClicked(event -> {
-			switchToScene(new ReplayScene() {
+		saveButton.setOnMouseClicked(event -> {
+			switchToScene(new SaveScene() {
 				@Override
 				public void switchToHomeScene() {
 					switchToScene(HomeScene.this);
@@ -103,6 +103,11 @@ public abstract class HomeScene extends Scene{
 					public void switchToHomeScene() {
 						switchToScene(HomeScene.this);
 					}
+
+					@Override
+					public void switchToScene(Scene scene) {
+						HomeScene.this.switchToScene(scene);
+					}
 				});
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -119,7 +124,7 @@ public abstract class HomeScene extends Scene{
 				}
 			});
 		});
-
+		
 	}
 	
 	public abstract void switchToScene(Scene scene);
