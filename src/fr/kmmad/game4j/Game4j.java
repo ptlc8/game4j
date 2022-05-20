@@ -85,4 +85,26 @@ public class Game4j {
 			e.printStackTrace();
 		}
 	}
+	
+	//Effacer la table de sauvegarde 
+	public void deleteSave() {
+		try {
+			Statement statement = bdd.createStatement();
+			statement.executeUpdate("Delete FROM saves");		
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	//Effacer la table de l'historique 
+	public void deleteHistory() {
+		try {
+			Statement statement = bdd.createStatement();
+			statement.executeUpdate("Delete FROM history");		
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+	}
 }
