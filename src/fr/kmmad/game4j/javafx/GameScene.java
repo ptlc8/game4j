@@ -23,7 +23,7 @@ public abstract class GameScene extends Scene{
 	public GameScene() {
 		super(new VBox(), 1000, 1000);
 
-		Game game = new Game(5,20);
+		Game game = new Game(6,5,20);
 		
 		//Text in game
 		Text inGameText = new Text("Try to escape !");
@@ -145,8 +145,8 @@ public abstract class GameScene extends Scene{
 		cancelAmount.setText(""+ game.getPlayer().getAvailableCancelAmount());
     	gridInGame.getChildren().removeAll();
 		int s = 80;
-		for(int i = 0; i<10; i++) {
-			for(int j = 0; j<10; j++) {
+		for(int i = 0; i<game.getMap().getSize(); i++) {
+			for(int j = 0; j<game.getMap().getSize(); j++) {
 				Rectangle r = new Rectangle(s, s, s, s);
 				if (game.getMap().getCell(i,j).getType() == Type.BONUS)
 					r.setFill(Color.GREEN);

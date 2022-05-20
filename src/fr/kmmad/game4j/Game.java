@@ -37,14 +37,14 @@ public class Game implements Serializable {
 	 * @param bnsRate poucentage de bonus sur la carte
 	 * @param obsRate poucentage d'obstacles sur la carte
 	 */
-	public Game(int bnsRate, int obsRate) {
+	public Game(int size, int bnsRate, int obsRate) {
 		this.obsRate = obsRate;
 		this.bnsRate = bnsRate;
 		date = new Date();
-		map = new Map2D(bnsRate, obsRate);
+		map = new Map2D(size, bnsRate, obsRate);
 		player = new Player(map.getCell(0, 0), 10);
 		path = new ArrayList<>();
-		System.out.println(map.shortPath(map.getCell(0), map.getCell(99)).size());
+		System.out.println(map.shortPath(map.getCell(0), map.getCell(size*size -1)).size());
 	}
 	
 	/**
@@ -210,7 +210,7 @@ public class Game implements Serializable {
 	 * @return true si la partie est gangée sinon false
 	 */
 	public boolean isVictory() {
-		return player.getCell() == map.getCell(9, 9);
+		return player.getCell() == map.getCell(map.getSize()-1, map.getSize()-1);
 	}
 	
 	/**
