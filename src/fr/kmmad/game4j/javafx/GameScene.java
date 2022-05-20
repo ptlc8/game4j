@@ -28,8 +28,6 @@ public abstract class GameScene extends Scene{
 	
 	public GameScene(Game game) {
 		super(new VBox(), 1000, 1000);
-
-		//Game game = new Game(5,20);
 		
 		Text inGameText = new Text("Try to escape !");
 		inGameText.setId("inGameText");
@@ -146,12 +144,8 @@ public abstract class GameScene extends Scene{
 		});
 		
 		saveButtonView.setOnMouseClicked(event -> {
-			try {
-				Game4j game4j = new Game4j();
-				game4j.addGameSave(game, "uwu"+new Random().nextInt(5));
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			Game4j game4j = new Game4j();
+			game4j.addGameSave(game, "uwu"+new Random().nextInt(5));
 		});
 
 		parent.requestFocus();
@@ -159,7 +153,7 @@ public abstract class GameScene extends Scene{
 	}
 	
 	public GameScene() {
-		this(new Game(5,20));
+		this(new Game(10,5,20));
 	}
 	
 	protected abstract void switchToHomeScene();
@@ -171,8 +165,8 @@ public abstract class GameScene extends Scene{
 		cancelAmount.setText(""+ game.getPlayer().getAvailableCancelAmount());
     	gridInGame.getChildren().removeAll();
 		int s = 80;
-		for(int i = 0; i<10; i++) {
-			for(int j = 0; j<10; j++) {
+		for(int i = 0; i<game.getMap().getSize(); i++) {
+			for(int j = 0; j<game.getMap().getSize(); j++) {
 				Rectangle r = new Rectangle(s, s, s, s);
 				if (game.getMap().getCell(i,j).getType() == Type.BONUS)
 					r.setFill(Color.GREEN);
