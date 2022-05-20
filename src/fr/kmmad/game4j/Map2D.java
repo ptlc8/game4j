@@ -15,13 +15,13 @@ public class Map2D implements Serializable {
 
 	public Map2D(int bnsRate, int obsRate) {
 		generateMap(bnsRate, obsRate);
-		while (shortPath(getCell(0,0),getCell(9,9)) == null) {
+		while (shortPath(getCell(0,0),getCell(9,9)) == null) { // s'assurer qu'un plus court chemin existe
 			generateMap(bnsRate, obsRate);
 		}
 	}	
 	
 	private void generateMap(int bnsRate, int obsRate) {
-		matrix = new Cell[10][10];
+		matrix = new Cell[10][10]; // initialisation du plateau
 		for (int i=0; i<matrix.length; i ++) {
 			matrix[i] = new Cell[10];
 			for (int j=0; j<matrix.length; j ++) {	
@@ -63,7 +63,7 @@ public class Map2D implements Serializable {
 	public void refreshMap() {
 		
 	}
-	public int[][] GenerateMatDist() {
+	public int[][] generateMatDist() {
 		int[][] matDist = new int[100][100];
 		for (int i=0; i<matrix.length; i ++) {
 			for (int j=0; j<matrix.length; j ++) {
@@ -84,7 +84,7 @@ public class Map2D implements Serializable {
 		return matDist;
 	}
 	
-	public int[][] GenerateMatEnergy() {
+	public int[][] generateMatEnergy() { // initialisation de la matrice d'énergie 
 		int[][] matEnergy = new int[10][10];
 		for (int i=0; i<matrix.length; i ++) {
 			matEnergy[i]= new int[10];
@@ -95,22 +95,24 @@ public class Map2D implements Serializable {
 		return matEnergy;
 	}
 	
-	public ArrayList<Cell> shortPath(Cell c1, Cell c2) { // c1 cell de départ et c2 arrivée
-		int[][] graph = GenerateMatDist();
+	public ArrayList<Cell> shortPath(Cell c1, Cell c2) { // c1 cell de départ et c2 cell d'arrivée
+		int[][] graph = generateMatDist(); // graph représente le plus court chemin
 		int[] preced = new int[graph.length];
 		int[] distOrigin = new int[graph.length];
-		for(int i=0; i<matrix.length; i++) {  //initialisation
+		for(int i=0; i<graph.length; i++) {  //initialisation
 			distOrigin[i] = Integer.MAX_VALUE;
 			preced[i] = -1;
 		}
 		distOrigin[c1.getId()]=0;
-		for(int i=0; i<matrix.length; i++) {
-			if (!getCell(i).getType().equals(Cell.Type.OBSTACLE)) { // test si la case est un obstacle
-				for(int j=0; j<matrix.length; j++) {
-					if (graph[i][j] < Integer.MAX_VALUE) {
-						if (graph[i][j] + distOrigin[i] < distOrigin[j]) {
-							distOrigin[j]= graph[i][j] + distOrigin[i];
-							preced[j]=i;
+		for(int i=0; i<graph.length; i++) {
+			if (!getCell(i).getType().equals(Cell.Type.OBSTACLE)) { // test si la case n'est pas un obstacle
+				for(int j=0; j<graph.length; j++) {
+					if (!getCell(j).getType().equals(Cell.Type.OBSTACLE)) {
+						if (graph[i][j] < Integer.MAX_VALUE && distOrigin[i]<Integer.MAX_VALUE) {
+							if (graph[i][j] + distOrigin[i] < distOrigin[j]) {
+								distOrigin[j]= graph[i][j] + distOrigin[i];
+								preced[j]=i;
+							}
 						}
 					}
 				}
@@ -129,7 +131,6 @@ public class Map2D implements Serializable {
 		}
 		return shortPath;
 	}
-
 }
 
 
