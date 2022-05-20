@@ -3,7 +3,6 @@ package fr.kmmad.game4j.javafx;
 import fr.kmmad.game4j.Game;
 import fr.kmmad.game4j.Game4j;
 
-import java.sql.SQLException;
 import java.util.Random;
 
 import fr.kmmad.game4j.Cell.Type;
@@ -145,7 +144,11 @@ public abstract class GameScene extends Scene{
 		
 		saveButtonView.setOnMouseClicked(event -> {
 			Game4j game4j = new Game4j();
-			game4j.addGameSave(game, "uwu"+new Random().nextInt(5));
+			if(game.isFinished()) {
+				game4j.addGameHistory(game);
+			}else if (!game.isFinished()) {
+				game4j.addGameSave(game, "uwu"+new Random().nextInt(5));
+			}
 		});
 
 		parent.requestFocus();
