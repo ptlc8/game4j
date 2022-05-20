@@ -64,6 +64,6 @@ public class Game4j {
 	// Ajouter une partie en cours dans la sauvegarde 
 	public void addGameSave(Game game) throws SQLException {
 		Statement statement = bdd.createStatement();
-		statement.executeUpdate("Insert into saves(date, game, id) values)"+game.getDate()+","+game.createSave()+")");
+		statement.executeUpdate("Insert into saves(date, game) values("+new Date(game.getDate().getTime())+","+game.createSave()+")");
 	}
 }
