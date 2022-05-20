@@ -61,8 +61,11 @@ public class ConsoleMain {
 				break;
 			}
 			game.display();
+			if (game.isFinished())
+				break;
 		}
 		sc.close();
+		DataMining.getQI(game);
 	}
 
 }

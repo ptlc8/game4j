@@ -121,7 +121,10 @@ public class Game implements Serializable {
 		else
 			player.loseEnergy(-energy);
 		if (cell.getType() == Type.BONUS)
+		{
 			cell.setNextType(Type.EMPTY);
+			player.setNumberBonus(player.getNumberBonus()+1);
+		}
 		else cell.setNextType(cell.getType());
 		player.setCell(cell);
 		path.add(direction);
@@ -142,6 +145,9 @@ public class Game implements Serializable {
 		player.increaseCancelAmount();
 		Direction direction = path.remove(path.size()-1);
 		Cell cell = player.getCell();
+		if (cell.getType().equals(Type.BONUS)) {
+			player.setNumberBonus(player.getNumberBonus()-1);
+		}
 		player.setCell(cell.getNeigh(direction.getOpposite()).getCell());
 		cell.resetPreviousType();
 		int energy = cell.getEnergy();

@@ -35,15 +35,14 @@ public class Game4j {
 		return recupGameFinish;
 	}
 
-	// recuperer toutes les parties en cours de la sauvegarde 
+	// recuperer toutes les parties en cours de la sauvegarde
 	public List<Game> getAllSaves() {
 		List<Game> recupSaves = new ArrayList<Game>();
 		try {
 			Statement statement = bdd.createStatement();
 			ResultSet rs = statement.executeQuery("Select * From saves");
-			for (int i=0; i <= rs.getFetchSize() ; i++) {
+			while (rs.next()) {
 				recupSaves.add(Game.loadSave(rs.getString("game")));
-				rs.next();
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -57,10 +56,9 @@ public class Game4j {
 			Statement statement = bdd.createStatement();
 			ResultSet rs = statement.executeQuery("Select name From saves Where name LIKE "+nameSave+"");
 			System.out.println(rs.getInt("id"));
-			if (rs.getFetchSize()==0) {
+			if (!rs.next()) {
 				return null;
 			}
-			rs.next();
 			return Game.loadSave(rs.getString("game"));
 		} catch (SQLException e) {
 			return null;
@@ -78,13 +76,35 @@ public class Game4j {
 		}
 	}
 	
-	// Ajouter une partie en cours dans la sauvegarde 
-	public void addGameSave(Game game) {
+	// Ajouter une partie en cours dans la sauvegarde
+	public void addGameSave(Game game, String name) {
 		try {
 			Statement statement = bdd.createStatement();
-			statement.executeUpdate("Insert into saves(date, game) values("+new Date(game.getDate().getTime())+","+game.createSave()+")");
+			statement.executeUpdate("Insert into saves(date, game, name) values('"+new Date(game.getDate().getTime())+"','"+game.createSave()+"','"+name+"')");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	//Effacer la table de sauvegarde 
+	public void deleteSave() {
+		try {
+			Statement statement = bdd.createStatement();
+			statement.executeUpdate("Delete FROM saves *");		
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	//Effacer la table de l'historique 
+	public void deleteHistory() {
+		try {
+			Statement statement = bdd.createStatement();
+			statement.executeUpdate("Delete FROM history *");		
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
 	}
 }
