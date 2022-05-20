@@ -4,6 +4,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Cette classe représente case :
+ * @author Mattéo
+ * @see Game
+ * @see Player#Player(Cell, int)
+ */
 public class Cell implements Serializable {
 	
 	private static final long serialVersionUID = 1L;

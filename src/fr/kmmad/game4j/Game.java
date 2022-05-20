@@ -2,6 +2,8 @@ package fr.kmmad.game4j;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -26,6 +28,8 @@ public class Game implements Serializable {
 	private Map2D map;
 	private Player player;
 	private List<Direction> path;
+	private List<Cell> pathCell;
+	private List<Cell> loop;
 	private int bnsRate;
 	private int obsRate;
 	private Date date;
@@ -44,6 +48,8 @@ public class Game implements Serializable {
 		map = new Map2D(bnsRate, obsRate);
 		player = new Player(map.getCell(0, 0), 10);
 		path = new ArrayList<>();
+		pathCell = new ArrayList<>();
+		loop = new ArrayList<>();
 		System.out.println(map.shortPath(map.getCell(0), map.getCell(99)).size());
 	}
 	
@@ -125,9 +131,15 @@ public class Game implements Serializable {
 		else cell.setNextType(cell.getType());
 		player.setCell(cell);
 		path.add(direction);
+		if(pathCell.contains(cell))
+			{
+			System.out.println("Attention, boucle détécté !");
+			}
+		pathCell.add(cell);
 		return true;
 	}
 
+	
 	/**
 	 * Annule le dernier mouvement effectué possible et remet l'état de la carte précédent,
 	 * pour cela il faut qu'il y ait un mouvement a annulé et il doit y avoir assez d'annulation
@@ -141,6 +153,7 @@ public class Game implements Serializable {
 			return false;
 		player.increaseCancelAmount();
 		Direction direction = path.remove(path.size()-1);
+		pathCell.remove(pathCell.size()-1);
 		Cell cell = player.getCell();
 		player.setCell(cell.getNeigh(direction.getOpposite()).getCell());
 		cell.resetPreviousType();
@@ -172,6 +185,27 @@ public class Game implements Serializable {
 	}
 	
 	/**
+	 * @return une liste contenant la toutes les cell de la boucle détcté
+	 */
+	public List<Cell> getLoop() {
+		List<Cell> loop = new ArrayList<Cell>();
+		int loopstart = 0;
+		int lastCell = pathCell.size()-1;
+		for(int i = 0; i < lastCell; i++)
+		{
+			if(pathCell.get(i) == pathCell.get(lastCell))
+			{
+				loopstart = pathCell.indexOf(pathCell.get(i));
+			}
+		}
+		for(int j = loopstart; j <= lastCell; j++)
+		{
+			loop.add(pathCell.get(j));
+		}
+		return loop;
+	}
+	
+	/**
 	 * @return carte du jeu
 	 */
 	public Map2D getMap() {
@@ -197,34 +231,6 @@ public class Game implements Serializable {
 	 */
 	public int getBonusRate() {
 		return bnsRate;
-	}
-	
-	/**
-	 * @return true si la partie est terminée sinon false
-	 */
-	public boolean isFinished() {
-		return isVictory() || isDefeat();
-	}
-	
-	/**
-	 * @return true si la partie est gangée sinon false
-	 */
-	public boolean isVictory() {
-		return player.getCell() == map.getCell(9, 9);
-	}
-	
-	/**
-	 * @return true si la partie est perdue sinon false
-	 */
-	public boolean isDefeat() {
-		return player.getEnergy() == 0 && player.getAvailableCancelAmount() == 0;
-	}
-	
-	/**
-	 * @return le joueur
-	 */
-	public Player getPlayer() {
-		return player;
 	}
 	
 }
