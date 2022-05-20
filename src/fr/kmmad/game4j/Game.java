@@ -48,13 +48,9 @@ public class Game implements Serializable {
 		map = new Map2D(size, bnsRate, obsRate);
 		player = new Player(map.getCell(0, 0), 10);
 		path = new ArrayList<>();
-<<<<<<< HEAD
 		pathCell = new ArrayList<>();
 		loop = new ArrayList<>();
-		System.out.println(map.shortPath(map.getCell(0), map.getCell(99)).size());
-=======
 		System.out.println(map.shortPath(map.getCell(0), map.getCell(size*size -1)).size());
->>>>>>> 9dbdd9774d011a142765fbb47d83613aee2f7e19
 	}
 	
 	/**
@@ -242,9 +238,7 @@ public class Game implements Serializable {
 	public int getBonusRate() {
 		return bnsRate;
 	}
-	
-<<<<<<< HEAD
-=======
+
 	/**
 	 * @return true si la partie est terminée sinon false
 	 */
@@ -272,6 +266,4 @@ public class Game implements Serializable {
 	public Player getPlayer() {
 		return player;
 	}
-	
->>>>>>> 9dbdd9774d011a142765fbb47d83613aee2f7e19
 }
