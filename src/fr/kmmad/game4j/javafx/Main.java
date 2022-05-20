@@ -15,10 +15,11 @@ public class Main extends Application {
 		Application.launch(args);
 	}
 	
-	public final  static Image homeImage = (loadImage("/assets/homeButton.png", 50, 50));
-	public final  static Image cancelImage = (loadImage("/assets/cancelButton.png", 50, 50));
-	public final  static Image saveImage = (loadImage("/assets/saveButton.png", 50, 50));
-	public final  static Image energyImage = (loadImage("/assets/boltImage.png", 50, 50));
+	public final static Image homeImage = loadImage("/assets/homeButton.png", 50, 50);
+	public final static Image cancelImage = loadImage("/assets/cancelButton.png", 50, 50);
+	public final static Image saveImage = loadImage("/assets/saveButton.png", 50, 50);
+	public final static Image energyImage = loadImage("/assets/boltImage.png", 50, 50);
+	public final static Image replayImage = loadImage("/assets/replayButton.png", 50, 50);
 	
 	@Override
 	public void start(Stage stage) throws Exception {
@@ -31,7 +32,6 @@ public class Main extends Application {
 		
 		
 		stage.setScene(new HomeScene(playerFrigidaire) {
-			@Override
 			public void switchToScene(Scene scene) {
 				stage.setScene(scene);
 			}
