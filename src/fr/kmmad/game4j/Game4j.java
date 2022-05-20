@@ -90,7 +90,7 @@ public class Game4j {
 	public void deleteSave() {
 		try {
 			Statement statement = bdd.createStatement();
-			statement.executeUpdate("Delete FROM saves");		
+			statement.executeUpdate("Delete FROM saves *");		
 		}catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -101,7 +101,7 @@ public class Game4j {
 	public void deleteHistory() {
 		try {
 			Statement statement = bdd.createStatement();
-			statement.executeUpdate("Delete FROM history");		
+			statement.executeUpdate("Delete FROM history *");		
 		}catch (SQLException e) {
 			e.printStackTrace();
 		}
