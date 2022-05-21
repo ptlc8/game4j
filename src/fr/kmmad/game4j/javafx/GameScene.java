@@ -277,7 +277,7 @@ public abstract class GameScene extends Scene{
 		});
 		
 		saveButtonView.setOnMouseClicked(event -> {
-			game4j.addGameSave(game, "uwu"+new Random().nextInt(5));
+			game4j.addGameSave(game, "uwu"+new Random().nextInt(100));
 		});
 
 		parent.requestFocus();

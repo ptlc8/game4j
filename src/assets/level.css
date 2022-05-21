@@ -1,0 +1,14 @@
+#levelMenu{
+	-fx-background-image: url("home.gif");
+    -fx-background-size:  cover;
+    -fx-alignment: center;
+}
+
+
+.button{
+    -fx-background-color: grey;
+    -fx-text-fill: black;
+    -fx-cursor : hand;
+    -fx-max-width: Infinity;
+    -fx-font-size:  40px;
+}

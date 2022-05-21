@@ -31,7 +31,7 @@ public class Main extends Application {
 	@Override
 	public void start(Stage stage) throws Exception {
 		
-		String ssoundFrigidaire = new File("bin/assets/frigidaire.mp3").toURI().toString();
+		String ssoundFrigidaire = new File("bin/assets/lapin-carottes.mp3").toURI().toString();
 		Media soundFrigidaire = new Media(ssoundFrigidaire);
 		MediaPlayer playerFrigidaire = new MediaPlayer(soundFrigidaire);
 		playerFrigidaire.setCycleCount(MediaPlayer.INDEFINITE);

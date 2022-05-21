@@ -21,7 +21,7 @@
 #leftPart{
 	-fx-translate-x: 30px;
 	-fx-background-color:  #ffffff;
-
+	-fx-background-insets:	50px, 0px, 100px, 0px;
 }
 
 #alertBoucle{
@@ -35,7 +35,7 @@
 	-fx-translate-x: 20px;
 	-fx-translate-y: 200px;
 }
-CheckBox {
+#pathVBox CheckBox {
 	-fx-padding: 5;
 }
 
