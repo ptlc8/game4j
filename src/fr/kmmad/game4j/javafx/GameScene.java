@@ -34,13 +34,11 @@ public abstract class GameScene extends Scene{
 	
 	private Text energyAmount, cancelAmount, alertText;
 	private GridPane gridInGame;
-	private HBox shortestHBox, pathHBox;
 	private boolean showGamePath = true, showShortestPath = true;
-	private HBox replayControlsHBox;
+	private HBox buttonsRight, shortestHBox, pathHBox;
 	private int replayProgress = 0;
-	private HBox buttonsRight;
 	private boolean historied = false;
-	private VBox alertBox;
+	private VBox alertBox, replayControlsVBox;
 	private Label alertBoucle;
 	private Game4j game4j;
 	
@@ -66,6 +64,10 @@ public abstract class GameScene extends Scene{
 		energyImageView.setId("energyImage");
 		ImageView cancelImageView = new ImageView(Main.cancelImage);
 		cancelImageView.setId("cancelImage");
+		ImageView arrowRightImageView = new ImageView(Main.arrowRight);
+		arrowRightImageView.setId("arrowRight");
+		ImageView arrowLeftImageView = new ImageView(Main.arrowRight);
+		arrowLeftImageView.setId("arrowRight");
 		
 		CheckBox shortestPathCheckBox = new CheckBox("Shortest path");
 		shortestPathCheckBox.setSelected(true);
@@ -88,7 +90,8 @@ public abstract class GameScene extends Scene{
 		pathHBox.getChildren().add(gamePathCheckBox);
 		pathHBox.setId("pathHBox");
 		
-		alertBoucle = new Label("Attention ! Il y a une boucle !");
+		alertBoucle = new Label("Attention !\nIl y a une boucle !");
+		alertBoucle.setId("alertBoucle");
 		alertBoucle.setVisible(false);
 		
 		//Vertical box left part
@@ -177,7 +180,7 @@ public abstract class GameScene extends Scene{
 		});
 		
 		Button previousButton = new Button();
-		previousButton.setGraphic(new ImageView(Main.replayImage));
+		previousButton.setGraphic(new ImageView(Main.arrowLeft));
 		previousButton.setOnAction(event -> {
 			if (replayProgress > 0)
 				replayProgress--;
@@ -185,7 +188,7 @@ public abstract class GameScene extends Scene{
 		});
 		
 		Button nextButton = new Button();
-		nextButton.setGraphic(new ImageView(Main.replayImage));
+		nextButton.setGraphic(new ImageView(Main.arrowRight));
 		nextButton.setOnAction(event -> {
 			if (replayProgress < game.getPath().size()-1)
 				replayProgress++;
@@ -203,11 +206,16 @@ public abstract class GameScene extends Scene{
 		fastOption.setOnAction(e -> replayService.setPeriod(Duration.seconds(0.05)));
 		speedButton.getItems().add(fastOption);
 
-		replayControlsHBox = new HBox();
+		HBox replayControlsHBox = new HBox();
 		replayControlsHBox.getChildren().add(previousButton);
-		replayControlsHBox.getChildren().add(speedButton);
 		replayControlsHBox.getChildren().add(replayButton);
 		replayControlsHBox.getChildren().add(nextButton);
+		replayControlsHBox.setId("replayHBox");
+		
+		replayControlsVBox = new VBox();
+		replayControlsVBox.getChildren().add(speedButton);
+		replayControlsVBox.getChildren().add(replayControlsHBox);
+		replayControlsVBox.setId("replayVBox");
 		
 		alertBox = new VBox();
 		alertBox.setId("alertBox");
@@ -236,7 +244,7 @@ public abstract class GameScene extends Scene{
 		BorderPane.setAlignment(inGameText, Pos.CENTER);
 		parent.setRight(rightPart);
 		parent.setLeft(leftPart);
-		parent.setBottom(replayControlsHBox);
+		parent.setBottom(replayControlsVBox);
 		
 		setRoot(parent);
 		
@@ -295,7 +303,7 @@ public abstract class GameScene extends Scene{
 		ImageView endView = new ImageView(Main.rabbitHouse);
 		pathHBox.setVisible(game.isFinished());
 		shortestHBox.setVisible(game.isFinished());
-		replayControlsHBox.setVisible(game.isFinished());
+		replayControlsVBox.setVisible(game.isFinished());
 		List<Cell> loop = game.getLoop();
 		if (loop != null) {
 			drawPath(loop, Color.RED);

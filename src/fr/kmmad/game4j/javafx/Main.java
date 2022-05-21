@@ -25,6 +25,8 @@ public class Main extends Application {
 	public final static Image carrotOnFieldImage = loadImage("/assets/carrot_on_field.png", 48, 48, false);
 	public final static Image rabbitImage = loadImage("/assets/rabbit.gif", 48, 48, false);
 	public final static Image rabbitHouse = loadImage("/assets/rabbitHouse.png", 50, 50, false);
+	public final static Image arrowRight = loadImage("/assets/arrowRight.png", 50, 50, false);
+	public final static Image arrowLeft = loadImage("/assets/arrowLeft.png", 50, 50, false);
 	
 	@Override
 	public void start(Stage stage) throws Exception {
