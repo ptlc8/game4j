@@ -41,7 +41,15 @@ public abstract class SaveScene extends Scene{
 				Text stateText = new Text("Ongoing");
 				gameHBox.getChildren().add(stateText);
 			}
-			Text movesText = new Text(10+""/*game.getPath().size()*/);
+			Text levelText = new Text();
+			if(game.getMap().getSize()<10) {
+				levelText.setText("Beginner");
+			}else if(game.getMap().getSize()>=12){
+				levelText.setText("Expert");
+			}else{
+				levelText.setText("Normal");
+			}
+			Text movesText = new Text(game.getPath().size()+"");
 			Text energyText = new Text(game.getPlayer().getEnergy()+"");
 			ImageView saveButtonView = new ImageView(Main.replayImage);
 			saveButtonView.setPickOnBounds(true);
@@ -54,6 +62,7 @@ public abstract class SaveScene extends Scene{
 				});
 			});
 			gameHBox.getChildren().add(gameText);
+			gameHBox.getChildren().add(levelText);
 			gameHBox.getChildren().add(movesText);
 			gameHBox.getChildren().add(energyText);
 			gameHBox.getChildren().add(saveButtonView);

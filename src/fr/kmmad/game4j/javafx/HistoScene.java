@@ -39,6 +39,14 @@ public abstract class HistoScene extends Scene{
 				Text stateText = new Text("Ongoing");
 				gameHBox.getChildren().add(stateText);
 			}
+			Text levelText = new Text();
+			if(game.getMap().getSize()<10) {
+				levelText.setText("Beginner");
+			}else if(game.getMap().getSize()>=12){
+				levelText.setText("Expert");
+			}else{
+				levelText.setText("Normal");
+			}
 			Text movesText = new Text(10+""/*game.getPath().size()*/);
 			Text energyText = new Text(game.getPlayer().getEnergy()+"");
 			ImageView replayButtonView = new ImageView(Main.replayImage);
@@ -52,6 +60,7 @@ public abstract class HistoScene extends Scene{
 				});
 			});
 			gameHBox.getChildren().add(gameText);
+			gameHBox.getChildren().add(levelText);
 			gameHBox.getChildren().add(movesText);
 			gameHBox.getChildren().add(energyText);
 			gameHBox.getChildren().add(replayButtonView);
