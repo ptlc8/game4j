@@ -33,7 +33,7 @@
 
 #pathVBox {
 	-fx-translate-x: 20px;
-	-fx-translate-y: 100px;
+	-fx-translate-y: 200px;
 }
 CheckBox {
 	-fx-padding: 5;
