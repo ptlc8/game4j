@@ -1,25 +1,21 @@
 package fr.kmmad.game4j;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Scanner;
 
 public class ConsoleMain {
 	
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
+		Game4j game4j = new Game4j();
 		Game game = null;
 		while (true) {
 			System.out.println("1 : Nouvelle partie");
-			System.out.println("2 : Charger la sauvegarde");
+			System.out.println("2 : Charger une sauvegarde");
 			String line = sc.next();
 			if (line.equals("1"))
 				game = new Game(10,5,20);
 			else if (line.equals("2")) {
-				game = Game.loadSave(new String(new FileInputStream(new File("save")).readAllBytes()));
+				game = game4j.getSave("save1");
 			} if (game != null)
 				break;
 		}
@@ -52,10 +48,7 @@ public class ConsoleMain {
 			case "s":
 				String save = game.createSave();
 				if (save != null) {
-					PrintWriter writer = new PrintWriter(new FileOutputStream(new File("save")));
-					writer.write(save);
-					writer.flush();
-					writer.close();
+					game4j.addGameSave(game, "save1");
 					System.out.println("Sauvegarde réussi !");
 				}
 				break;

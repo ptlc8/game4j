@@ -2,14 +2,13 @@ package fr.kmmad.game4j;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import fr.kmmad.game4j.Cell.Type;
@@ -27,9 +26,7 @@ public class Game implements Serializable {
 	
 	private Map2D map;
 	private Player player;
-	private List<Direction> path;
-	private List<Cell> pathCell;
-	private List<Cell> loop;
+	private List<Cell> path;
 	private int bnsRate;
 	private int obsRate;
 	private Date date;
@@ -48,8 +45,8 @@ public class Game implements Serializable {
 		map = new Map2D(size, bnsRate, obsRate);
 		player = new Player(map.getCell(0, 0), 10);
 		path = new ArrayList<>();
-		pathCell = new ArrayList<>();
-		loop = new ArrayList<>();
+		path.add(map.getCell(0, 0));
+		new ArrayList<>();
 		System.out.println(map.shortPath(map.getCell(0), map.getCell(size*size -1)).size());
 	}
 	
@@ -133,12 +130,11 @@ public class Game implements Serializable {
 		}
 		else cell.setNextType(cell.getType());
 		player.setCell(cell);
-		path.add(direction);
-		if(pathCell.contains(cell))
-			{
+		if(path.contains(cell))
+		{
 			System.out.println("Attention, boucle détécté !");
-			}
-		pathCell.add(cell);
+		}
+		path.add(cell);
 		return true;
 	}
 
@@ -150,18 +146,16 @@ public class Game implements Serializable {
 	 * @return true si un mouvement a pu être annulé, sinon false
 	 */
 	public boolean cancelMove() {
-		if (path.size() == 0)
+		if (path.size() <= 1)
 			return false;
 		if (!player.canCancelMove())
 			return false;
 		player.increaseCancelAmount();
-		Direction direction = path.remove(path.size()-1);
-		pathCell.remove(pathCell.size()-1);
-		Cell cell = player.getCell();
+		Cell cell = path.remove(path.size()-1);
 		if (cell.getType().equals(Type.BONUS)) {
 			player.setNumberBonus(player.getNumberBonus()-1);
 		}
-		player.setCell(cell.getNeigh(direction.getOpposite()).getCell());
+		player.setCell(path.get(path.size()-1));
 		cell.resetPreviousType();
 		int energy = cell.getEnergy();
 		if (energy > 0)
@@ -191,22 +185,30 @@ public class Game implements Serializable {
 	}
 	
 	/**
+	 * @author Mattéo
 	 * @return une liste contenant la toutes les cell de la boucle détcté
 	 */
 	public List<Cell> getLoop() {
 		List<Cell> loop = new ArrayList<Cell>();
 		int loopstart = 0;
-		int lastCell = pathCell.size()-1;
-		for(int i = 0; i < lastCell; i++)
+		int loopend = 0;
+		int lastCell = path.size()-1;
+		loop:for(int i = lastCell; i >= 0; i--)
 		{
-			if(pathCell.get(i) == pathCell.get(lastCell))
+			for (int j = i-1; j >= 0; j--)
 			{
-				loopstart = pathCell.indexOf(pathCell.get(i));
+				if (path.get(i).getId()==path.get(j).getId()) {
+					loopstart = j;
+					loopend = i;
+					break loop;
+				}
 			}
 		}
-		for(int j = loopstart; j <= lastCell; j++)
+		if (loopend == loopstart)
+			return null;
+		for(int j = loopstart; j <= loopend; j++)
 		{
-			loop.add(pathCell.get(j));
+			loop.add(path.get(j));
 		}
 		return loop;
 	}
@@ -266,4 +268,26 @@ public class Game implements Serializable {
 	public Player getPlayer() {
 		return player;
 	}
+	
+	/**
+	 * @return case de départ
+	 */
+	public Cell getStartCell() {
+		return map.getCell(0, 0);
+	}
+	
+	/**
+	 * @return case d'arrivée
+	 */
+	public Cell getEndCell() {
+		return map.getCell(map.getSize()-1, map.getSize()-1);
+	}
+	
+	/**
+	 * @return le chemin parcouru par le joueur
+	 */
+	public List<Cell> getPath() {
+		return Collections.unmodifiableList(path);
+	}
+
 }

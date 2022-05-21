@@ -3,65 +3,106 @@ package fr.kmmad.game4j.javafx;
 import fr.kmmad.game4j.Game;
 import fr.kmmad.game4j.Game4j;
 
+import java.util.List;
 import java.util.Random;
-
+import fr.kmmad.game4j.Cell;
 import fr.kmmad.game4j.Cell.Type;
+import javafx.concurrent.ScheduledService;
+import javafx.concurrent.Task;
+import javafx.geometry.HPos;
 import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 
 public abstract class GameScene extends Scene{
 	
-	private Text victoryText, defeatText, energyAmount, cancelAmount;
+	private Text energyAmount, cancelAmount, alertText;
 	private GridPane gridInGame;
+	private HBox shortestHBox, pathHBox;
+	private boolean showGamePath = true, showShortestPath = true;
+	private HBox replayControlsHBox;
+	private int replayProgress = 0;
+	private HBox buttonsRight;
+	private boolean historied = false;
+	private VBox alertBox;
+	private Label alertBoucle;
 	
 	public GameScene(Game game) {
 		super(new VBox(), 1000, 700);
 		
-		Text inGameText = new Text("Try to escape !");
+		historied = game.isFinished();
+		
+		Text inGameText = new Text("Go home !");
 		inGameText.setId("inGameText");
 		
 		ImageView homeButtonView = new ImageView(Main.homeImage);
 		homeButtonView.setPickOnBounds(true);
+		homeButtonView.setId("homeButton");
 		ImageView cancelButtonView = new ImageView(Main.cancelImage);
 		cancelButtonView.setPickOnBounds(true);
+		cancelButtonView.setId("cancelButton");
 		ImageView saveButtonView = new ImageView(Main.saveImage);
 		saveButtonView.setPickOnBounds(true);
+		saveButtonView.setId("saveButton");
 		ImageView energyImageView = new ImageView(Main.energyImage);
+		energyImageView.setId("energyImage");
 		ImageView cancelImageView = new ImageView(Main.cancelImage);
+		cancelImageView.setId("cancelImage");
 		
 		Text shortestPathText = new Text("Shortest path");
-		CheckBox shortestCheckBox = new CheckBox();
-		HBox shortestHBox = new HBox();
+		CheckBox shortestPathCheckBox = new CheckBox("Shortest path");
+		shortestPathCheckBox.setSelected(true);
+		shortestPathCheckBox.setOnAction(event -> {
+			showShortestPath = shortestPathCheckBox.isSelected();
+			refresh(game);
+		});
+		shortestHBox = new HBox();
 		shortestHBox.getChildren().add(shortestPathText);
-		shortestHBox.getChildren().add(shortestCheckBox);
+		shortestHBox.getChildren().add(shortestPathCheckBox);
+		shortestHBox.setId("shortestHBox");
 		
 		
 		Text gamePathText = new Text("My path"); 
-		CheckBox gameCheckBox = new CheckBox();
-		HBox gameHBox = new HBox();
-		gameHBox.getChildren().add(gamePathText);
-		gameHBox.getChildren().add(gameCheckBox);
+		CheckBox gamePathCheckBox = new CheckBox();
+		gamePathCheckBox.setSelected(true);
+		gamePathCheckBox.setOnAction(event -> {
+			showGamePath = gamePathCheckBox.isSelected();
+			refresh(game);
+		});
+		pathHBox = new HBox();
+		pathHBox.getChildren().add(gamePathText);
+		pathHBox.getChildren().add(gamePathCheckBox);
+		pathHBox.setId("pathHBox");
+		
+		alertBoucle = new Label("Attention ! Il y a une boucle !");
+		alertBoucle.setVisible(false);
 		
 		//Vertical box left part
 		VBox leftPart = new VBox();
 		leftPart.getChildren().add(homeButtonView);
 		leftPart.getChildren().add(shortestHBox);
-		leftPart.getChildren().add(gameHBox);
+		leftPart.getChildren().add(pathHBox);
+		leftPart.getChildren().add(alertBoucle);
+		leftPart.setId("leftPart");
 		
 		//Horizontal box buttons right
-		HBox buttonsRight = new HBox();
+		buttonsRight = new HBox();
 		buttonsRight.getChildren().add(cancelButtonView);
 		buttonsRight.getChildren().add(saveButtonView);
 
@@ -90,6 +131,7 @@ public abstract class GameScene extends Scene{
 		rightPart.getChildren().add(buttonsRight);
 		rightPart.getChildren().add(energyHBox);
 		rightPart.getChildren().add(cancelHBox);
+		rightPart.setId("rightPart");
 		
 		
 		//Grid of the game
@@ -99,23 +141,94 @@ public abstract class GameScene extends Scene{
 		gridInGame.setHgap(1);
 		gridInGame.setVgap(1);
 		
+		// Replay buttons
+		ScheduledService<Boolean> replayService = new ScheduledService<Boolean>() {
+			@Override
+			protected Task<Boolean> createTask() {
+				return new Task<Boolean>() {
+					@Override
+					protected Boolean call() throws Exception {
+						if (game.isFinished()) {
+							if (replayProgress < game.getPath().size()-1) {
+								replayProgress++;
+								return true;
+							}
+							this.cancel();
+						}
+						return false;
+					}
+				};
+			}
+		};
+		replayService.setPeriod(Duration.seconds(0.2));
+		replayService.setOnSucceeded(e -> {
+			if (replayService.getValue())
+				refresh(game);
+		});
+		replayService.start();
 		
-		//Victory text
-		victoryText = new Text("Well done you won !");
-		victoryText.setFill(Color.BLUE);
-	
+		Button replayButton = new Button();
+		replayButton.setGraphic(new ImageView(Main.replayImage));
+		replayButton.setOnAction(event -> {
+			if (replayProgress == game.getPath().size()-1)
+				replayProgress = 0;
+			if (replayService.isRunning())
+				replayService.cancel();
+			else
+				replayService.restart();
+		});
 		
-		//Defeat text
-		defeatText = new Text("Oh no you lose...");
-		defeatText.setFill(Color.BLUE);
+		Button previousButton = new Button();
+		previousButton.setGraphic(new ImageView(Main.replayImage));
+		previousButton.setOnAction(event -> {
+			if (replayProgress > 0)
+				replayProgress--;
+			refresh(game);
+		});
 		
-		refresh(game);
+		Button nextButton = new Button();
+		nextButton.setGraphic(new ImageView(Main.replayImage));
+		nextButton.setOnAction(event -> {
+			if (replayProgress < game.getPath().size()-1)
+				replayProgress++;
+			refresh(game);
+		});
+		
+		MenuButton speedButton = new MenuButton("Vitesse");
+		MenuItem slowOption = new MenuItem("Lent");
+		slowOption.setOnAction(e -> replayService.setPeriod(Duration.seconds(0.8)));
+		speedButton.getItems().add(slowOption);
+		MenuItem normalOption = new MenuItem("Normal");
+		normalOption.setOnAction(e -> replayService.setPeriod(Duration.seconds(0.2)));
+		speedButton.getItems().add(normalOption);
+		MenuItem fastOption = new MenuItem("Rapide");
+		fastOption.setOnAction(e -> replayService.setPeriod(Duration.seconds(0.05)));
+		speedButton.getItems().add(fastOption);
+
+		replayControlsHBox = new HBox();
+		replayControlsHBox.getChildren().add(previousButton);
+		replayControlsHBox.getChildren().add(speedButton);
+		replayControlsHBox.getChildren().add(replayButton);
+		replayControlsHBox.getChildren().add(nextButton);
+		
+		alertBox = new VBox();
+		alertBox.setId("alertBox");
+		alertBox.setFillWidth(false);
+		alertText = new Text();
+		Button alertButton = new Button("OK");
+		alertButton.setOnAction(event -> {
+			alertBox.setVisible(false);
+		});
+		alertBox.getChildren().add(alertText);
+		alertBox.getChildren().add(alertButton);
+		alertBox.setVisible(false);
+		
 		
 		//Pile sur la grille
 		StackPane gameStack = new StackPane();
 		gameStack.getChildren().add(gridInGame);
-		gameStack.getChildren().add(victoryText);
-		gameStack.getChildren().add(defeatText);
+		gameStack.getChildren().add(alertBox);
+		gameStack.setId("gameStack");
 		
 		BorderPane parent = new BorderPane();
 		parent.setCenter(gameStack);
@@ -124,8 +237,11 @@ public abstract class GameScene extends Scene{
 		BorderPane.setAlignment(inGameText, Pos.CENTER);
 		parent.setRight(rightPart);
 		parent.setLeft(leftPart);
+		parent.setBottom(replayControlsHBox);
 		
 		setRoot(parent);
+		
+		refresh(game);
 		
 		GameEventHandler gameEventHandler = new GameEventHandler(game){
 			@Override
@@ -143,15 +259,12 @@ public abstract class GameScene extends Scene{
 		
 		homeButtonView.setOnMouseClicked(event -> {
 			switchToHomeScene();
+			replayService.cancel();
 		});
 		
 		saveButtonView.setOnMouseClicked(event -> {
 			Game4j game4j = new Game4j();
-			if(game.isFinished()) {
-				game4j.addGameHistory(game);
-			}else if (!game.isFinished()) {
-				game4j.addGameSave(game, "uwu"+new Random().nextInt(5));
-			}
+			game4j.addGameSave(game, "uwu"+new Random().nextInt(5));
 		});
 
 		parent.requestFocus();
@@ -165,8 +278,7 @@ public abstract class GameScene extends Scene{
 	protected abstract void switchToHomeScene();
 	
 	public void refresh(Game game) {
-		victoryText.setVisible(game.isVictory());
-		defeatText.setVisible(game.isDefeat());
+		Game4j game4j = new Game4j();
 		energyAmount.setText(""+game.getPlayer().getEnergy());
 		cancelAmount.setText(""+ game.getPlayer().getAvailableCancelAmount());
     	gridInGame.getChildren().clear();
@@ -183,8 +295,61 @@ public abstract class GameScene extends Scene{
 			}
 		}
 		ImageView playerView = new ImageView(Main.rabbitImage);
-		gridInGame.add(playerView, game.getPlayer().getCell().getCoordY(), game.getPlayer().getCell().getCoordX());
+		ImageView endView = new ImageView(Main.rabbitHouse);
+		pathHBox.setVisible(game.isFinished());
+		shortestHBox.setVisible(game.isFinished());
+		replayControlsHBox.setVisible(game.isFinished());
+		List<Cell> loop = game.getLoop();
+		if (loop != null) {
+			drawPath(loop, Color.RED);
+			alertBoucle.setVisible(true);
+		}
 		if(game.isFinished()) {
+			if(!historied) {
+				historied = true;
+				game4j.addGameHistory(game);
+				buttonsRight.setVisible(false);
+				if(game.isVictory()) {
+					alertText.setText("Well done !");
+					alertBox.setVisible(true);
+				}else if(game.isDefeat()) {
+					alertText.setText("OH noooo ! You loose...");
+					alertBox.setVisible(true);
+				}
+			}
+			if (showShortestPath)
+				drawPath(game.getMap().shortPath(game.getStartCell(), game.getEndCell()), Color.LIME);
+			if (showGamePath)
+				drawPath(game.getPath(), Color.CYAN);
+			Cell replayCell = game.getPath().get(replayProgress);
+			gridInGame.add(playerView, replayCell.getCoordY(), replayCell.getCoordX());
+		} else {
+			gridInGame.add(playerView, game.getPlayer().getCell().getCoordY(), game.getPlayer().getCell().getCoordX());
+			gridInGame.add(endView, game.getMap().getSize()-1, game.getMap().getSize()-1);
+		}
+	}
+	
+	private void drawPath(List<Cell> path, Color color) {
+		int thickness = 16;
+		for (int i = 0; i < path.size(); i++) {
+			Cell cell = path.get(i);
+			Rectangle r = new Rectangle(thickness,thickness, color);
+			GridPane.setHalignment(r, HPos.CENTER);
+			gridInGame.add(r, cell.getCoordY(), cell.getCoordX());
+			if (i < path.size()-1) {
+				Cell nextCell = path.get(i+1);
+				Rectangle rn = new Rectangle(thickness,thickness, color);
+				GridPane.setHalignment(rn, nextCell.getCoordY()<cell.getCoordY() ? HPos.LEFT : nextCell.getCoordY()>cell.getCoordY() ? HPos.RIGHT : HPos.CENTER);
+				GridPane.setValignment(rn, nextCell.getCoordX()<cell.getCoordX() ? VPos.TOP : nextCell.getCoordX()>cell.getCoordX() ? VPos.BOTTOM : VPos.CENTER);
+				gridInGame.add(rn, path.get(i).getCoordY(), path.get(i).getCoordX());
+			}
+			if (i > 0) {
+				Cell previousCell = path.get(i-1);
+				Rectangle pn = new Rectangle(thickness,thickness, color);
+				GridPane.setHalignment(pn, previousCell.getCoordY()<cell.getCoordY() ? HPos.LEFT : previousCell.getCoordY()>cell.getCoordY() ? HPos.RIGHT : HPos.CENTER);
+				GridPane.setValignment(pn, previousCell.getCoordX()<cell.getCoordX() ? VPos.TOP : previousCell.getCoordX()>cell.getCoordX() ? VPos.BOTTOM : VPos.CENTER);
+				gridInGame.add(pn, path.get(i).getCoordY(), path.get(i).getCoordX());
+			}
 		}
 	}
 	

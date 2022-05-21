@@ -14,6 +14,8 @@ public abstract class GameEventHandler{
     }
     
     public void move(KeyEvent keyEvent) {
+    	if (game.isFinished())
+    		return;
     	switch (keyEvent.getCode()) {
     	case Q, LEFT:
     		game.move(Direction.WEST);
@@ -43,6 +45,8 @@ public abstract class GameEventHandler{
     
  
     public void cancel(MouseEvent event) {
+    	if (game.isFinished())
+    		return;
     	game.cancelMove();
     	refresh(game);
     }

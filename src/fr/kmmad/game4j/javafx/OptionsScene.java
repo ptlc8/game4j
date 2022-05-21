@@ -35,7 +35,7 @@ public abstract class OptionsScene extends Scene{
 		musicSlider.setShowTickLabels(false);
 		musicSlider.setValue(player.getVolume());
 		
-		musicSlider.setOnMouseDragged(event -> {
+		musicSlider.valueProperty().addListener(event -> {
 			player.setVolume(musicSlider.getValue());
 		});
 		
