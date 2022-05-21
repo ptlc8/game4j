@@ -42,6 +42,7 @@ public abstract class GameScene extends Scene{
 	private boolean historied = false;
 	private VBox alertBox;
 	private Label alertBoucle;
+	private Game4j game4j;
 	
 	public GameScene(Game game) {
 		super(new VBox(), 1000, 700);
@@ -65,7 +66,6 @@ public abstract class GameScene extends Scene{
 		ImageView cancelImageView = new ImageView(Main.cancelImage);
 		cancelImageView.setId("cancelImage");
 		
-		Text shortestPathText = new Text("Shortest path");
 		CheckBox shortestPathCheckBox = new CheckBox("Shortest path");
 		shortestPathCheckBox.setSelected(true);
 		shortestPathCheckBox.setOnAction(event -> {
@@ -73,20 +73,17 @@ public abstract class GameScene extends Scene{
 			refresh(game);
 		});
 		shortestHBox = new HBox();
-		shortestHBox.getChildren().add(shortestPathText);
 		shortestHBox.getChildren().add(shortestPathCheckBox);
 		shortestHBox.setId("shortestHBox");
 		
 		
-		Text gamePathText = new Text("My path"); 
-		CheckBox gamePathCheckBox = new CheckBox();
+		CheckBox gamePathCheckBox = new CheckBox("My path");
 		gamePathCheckBox.setSelected(true);
 		gamePathCheckBox.setOnAction(event -> {
 			showGamePath = gamePathCheckBox.isSelected();
 			refresh(game);
 		});
 		pathHBox = new HBox();
-		pathHBox.getChildren().add(gamePathText);
 		pathHBox.getChildren().add(gamePathCheckBox);
 		pathHBox.setId("pathHBox");
 		
@@ -216,6 +213,7 @@ public abstract class GameScene extends Scene{
 		alertBox.setFillWidth(false);
 		alertText = new Text();
 		Button alertButton = new Button("OK");
+		alertButton.setId("alertButton");
 		alertButton.setOnAction(event -> {
 			alertBox.setVisible(false);
 		});
@@ -278,7 +276,7 @@ public abstract class GameScene extends Scene{
 	protected abstract void switchToHomeScene();
 	
 	public void refresh(Game game) {
-		Game4j game4j = new Game4j();
+		game4j = new Game4j();
 		energyAmount.setText(""+game.getPlayer().getEnergy());
 		cancelAmount.setText(""+ game.getPlayer().getAvailableCancelAmount());
     	gridInGame.getChildren().clear();
