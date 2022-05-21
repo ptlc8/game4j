@@ -26,8 +26,7 @@ public class Game implements Serializable {
 	
 	private Map2D map;
 	private Player player;
-	private List<Direction> path;
-	private List<Cell> pathCell;
+	private List<Cell> path;
 	private int bnsRate;
 	private int obsRate;
 	private Date date;
@@ -46,8 +45,7 @@ public class Game implements Serializable {
 		map = new Map2D(size, bnsRate, obsRate);
 		player = new Player(map.getCell(0, 0), 10);
 		path = new ArrayList<>();
-		pathCell = new ArrayList<>();
-		pathCell.add(map.getCell(0, 0));
+		path.add(map.getCell(0, 0));
 		new ArrayList<>();
 		System.out.println(map.shortPath(map.getCell(0), map.getCell(size*size -1)).size());
 	}
@@ -132,12 +130,11 @@ public class Game implements Serializable {
 		}
 		else cell.setNextType(cell.getType());
 		player.setCell(cell);
-		path.add(direction);
-		if(pathCell.contains(cell))
+		if(path.contains(cell))
 		{
 			System.out.println("Attention, boucle détécté !");
 		}
-		pathCell.add(cell);
+		path.add(cell);
 		return true;
 	}
 
@@ -149,18 +146,16 @@ public class Game implements Serializable {
 	 * @return true si un mouvement a pu être annulé, sinon false
 	 */
 	public boolean cancelMove() {
-		if (path.size() == 0)
+		if (path.size() <= 1)
 			return false;
 		if (!player.canCancelMove())
 			return false;
 		player.increaseCancelAmount();
-		Direction direction = path.remove(path.size()-1);
-		pathCell.remove(pathCell.size()-1);
-		Cell cell = player.getCell();
+		Cell cell = path.remove(path.size()-1);
 		if (cell.getType().equals(Type.BONUS)) {
 			player.setNumberBonus(player.getNumberBonus()-1);
 		}
-		player.setCell(cell.getNeigh(direction.getOpposite()).getCell());
+		player.setCell(path.get(path.size()-1));
 		cell.resetPreviousType();
 		int energy = cell.getEnergy();
 		if (energy > 0)
@@ -197,12 +192,12 @@ public class Game implements Serializable {
 		List<Cell> loop = new ArrayList<Cell>();
 		int loopstart = 0;
 		int loopend = 0;
-		int lastCell = pathCell.size()-1;
+		int lastCell = path.size()-1;
 		loop:for(int i = lastCell; i >= 0; i--)
 		{
 			for (int j = i-1; j >= 0; j--)
 			{
-				if (pathCell.get(i).getId()==pathCell.get(j).getId()) {
+				if (path.get(i).getId()==path.get(j).getId()) {
 					loopstart = j;
 					loopend = i;
 					break loop;
@@ -213,7 +208,7 @@ public class Game implements Serializable {
 			return null;
 		for(int j = loopstart; j <= loopend; j++)
 		{
-			loop.add(pathCell.get(j));
+			loop.add(path.get(j));
 		}
 		return loop;
 	}
@@ -292,7 +287,7 @@ public class Game implements Serializable {
 	 * @return le chemin parcouru par le joueur
 	 */
 	public List<Cell> getPath() {
-		return Collections.unmodifiableList(pathCell);
+		return Collections.unmodifiableList(path);
 	}
 	
 }
