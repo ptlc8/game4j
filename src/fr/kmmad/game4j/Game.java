@@ -2,14 +2,13 @@ package fr.kmmad.game4j;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import fr.kmmad.game4j.Cell.Type;
@@ -29,7 +28,6 @@ public class Game implements Serializable {
 	private Player player;
 	private List<Direction> path;
 	private List<Cell> pathCell;
-	private List<Cell> loop;
 	private int bnsRate;
 	private int obsRate;
 	private Date date;
@@ -49,7 +47,8 @@ public class Game implements Serializable {
 		player = new Player(map.getCell(0, 0), 10);
 		path = new ArrayList<>();
 		pathCell = new ArrayList<>();
-		loop = new ArrayList<>();
+		pathCell.add(map.getCell(0, 0));
+		new ArrayList<>();
 		System.out.println(map.shortPath(map.getCell(0), map.getCell(size*size -1)).size());
 	}
 	
@@ -265,6 +264,27 @@ public class Game implements Serializable {
 	 */
 	public Player getPlayer() {
 		return player;
+	}
+	
+	/**
+	 * @return case de départ
+	 */
+	public Cell getStartCell() {
+		return map.getCell(0, 0);
+	}
+	
+	/**
+	 * @return case d'arrivée
+	 */
+	public Cell getEndCell() {
+		return map.getCell(map.getSize()-1, map.getSize()-1);
+	}
+	
+	/**
+	 * @return le chemin parcouru par le joueur
+	 */
+	public List<Cell> getPath() {
+		return Collections.unmodifiableList(pathCell);
 	}
 	
 }

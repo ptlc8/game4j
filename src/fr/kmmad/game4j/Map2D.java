@@ -116,6 +116,7 @@ public class Map2D implements Serializable {
 			}
 		}
 		ArrayList<Cell> shortPath = new ArrayList<Cell>();
+		shortPath.add(c2);
 		int idt = c2.getId();
 		while (idt != c1.getId()) {
 			if (preced[idt] == -1) {

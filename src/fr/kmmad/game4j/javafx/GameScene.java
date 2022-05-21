@@ -3,28 +3,42 @@ package fr.kmmad.game4j.javafx;
 import fr.kmmad.game4j.Game;
 import fr.kmmad.game4j.Game4j;
 
+import java.util.List;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
+import fr.kmmad.game4j.Cell;
 import fr.kmmad.game4j.Cell.Type;
+import javafx.concurrent.ScheduledService;
+import javafx.concurrent.Task;
+import javafx.geometry.HPos;
 import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 
 public abstract class GameScene extends Scene{
 	
 	private Text victoryText, defeatText, energyAmount, cancelAmount;
 	private GridPane gridInGame;
+	private HBox shortestHBox, pathHBox;
+	private boolean showGamePath = true, showShortestPath = true;
+	private HBox replayControlsHBox;
+	private int replayProgress = 0;
+	private boolean replay = true;
 	
 	public GameScene(Game game) {
 		super(new VBox(), 1000, 700);
@@ -42,23 +56,33 @@ public abstract class GameScene extends Scene{
 		ImageView cancelImageView = new ImageView(Main.cancelImage);
 		
 		Text shortestPathText = new Text("Shortest path");
-		CheckBox shortestCheckBox = new CheckBox();
-		HBox shortestHBox = new HBox();
+		CheckBox shortestPathCheckBox = new CheckBox("Shortest path");
+		shortestPathCheckBox.setSelected(true);
+		shortestPathCheckBox.setOnAction(event -> {
+			showShortestPath = shortestPathCheckBox.isSelected();
+			refresh(game);
+		});
+		shortestHBox = new HBox();
 		shortestHBox.getChildren().add(shortestPathText);
-		shortestHBox.getChildren().add(shortestCheckBox);
+		shortestHBox.getChildren().add(shortestPathCheckBox);
 		
 		
 		Text gamePathText = new Text("My path"); 
-		CheckBox gameCheckBox = new CheckBox();
-		HBox gameHBox = new HBox();
-		gameHBox.getChildren().add(gamePathText);
-		gameHBox.getChildren().add(gameCheckBox);
+		CheckBox gamePathCheckBox = new CheckBox();
+		gamePathCheckBox.setSelected(true);
+		gamePathCheckBox.setOnAction(event -> {
+			showGamePath = gamePathCheckBox.isSelected();
+			refresh(game);
+		});
+		pathHBox = new HBox();
+		pathHBox.getChildren().add(gamePathText);
+		pathHBox.getChildren().add(gamePathCheckBox);
 		
 		//Vertical box left part
 		VBox leftPart = new VBox();
 		leftPart.getChildren().add(homeButtonView);
 		leftPart.getChildren().add(shortestHBox);
-		leftPart.getChildren().add(gameHBox);
+		leftPart.getChildren().add(pathHBox);
 		
 		//Horizontal box buttons right
 		HBox buttonsRight = new HBox();
@@ -103,13 +127,67 @@ public abstract class GameScene extends Scene{
 		//Victory text
 		victoryText = new Text("Well done you won !");
 		victoryText.setFill(Color.BLUE);
-	
 		
 		//Defeat text
 		defeatText = new Text("Oh no you lose...");
 		defeatText.setFill(Color.BLUE);
 		
-		refresh(game);
+		
+		// Replay buttons
+		Button replayButton = new Button();
+		replayButton.setGraphic(new ImageView(Main.replayImage));
+		replayButton.setOnAction(event -> {
+			if (replayProgress == game.getPath().size()-1)
+				replayProgress = 0;
+			replay = !replay;
+		});
+		
+		Button previousButton = new Button();
+		previousButton.setGraphic(new ImageView(Main.replayImage));
+		previousButton.setOnAction(event -> {
+			if (replayProgress > 0)
+				replayProgress--;
+			refresh(game);
+		});
+		
+		Button nextButton = new Button();
+		nextButton.setGraphic(new ImageView(Main.replayImage));
+		nextButton.setOnAction(event -> {
+			if (replayProgress < game.getPath().size()-1)
+				replayProgress++;
+			refresh(game);
+		});
+
+		replayControlsHBox = new HBox();
+		replayControlsHBox.getChildren().add(previousButton);
+		replayControlsHBox.getChildren().add(replayButton);
+		replayControlsHBox.getChildren().add(nextButton);
+		
+		ScheduledService<Integer> replayService = new ScheduledService<Integer>() {
+			@Override
+			protected Task<Integer> createTask() {
+				return new Task<Integer>() {
+					@Override
+					protected Integer call() throws Exception {
+						if (replay && game.isFinished()) {
+							if (replayProgress < game.getPath().size()-1) {
+								replayProgress++;
+								System.out.println(replayProgress);
+							} else {
+								replay = false;
+							}
+						}
+						return null;
+					}
+				};
+			}
+		};
+		replayService.setPeriod(Duration.seconds(0.2));
+		replayService.setOnSucceeded(e -> {
+			refresh(game);
+		});
+		replayService.start();
+		
 		
 		//Pile sur la grille
 		StackPane gameStack = new StackPane();
@@ -124,8 +202,11 @@ public abstract class GameScene extends Scene{
 		BorderPane.setAlignment(inGameText, Pos.CENTER);
 		parent.setRight(rightPart);
 		parent.setLeft(leftPart);
+		parent.setBottom(replayControlsHBox);
 		
 		setRoot(parent);
+		
+		refresh(game);
 		
 		GameEventHandler gameEventHandler = new GameEventHandler(game){
 			@Override
@@ -143,6 +224,7 @@ public abstract class GameScene extends Scene{
 		
 		homeButtonView.setOnMouseClicked(event -> {
 			switchToHomeScene();
+			replayService.cancel();
 		});
 		
 		saveButtonView.setOnMouseClicked(event -> {
@@ -183,8 +265,42 @@ public abstract class GameScene extends Scene{
 			}
 		}
 		ImageView playerView = new ImageView(Main.rabbitImage);
-		gridInGame.add(playerView, game.getPlayer().getCell().getCoordY(), game.getPlayer().getCell().getCoordX());
+		pathHBox.setVisible(game.isFinished());
+		shortestHBox.setVisible(game.isFinished());
+		replayControlsHBox.setVisible(game.isFinished());
 		if(game.isFinished()) {
+			if (showShortestPath)
+				drawPath(game.getMap().shortPath(game.getStartCell(), game.getEndCell()), Color.LIME);
+			if (showGamePath)
+				drawPath(game.getPath(), Color.CYAN);
+			Cell replayCell = game.getPath().get(replayProgress);
+			gridInGame.add(playerView, replayCell.getCoordY(), replayCell.getCoordX());
+		} else {
+			gridInGame.add(playerView, game.getPlayer().getCell().getCoordY(), game.getPlayer().getCell().getCoordX());
+		}
+	}
+	
+	private void drawPath(List<Cell> path, Color color) {
+		int thickness = 16;
+		for (int i = 0; i < path.size(); i++) {
+			Cell cell = path.get(i);
+			Rectangle r = new Rectangle(thickness,thickness, color);
+			GridPane.setHalignment(r, HPos.CENTER);
+			gridInGame.add(r, cell.getCoordY(), cell.getCoordX());
+			if (i < path.size()-1) {
+				Cell nextCell = path.get(i+1);
+				Rectangle rn = new Rectangle(thickness,thickness, color);
+				GridPane.setHalignment(rn, nextCell.getCoordY()<cell.getCoordY() ? HPos.LEFT : nextCell.getCoordY()>cell.getCoordY() ? HPos.RIGHT : HPos.CENTER);
+				GridPane.setValignment(rn, nextCell.getCoordX()<cell.getCoordX() ? VPos.TOP : nextCell.getCoordX()>cell.getCoordX() ? VPos.BOTTOM : VPos.CENTER);
+				gridInGame.add(rn, path.get(i).getCoordY(), path.get(i).getCoordX());
+			}
+			if (i > 0) {
+				Cell previousCell = path.get(i-1);
+				Rectangle pn = new Rectangle(thickness,thickness, color);
+				GridPane.setHalignment(pn, previousCell.getCoordY()<cell.getCoordY() ? HPos.LEFT : previousCell.getCoordY()>cell.getCoordY() ? HPos.RIGHT : HPos.CENTER);
+				GridPane.setValignment(pn, previousCell.getCoordX()<cell.getCoordX() ? VPos.TOP : previousCell.getCoordX()>cell.getCoordX() ? VPos.BOTTOM : VPos.CENTER);
+				gridInGame.add(pn, path.get(i).getCoordY(), path.get(i).getCoordX());
+			}
 		}
 	}
 	
