@@ -5,9 +5,6 @@ import fr.kmmad.game4j.Game4j;
 
 import java.util.List;
 import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
-
 import fr.kmmad.game4j.Cell;
 import fr.kmmad.game4j.Cell.Type;
 import javafx.concurrent.ScheduledService;
