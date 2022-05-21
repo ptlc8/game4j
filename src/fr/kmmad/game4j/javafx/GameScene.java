@@ -19,6 +19,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -71,6 +73,7 @@ public abstract class GameScene extends Scene{
 		
 		CheckBox shortestPathCheckBox = new CheckBox("Shortest path");
 		shortestPathCheckBox.setSelected(true);
+		shortestPathCheckBox.setBackground(new Background(new BackgroundFill(Color.LIME, null, null)));
 		shortestPathCheckBox.setOnAction(event -> {
 			showShortestPath = shortestPathCheckBox.isSelected();
 			refresh(game);
@@ -82,6 +85,7 @@ public abstract class GameScene extends Scene{
 		
 		CheckBox gamePathCheckBox = new CheckBox("My path");
 		gamePathCheckBox.setSelected(true);
+		gamePathCheckBox.setBackground(new Background(new BackgroundFill(Color.CYAN, null, null)));
 		gamePathCheckBox.setOnAction(event -> {
 			showGamePath = gamePathCheckBox.isSelected();
 			refresh(game);
