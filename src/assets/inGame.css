@@ -24,6 +24,13 @@
 
 }
 
+#alertBoucle{
+	-fx-text-fill:  #ff0000;
+	-fx-font-size:  20px;
+	-fx-text-alignment: center;
+	-fx-padding: 10px;
+}
+
 #pathHBox{
 	-fx-translate-x: 20px;
 	-fx-translate-y: 100px;
@@ -45,4 +52,8 @@
 	-fx-alignment:  center;
 	-fx-background-insets:  250px;
 	-fx-background-radius:  20px;
+}
+
+#replayVBox, #replayHBox{
+	-fx-alignment:  center;
 }
