@@ -240,7 +240,7 @@ public class Game implements Serializable {
 	public int getBonusRate() {
 		return bnsRate;
 	}
-	
+
 	/**
 	 * @return true si la partie est terminée sinon false
 	 */
@@ -289,5 +289,5 @@ public class Game implements Serializable {
 	public List<Cell> getPath() {
 		return Collections.unmodifiableList(path);
 	}
-	
+
 }
