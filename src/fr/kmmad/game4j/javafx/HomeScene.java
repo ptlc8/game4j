@@ -85,7 +85,7 @@ public abstract class HomeScene extends Scene{
 		gridHome.add(optionButton, 0, 4);
 		setRoot(gridHome);
 
-		getStylesheets().add("assets/accueil.css");
+		getStylesheets().add("assets/home.css");
 		
 	}
 	

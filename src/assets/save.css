@@ -1,4 +1,38 @@
-#save{
+#root{
     -fx-background-image: url("home.gif");
     -fx-background-size:  cover;
+    -fx-alignment: center;
 }
+
+#homeButton{
+    -fx-translate-x: -450px;
+    -fx-translate-y: 10px;
+    
+}
+
+#title{
+}
+
+#gameHBox{
+
+}
+
+
+#contain{
+    -fx-padding: 50 100 100 100;
+}
+
+#scroll{
+
+}
+
+#VBoxScroll{
+    
+}
+
+.elements{
+    -fx-fill: #ff0000;
+}
+
+
+
