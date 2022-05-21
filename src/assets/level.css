@@ -1,5 +1,5 @@
-#gridHome{
-    -fx-background-image: url("home.gif");
+#levelMenu{
+	-fx-background-image: url("home.gif");
     -fx-background-size:  cover;
     -fx-alignment: center;
 }

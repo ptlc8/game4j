@@ -1,7 +1,5 @@
 package fr.kmmad.game4j.javafx;
 
-import java.sql.SQLException;
-
 import fr.kmmad.game4j.Game;
 import fr.kmmad.game4j.Game4j;
 import javafx.scene.Scene;
@@ -14,7 +12,7 @@ import javafx.scene.text.Text;
 
 public abstract class HistoScene extends Scene{
 
-	public HistoScene() throws SQLException {
+	public HistoScene(){
 		super(new VBox(), 1000, 700);
 		
 		ImageView homeButtonView = new ImageView(Main.homeImage);

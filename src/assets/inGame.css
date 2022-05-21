@@ -21,7 +21,7 @@
 #leftPart{
 	-fx-translate-x: 30px;
 	-fx-background-color:  #ffffff;
-
+	-fx-background-insets:	50px, 0px, 100px, 0px;
 }
 
 #alertBoucle{
@@ -31,14 +31,9 @@
 	-fx-padding: 10px;
 }
 
-#pathHBox{
+#checkVBox{
 	-fx-translate-x: 20px;
-	-fx-translate-y: 100px;
-}
-
-#shortestHBox{
-	-fx-translate-x: 20px;
-	-fx-translate-y: 100px;
+	-fx-translate-y: 300px;
 }
 
 

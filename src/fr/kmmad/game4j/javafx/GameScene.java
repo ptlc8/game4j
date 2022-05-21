@@ -98,11 +98,15 @@ public abstract class GameScene extends Scene{
 		alertBoucle.setId("alertBoucle");
 		alertBoucle.setVisible(false);
 		
+		VBox checkVBox = new VBox();
+		checkVBox.getChildren().add(shortestHBox);
+		checkVBox.getChildren().add(pathHBox);
+		checkVBox.setId("checkVBox");
+		
 		//Vertical box left part
 		VBox leftPart = new VBox();
 		leftPart.getChildren().add(homeButtonView);
-		leftPart.getChildren().add(shortestHBox);
-		leftPart.getChildren().add(pathHBox);
+		leftPart.getChildren().add(checkVBox);
 		leftPart.getChildren().add(alertBoucle);
 		leftPart.setId("leftPart");
 		
