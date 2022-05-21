@@ -31,14 +31,12 @@
 	-fx-padding: 10px;
 }
 
-#pathHBox{
+#pathVBox {
 	-fx-translate-x: 20px;
 	-fx-translate-y: 100px;
 }
-
-#shortestHBox{
-	-fx-translate-x: 20px;
-	-fx-translate-y: 100px;
+CheckBox {
+	-fx-padding: 5;
 }
 
 
