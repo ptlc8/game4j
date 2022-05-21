@@ -1,15 +1,38 @@
-#inGameText{
-	-fx-font-size : 20px;
-	-fx-fill: #ff0000;
-	-fx-translate-y : 50px;
-}
-
-
 #inGame{
     -fx-background-image: url("home.gif");
     -fx-background-size:  cover;
 }
 
+#inGameText{
+	-fx-font-size : 20px;
+	-fx-fill: #000000;
+	-fx-translate-y : 25px;
+	-fx-font-familly: url("COCO.ttf");
+	-fx-background-color:  #ffffff;
+}
+
+
 #gidInGame{
 	-fx-lines-visible : true;
+	-fx-background-color:  #ffffff;
+}
+
+
+#leftPart{
+	-fx-translate-x: 30px;
+	-fx-background-color:  #ffffff;
+
+}
+
+
+#rightPart{
+	-fx-translate-x: -30px;
+	-fx-background-color:  #ffffff;
+}
+
+#alertBox{
+	-fx-background-color:  #ffffff;
+	-fx-alignment:  center;
+	-fx-background-insets:  250px;
+	-fx-background-radius:  20px;
 }

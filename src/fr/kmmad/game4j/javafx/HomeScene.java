@@ -35,7 +35,7 @@ public abstract class HomeScene extends Scene{
 		saveButton.setFont(new Font(40));
 
 		//Button histo
-		Button histoButton = new Button("Historique");
+		Button histoButton = new Button("History");
 		histoButton.getStyleClass().add("button");
 		histoButton.setId("histoButton");
 		histoButton.setFont(new Font(40));
@@ -74,7 +74,7 @@ public abstract class HomeScene extends Scene{
 		
 		// Home buttons
 
-		playButton.setOnMouseClicked(event -> {
+		playButton.setOnAction(event -> {
 			switchToScene(new GameScene() {
 				@Override
 				public void switchToHomeScene() {
@@ -83,7 +83,7 @@ public abstract class HomeScene extends Scene{
 			});
 		});
 		
-		saveButton.setOnMouseClicked(event -> {
+		saveButton.setOnAction(event -> {
 			switchToScene(new SaveScene() {
 				@Override
 				public void switchToHomeScene() {
@@ -96,7 +96,7 @@ public abstract class HomeScene extends Scene{
 			});
 		});
 
-		histoButton.setOnMouseClicked(event -> {
+		histoButton.setOnAction(event -> {
 			try {
 				switchToScene(new HistoScene() {
 					@Override
@@ -115,7 +115,7 @@ public abstract class HomeScene extends Scene{
 			}
 		});
 		
-		optionButton.setOnMouseClicked(event -> {
+		optionButton.setOnAction(event -> {
 			switchToScene(new OptionsScene(player) {
 				@Override
 				protected void switchToHomeScene() {

@@ -15,6 +15,7 @@ import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -29,28 +30,39 @@ import javafx.util.Duration;
 
 public abstract class GameScene extends Scene{
 	
-	private Text victoryText, defeatText, energyAmount, cancelAmount;
+	private Text energyAmount, cancelAmount, alertText;
 	private GridPane gridInGame;
 	private HBox shortestHBox, pathHBox;
 	private boolean showGamePath = true, showShortestPath = true;
 	private HBox replayControlsHBox;
 	private int replayProgress = 0;
 	private boolean replay = true;
+	private HBox buttonsRight;
+	private boolean historied = false;
+	private VBox alertBox;
+	private Label alertBoucle;
 	
 	public GameScene(Game game) {
 		super(new VBox(), 1000, 700);
 		
-		Text inGameText = new Text("Try to escape !");
+		historied = game.isFinished();
+		
+		Text inGameText = new Text("Go home !");
 		inGameText.setId("inGameText");
 		
 		ImageView homeButtonView = new ImageView(Main.homeImage);
 		homeButtonView.setPickOnBounds(true);
+		homeButtonView.setId("homeButton");
 		ImageView cancelButtonView = new ImageView(Main.cancelImage);
 		cancelButtonView.setPickOnBounds(true);
+		cancelButtonView.setId("cancelButton");
 		ImageView saveButtonView = new ImageView(Main.saveImage);
 		saveButtonView.setPickOnBounds(true);
+		saveButtonView.setId("saveButton");
 		ImageView energyImageView = new ImageView(Main.energyImage);
+		energyImageView.setId("energyImage");
 		ImageView cancelImageView = new ImageView(Main.cancelImage);
+		cancelImageView.setId("cancelImage");
 		
 		Text shortestPathText = new Text("Shortest path");
 		CheckBox shortestPathCheckBox = new CheckBox("Shortest path");
@@ -62,6 +74,7 @@ public abstract class GameScene extends Scene{
 		shortestHBox = new HBox();
 		shortestHBox.getChildren().add(shortestPathText);
 		shortestHBox.getChildren().add(shortestPathCheckBox);
+		shortestHBox.setId("shortestHBox");
 		
 		
 		Text gamePathText = new Text("My path"); 
@@ -74,15 +87,21 @@ public abstract class GameScene extends Scene{
 		pathHBox = new HBox();
 		pathHBox.getChildren().add(gamePathText);
 		pathHBox.getChildren().add(gamePathCheckBox);
+		pathHBox.setId("pathHBox");
+		
+		alertBoucle = new Label("Attention ! Il y a une boucle !");
+		alertBoucle.setVisible(false);
 		
 		//Vertical box left part
 		VBox leftPart = new VBox();
 		leftPart.getChildren().add(homeButtonView);
 		leftPart.getChildren().add(shortestHBox);
 		leftPart.getChildren().add(pathHBox);
+		leftPart.getChildren().add(alertBoucle);
+		leftPart.setId("leftPart");
 		
 		//Horizontal box buttons right
-		HBox buttonsRight = new HBox();
+		buttonsRight = new HBox();
 		buttonsRight.getChildren().add(cancelButtonView);
 		buttonsRight.getChildren().add(saveButtonView);
 
@@ -111,6 +130,7 @@ public abstract class GameScene extends Scene{
 		rightPart.getChildren().add(buttonsRight);
 		rightPart.getChildren().add(energyHBox);
 		rightPart.getChildren().add(cancelHBox);
+		rightPart.setId("rightPart");
 		
 		
 		//Grid of the game
@@ -119,16 +139,6 @@ public abstract class GameScene extends Scene{
 		gridInGame.setAlignment(Pos.CENTER);
 		gridInGame.setHgap(1);
 		gridInGame.setVgap(1);
-		
-		
-		//Victory text
-		victoryText = new Text("Well done you won !");
-		victoryText.setFill(Color.BLUE);
-		
-		//Defeat text
-		defeatText = new Text("Oh no you lose...");
-		defeatText.setFill(Color.BLUE);
-		
 		
 		// Replay buttons
 		Button replayButton = new Button();
@@ -160,6 +170,18 @@ public abstract class GameScene extends Scene{
 		replayControlsHBox.getChildren().add(replayButton);
 		replayControlsHBox.getChildren().add(nextButton);
 		
+		alertBox = new VBox();
+		alertBox.setId("alertBox");
+		alertBox.setFillWidth(false);
+		alertText = new Text();
+		Button alertButton = new Button("OK");
+		alertButton.setOnAction(event -> {
+			alertBox.setVisible(false);
+		});
+		alertBox.getChildren().add(alertText);
+		alertBox.getChildren().add(alertButton);
+		alertBox.setVisible(false);
+		
 		ScheduledService<Boolean> replayService = new ScheduledService<Boolean>() {
 			@Override
 			protected Task<Boolean> createTask() {
@@ -189,8 +211,8 @@ public abstract class GameScene extends Scene{
 		//Pile sur la grille
 		StackPane gameStack = new StackPane();
 		gameStack.getChildren().add(gridInGame);
-		gameStack.getChildren().add(victoryText);
-		gameStack.getChildren().add(defeatText);
+		gameStack.getChildren().add(alertBox);
+		gameStack.setId("gameStack");
 		
 		BorderPane parent = new BorderPane();
 		parent.setCenter(gameStack);
@@ -226,11 +248,7 @@ public abstract class GameScene extends Scene{
 		
 		saveButtonView.setOnMouseClicked(event -> {
 			Game4j game4j = new Game4j();
-			if(game.isFinished()) {
-				game4j.addGameHistory(game);
-			}else if (!game.isFinished()) {
-				game4j.addGameSave(game, "uwu"+new Random().nextInt(5));
-			}
+			game4j.addGameSave(game, "uwu"+new Random().nextInt(5));
 		});
 
 		parent.requestFocus();
@@ -244,8 +262,7 @@ public abstract class GameScene extends Scene{
 	protected abstract void switchToHomeScene();
 	
 	public void refresh(Game game) {
-		victoryText.setVisible(game.isVictory());
-		defeatText.setVisible(game.isDefeat());
+		Game4j game4j = new Game4j();
 		energyAmount.setText(""+game.getPlayer().getEnergy());
 		cancelAmount.setText(""+ game.getPlayer().getAvailableCancelAmount());
     	gridInGame.getChildren().clear();
@@ -262,13 +279,28 @@ public abstract class GameScene extends Scene{
 			}
 		}
 		ImageView playerView = new ImageView(Main.rabbitImage);
+		ImageView endView = new ImageView(Main.rabbitHouse);
 		pathHBox.setVisible(game.isFinished());
 		shortestHBox.setVisible(game.isFinished());
 		replayControlsHBox.setVisible(game.isFinished());
 		List<Cell> loop = game.getLoop();
-		if (loop != null)
+		if (loop != null) {
 			drawPath(loop, Color.RED);
+			alertBoucle.setVisible(true);
+		}
 		if(game.isFinished()) {
+			if(!historied) {
+				historied = true;
+				game4j.addGameHistory(game);
+				buttonsRight.setVisible(false);
+				if(game.isVictory()) {
+					alertText.setText("Well done !");
+					alertBox.setVisible(true);
+				}else if(game.isDefeat()) {
+					alertText.setText("OH noooo ! You loose...");
+					alertBox.setVisible(true);
+				}
+			}
 			if (showShortestPath)
 				drawPath(game.getMap().shortPath(game.getStartCell(), game.getEndCell()), Color.LIME);
 			if (showGamePath)
@@ -277,6 +309,7 @@ public abstract class GameScene extends Scene{
 			gridInGame.add(playerView, replayCell.getCoordY(), replayCell.getCoordX());
 		} else {
 			gridInGame.add(playerView, game.getPlayer().getCell().getCoordY(), game.getPlayer().getCell().getCoordX());
+			gridInGame.add(endView, game.getMap().getSize()-1, game.getMap().getSize()-1);
 		}
 	}
 	

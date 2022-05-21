@@ -24,6 +24,7 @@ public class Main extends Application {
 	public final static Image emptyFieldImage = loadImage("/assets/empty_field.png", 48, 48, false);
 	public final static Image carrotOnFieldImage = loadImage("/assets/carrot_on_field.png", 48, 48, false);
 	public final static Image rabbitImage = loadImage("/assets/rabbit.gif", 48, 48, false);
+	public final static Image rabbitHouse = loadImage("/assets/rabbitHouse.png", 50, 50, false);
 	
 	@Override
 	public void start(Stage stage) throws Exception {
@@ -32,6 +33,7 @@ public class Main extends Application {
 		Media soundFrigidaire = new Media(ssoundFrigidaire);
 		MediaPlayer playerFrigidaire = new MediaPlayer(soundFrigidaire);
 		playerFrigidaire.setCycleCount(MediaPlayer.INDEFINITE);
+		playerFrigidaire.setVolume(0.25);
 		playerFrigidaire.play();
 		
 		
