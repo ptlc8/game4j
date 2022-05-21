@@ -48,6 +48,7 @@ public abstract class GameScene extends Scene{
 		super(new VBox(), 1000, 700);
 		
 		historied = game.isFinished();
+		game4j = new Game4j();
 		
 		Text inGameText = new Text("Go home !");
 		inGameText.setId("inGameText");
@@ -261,7 +262,6 @@ public abstract class GameScene extends Scene{
 		});
 		
 		saveButtonView.setOnMouseClicked(event -> {
-			Game4j game4j = new Game4j();
 			game4j.addGameSave(game, "uwu"+new Random().nextInt(5));
 		});
 
@@ -276,7 +276,6 @@ public abstract class GameScene extends Scene{
 	protected abstract void switchToHomeScene();
 	
 	public void refresh(Game game) {
-		game4j = new Game4j();
 		energyAmount.setText(""+game.getPlayer().getEnergy());
 		cancelAmount.setText(""+ game.getPlayer().getAvailableCancelAmount());
     	gridInGame.getChildren().clear();
