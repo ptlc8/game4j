@@ -16,6 +16,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -36,7 +38,6 @@ public abstract class GameScene extends Scene{
 	private boolean showGamePath = true, showShortestPath = true;
 	private HBox replayControlsHBox;
 	private int replayProgress = 0;
-	private boolean replay = true;
 	private HBox buttonsRight;
 	private boolean historied = false;
 	private VBox alertBox;
@@ -141,12 +142,40 @@ public abstract class GameScene extends Scene{
 		gridInGame.setVgap(1);
 		
 		// Replay buttons
+		ScheduledService<Boolean> replayService = new ScheduledService<Boolean>() {
+			@Override
+			protected Task<Boolean> createTask() {
+				return new Task<Boolean>() {
+					@Override
+					protected Boolean call() throws Exception {
+						if (game.isFinished()) {
+							if (replayProgress < game.getPath().size()-1) {
+								replayProgress++;
+								return true;
+							}
+							this.cancel();
+						}
+						return false;
+					}
+				};
+			}
+		};
+		replayService.setPeriod(Duration.seconds(0.2));
+		replayService.setOnSucceeded(e -> {
+			if (replayService.getValue())
+				refresh(game);
+		});
+		replayService.start();
+		
 		Button replayButton = new Button();
 		replayButton.setGraphic(new ImageView(Main.replayImage));
 		replayButton.setOnAction(event -> {
 			if (replayProgress == game.getPath().size()-1)
 				replayProgress = 0;
-			replay = !replay;
+			if (replayService.isRunning())
+				replayService.cancel();
+			else
+				replayService.restart();
 		});
 		
 		Button previousButton = new Button();
@@ -164,9 +193,21 @@ public abstract class GameScene extends Scene{
 				replayProgress++;
 			refresh(game);
 		});
+		
+		MenuButton speedButton = new MenuButton("Vitesse");
+		MenuItem slowOption = new MenuItem("Lent");
+		slowOption.setOnAction(e -> replayService.setPeriod(Duration.seconds(0.8)));
+		speedButton.getItems().add(slowOption);
+		MenuItem normalOption = new MenuItem("Normal");
+		normalOption.setOnAction(e -> replayService.setPeriod(Duration.seconds(0.2)));
+		speedButton.getItems().add(normalOption);
+		MenuItem fastOption = new MenuItem("Rapide");
+		fastOption.setOnAction(e -> replayService.setPeriod(Duration.seconds(0.05)));
+		speedButton.getItems().add(fastOption);
 
 		replayControlsHBox = new HBox();
 		replayControlsHBox.getChildren().add(previousButton);
+		replayControlsHBox.getChildren().add(speedButton);
 		replayControlsHBox.getChildren().add(replayButton);
 		replayControlsHBox.getChildren().add(nextButton);
 		
@@ -181,31 +222,6 @@ public abstract class GameScene extends Scene{
 		alertBox.getChildren().add(alertText);
 		alertBox.getChildren().add(alertButton);
 		alertBox.setVisible(false);
-		
-		ScheduledService<Boolean> replayService = new ScheduledService<Boolean>() {
-			@Override
-			protected Task<Boolean> createTask() {
-				return new Task<Boolean>() {
-					@Override
-					protected Boolean call() throws Exception {
-						if (replay && game.isFinished()) {
-							if (replayProgress < game.getPath().size()-1) {
-								replayProgress++;
-								return true;
-							}
-							replay = false;
-						}
-						return false;
-					}
-				};
-			}
-		};
-		replayService.setPeriod(Duration.seconds(0.2));
-		replayService.setOnSucceeded(e -> {
-			if (replayService.getValue())
-				refresh(game);
-		});
-		replayService.start();
 		
 		
 		//Pile sur la grille
