@@ -163,28 +163,28 @@ public abstract class GameScene extends Scene{
 		replayControlsHBox.getChildren().add(replayButton);
 		replayControlsHBox.getChildren().add(nextButton);
 		
-		ScheduledService<Integer> replayService = new ScheduledService<Integer>() {
+		ScheduledService<Boolean> replayService = new ScheduledService<Boolean>() {
 			@Override
-			protected Task<Integer> createTask() {
-				return new Task<Integer>() {
+			protected Task<Boolean> createTask() {
+				return new Task<Boolean>() {
 					@Override
-					protected Integer call() throws Exception {
+					protected Boolean call() throws Exception {
 						if (replay && game.isFinished()) {
 							if (replayProgress < game.getPath().size()-1) {
 								replayProgress++;
-								System.out.println(replayProgress);
-							} else {
-								replay = false;
+								return true;
 							}
+							replay = false;
 						}
-						return null;
+						return false;
 					}
 				};
 			}
 		};
 		replayService.setPeriod(Duration.seconds(0.2));
 		replayService.setOnSucceeded(e -> {
-			refresh(game);
+			if (replayService.getValue())
+				refresh(game);
 		});
 		replayService.start();
 		
@@ -268,6 +268,9 @@ public abstract class GameScene extends Scene{
 		pathHBox.setVisible(game.isFinished());
 		shortestHBox.setVisible(game.isFinished());
 		replayControlsHBox.setVisible(game.isFinished());
+		List<Cell> loop = game.getLoop();
+		if (loop != null)
+			drawPath(loop, Color.RED);
 		if(game.isFinished()) {
 			if (showShortestPath)
 				drawPath(game.getMap().shortPath(game.getStartCell(), game.getEndCell()), Color.LIME);

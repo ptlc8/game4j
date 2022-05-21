@@ -134,9 +134,9 @@ public class Game implements Serializable {
 		player.setCell(cell);
 		path.add(direction);
 		if(pathCell.contains(cell))
-			{
+		{
 			System.out.println("Attention, boucle détécté !");
-			}
+		}
 		pathCell.add(cell);
 		return true;
 	}
@@ -190,20 +190,28 @@ public class Game implements Serializable {
 	}
 	
 	/**
+	 * @author Mattéo
 	 * @return une liste contenant la toutes les cell de la boucle détcté
 	 */
 	public List<Cell> getLoop() {
 		List<Cell> loop = new ArrayList<Cell>();
 		int loopstart = 0;
+		int loopend = 0;
 		int lastCell = pathCell.size()-1;
-		for(int i = 0; i < lastCell; i++)
+		loop:for(int i = lastCell; i >= 0; i--)
 		{
-			if(pathCell.get(i) == pathCell.get(lastCell))
+			for (int j = i-1; j >= 0; j--)
 			{
-				loopstart = pathCell.indexOf(pathCell.get(i));
+				if (pathCell.get(i).getId()==pathCell.get(j).getId()) {
+					loopstart = j;
+					loopend = i;
+					break loop;
+				}
 			}
 		}
-		for(int j = loopstart; j <= lastCell; j++)
+		if (loopend == loopstart)
+			return null;
+		for(int j = loopstart; j <= loopend; j++)
 		{
 			loop.add(pathCell.get(j));
 		}
