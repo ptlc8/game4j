@@ -106,7 +106,10 @@ public class Map2D implements Serializable {
 			preced[i] = -1;
 		}
 		distOrigin[c1.getId()]=0;
-		for(int i=0; i<graph.length; i++) {
+		ArrayList<Integer> ids = new ArrayList<>();
+		ids.add(c1.getId());
+		for(int k = 0; k < ids.size(); k++) {
+			int i = ids.get(k);
 			if (!getCell(i).getType().equals(Cell.Type.OBSTACLE)) { // test si la case n'est pas un obstacle
 				for(int j=0; j<graph.length; j++) {
 					if (!getCell(j).getType().equals(Cell.Type.OBSTACLE)) {
@@ -115,6 +118,8 @@ public class Map2D implements Serializable {
 								distOrigin[j]= graph[i][j] + distOrigin[i];
 								preced[j]=i;
 							}
+							if (!ids.contains(j))
+								ids.add(j);
 						}
 					}
 				}
@@ -146,15 +151,20 @@ public class Map2D implements Serializable {
 		}
 		// Parcours du graphe
 		distOrigin[start.getId()]=0;
-		for(int i=0; i<energies.length; i++) {
+		ArrayList<Integer> ids = new ArrayList<>();
+		ids.add(start.getId());
+		for(int k = 0; k < ids.size(); k++) {
+			int i = ids.get(k);
 			if (!getCell(i).getType().equals(Cell.Type.OBSTACLE)) {
 				for(int j=0; j<energies.length; j++) {
 					if (!getCell(j).getType().equals(Cell.Type.OBSTACLE)) {
-						if (energies[i][j] > Integer.MIN_VALUE && distOrigin[i]<Integer.MAX_VALUE) {
+						if (energies[i][j] > Integer.MIN_VALUE) {
 							if (10-energies[i][j] + distOrigin[i] < distOrigin[j]) {
 								distOrigin[j]= 10-energies[i][j] + distOrigin[i];
 								preced[j]=i;
 							}
+							if (!ids.contains(j))
+								ids.add(j);
 						}
 					}
 				}
@@ -175,7 +185,7 @@ public class Map2D implements Serializable {
 		}
 		// Vérification de la positivité continue de l'énergie
 		for (int i = 0; i < shortPath.size(); i++)
-			if (-distOrigin[shortPath.get(i).getId()]+10*(shortPath.size()-i) < 0)
+			if (-distOrigin[shortPath.get(i).getId()]+10*(shortPath.size()-i) <= 0)
 				return null;
 		return shortPath;
 	}

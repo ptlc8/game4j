@@ -47,7 +47,6 @@ public class Game implements Serializable {
 		path = new ArrayList<>();
 		path.add(map.getCell(0, 0));
 		new ArrayList<>();
-		System.out.println(map.shortPath(map.getCell(0), map.getCell(size*size -1)).size());
 	}
 	
 	/**
