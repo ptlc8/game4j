@@ -1,61 +1,107 @@
 package fr.kmmad.game4j;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class DataMining{
 	
 	
-	
-	public static void getQI(Game game) {
-		int qi = 0;
-		// on test si le joueur a gagné la partie 
-		if ( game.isVictory()== true) {
-			qi=qi + 5;
-		}else {
-			qi=qi+1;
-		}
-		// on test le pourcentage de bonus pris par le joueur 
-		if (game.getBonusRate()/2 <= game.getPlayer().getNumberBonus()) {
-			qi=qi+3;
-		}else if(game.getBonusRate()/4 <= game.getPlayer().getNumberBonus()) {
-			qi = qi + 1;
-		}
-		//test le pourcentage d'obstacles qui a eu dans la partie
-		// on divise par 10 le pourcentage et c'est le nombre de point que l'on donne au qi 
-		int percentageObstacles = game.getPlayer().getNumberBonus()/10;
-		qi = qi + percentageObstacles;
-		
-		
-		try {
-			List<Integer[]> qiList = new ArrayList<Integer[]>();
-			FileReader fr = new FileReader("data.csv");
-			char[]i = new char[10000];
-			fr.read(i);
-			for(char j : i)
-				qiList.add(Integer.parseInt(System.out.print(j)));
-			
-			fr.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("echec");
-		
-		}
-
-		System.out.println("partie finit");
-		if (qi >= 8 ){
-			System.out.println("QI HAUT");
-		}else if (qi >= 5) {
-			System.out.println("QI MOYEN");
-		}else {
-			System.out.println("QI BAS");
-
-		}
+	// methode pour lire le dossier data.csv
+	public static ArrayList<Map<String,String>> loadCSV(String fileName) {
+			  ArrayList<Map<String,String>> data = new ArrayList<>();
+			  try {
+			   BufferedReader reader = new BufferedReader(new FileReader(new File(fileName)));
+			   String line = reader.readLine();
+			   line = line.substring(0, line.length()-2);
+			   if (line == null) return null;
+			   String[] headers = line.split(",");
+			   while ((line = reader.readLine()) != null) {
+				   line = line.substring(0, line.length()-2);
+			    String[] values = line.split(",");
+			    Map<String, String> dataLine = new HashMap<>();
+			    for (int i = 0; i < values.length; i++)
+			     dataLine.put(headers[i], values[i]);
+			    data.add(dataLine);
+			   }
+			   reader.close();
+			   return data;
+			  } catch (IOException e) {
+			   e.printStackTrace();
+			   return null;
+			  }
 	}
+		// methode qui renvoie le qi en fonction de tes k proches voisins 
+		// En entree on a le taux obstacle de bonus de la partie ainsi que si elle a etait gagné 
+		public static String getKnn(int tauxObsGame, int tauxBonusGame, boolean victoryGame) {
+			int victGame;
+			if (victoryGame == true ) {
+				victGame=1;
+			}else {
+				victGame = 0;
+			}
+			// tableau 3D avec taux d'obstacles de bonus et si victoire ou defaites 
+			int [][][] tab3D = new int [100][100][2];
+			
+			// Appel de la methode de lecture de csv 
+			ArrayList<Map<String,String>> data = loadCSV("data.csv");
+			for (int i = 0; i<data.size();i++) {
+				
+				int tauxObs = (int) (Float.parseFloat(data.get(i).get("taux_obstacle"))*100);
+				int tauxBonus = (int) (Float.parseFloat(data.get(i).get("taux_bonus"))*100);
+				int victory;
+				
+				if (data.get(i).get("victoire").equals("yes")) {
+					victory = 1;
+				}else {
+					victory = 0;
+				}
+				if (data.get(i).get("QI").equals("high")) {
+					tab3D[tauxObs][tauxBonus][victory]= 3;
+				}else if (data.get(i).get("QI").equals("middle")) {
+					tab3D[tauxObs][tauxBonus][victory]= 2;					
+				}else {
+					tab3D[tauxObs][tauxBonus][victory] = 1;
+				}
 
+			}
+			List<Integer> qiHighList = new ArrayList<Integer>();
+			List<Integer> qiMiddleList = new ArrayList<Integer>();
+			List<Integer> qiLowList = new ArrayList<Integer>();
+			
+
+			int k = 15;
+			for (int i = Math.max(tauxObsGame-k, 0)  ; i< tauxObsGame + k && i < tab3D.length ;i++) {
+				for (int j=Math.max(tauxBonusGame-k, 0)  ; j< tauxBonusGame + k && j < tab3D[i].length ;j++) {
+					for (int l= 0; l<2 ; l++) {
+						if (tab3D[i][j][l] == 3) {
+							qiHighList.add(tab3D[i][j][l]);
+						}else if (tab3D[i][j][l] == 2) {
+							qiMiddleList.add(tab3D[i][j][l]);
+						}else {
+							qiLowList.add(tab3D[i][j][l]);
+						}
+					}
+				}
+			}
+			int a = qiHighList.size();
+			int b = qiMiddleList.size();
+			int c = qiLowList.size();
+			if (a > b && a > c ) {
+				return ("QI High");
+			}else if(b > a && b>c) {
+				return ("QI Middle");
+			}else {
+				return ("QI Low");
+			}
+		}
+		
 }
+
