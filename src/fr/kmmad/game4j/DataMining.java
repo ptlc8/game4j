@@ -15,14 +15,44 @@ import java.util.Map;
  */
 public class DataMining{
 	
+	public static final String fileName = "data.csv";
+	
+	public static void main(String[] args) {
+		System.out.println(testData());
+	}
+	
+	public static float testData() {
+		// Appel de la methode de lecture de csv 
+		ArrayList<Map<String,String>> data = loadCSV(fileName);
+		DataMining testDataMining = new DataMining(data.subList(0, (int)(0.8f*data.size())));
+		int testDataNumber = data.size() - (int)(0.8f*data.size());
+		int success = 0;
+		for (int i = (int)(0.8f*data.size()); i < data.size(); i++) {
+			int tauxOstacles = (int)Float.parseFloat(data.get(i).get("taux_obstacle"));
+			int tauxBonus = (int)Float.parseFloat(data.get(i).get("taux_bonus"));
+			boolean victoire = data.get(i).get("victoire").equals("yes");
+			String QI = data.get(i).get("QI");
+			if (testDataMining.getKnn(tauxOstacles, tauxBonus, victoire).equals(QI))
+				success++;
+		}
+		return success*1f/testDataNumber;
+	}
+	
 	private int [][][] tab3D;
 	
 	public DataMining() {
-		// tableau 3D avec taux d'obstacles de bonus et si victoire ou defaites 
-		tab3D = new int [100][100][2];
-		
 		// Appel de la methode de lecture de csv 
-		ArrayList<Map<String,String>> data = loadCSV("data.csv");
+		this(loadCSV(fileName));
+	}
+	
+	public DataMining(List<Map<String,String>> data) {
+		tab3D = createTab(data);
+	}
+	
+	public int[][][] createTab(List<Map<String,String>> data) {
+		// tableau 3D avec taux d'obstacles de bonus et si victoire ou defaites 
+		int[][][] tab3D = new int [100][100][2];
+		
 		for (int i = 0; i<data.size();i++) {
 			
 			int tauxObs = (int) (Float.parseFloat(data.get(i).get("taux_obstacle"))*100);
@@ -41,8 +71,9 @@ public class DataMining{
 			}else {
 				tab3D[tauxObs][tauxBonus][victory] = 1;
 			}
-
 		}
+		
+		return tab3D;
 	}
 	
 	// methode pour lire un fichier data.csv
@@ -93,11 +124,11 @@ public class DataMining{
 		int b = qiMiddleList.size();
 		int c = qiLowList.size();
 		if (a > b && a > c ) {
-			return ("High IQ");
-		}else if(b > a && b>c) {
-			return ("Middle IQ");
+			return "high";
+		}else if(b > c) {
+			return "middle";
 		}else {
-			return ("Low IQ");
+			return "low";
 		}
 	}
 	

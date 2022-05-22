@@ -348,10 +348,10 @@ public abstract class GameScene extends Scene{
 				buttonsRight.setVisible(false);
 				String iq = iqMining.getQI(game);
 				if(game.isVictory()) {
-					alertText.setText("Well done !\n"+iq);
+					alertText.setText("Well done !\nYour IQ is "+iq);
 					alertBox.setVisible(true);
 				}else if(game.isDefeat()) {
-					alertText.setText("OH noooo ! You loose...\n"+iq);
+					alertText.setText("OH noooo ! You loose...\nYour IQ is "+iq);
 					alertBox.setVisible(true);
 				}
 			}
