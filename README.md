@@ -9,7 +9,7 @@
 - [MySQL Connector/J](https://mvnrepository.com/artifact/mysql/mysql-connector-java)
 - [JavaFX](https://openjfx.io/)
 
-## Récuperation et compilaition
+## Récuperation et compilation
 
 - Cloner le projet
 - Créer un fichier `Credentials.java` dans [/src/fr/kmmad/game4j](/src/fr/kmmad/game4j) de la forme :
@@ -36,6 +36,10 @@ Créer une JRE :
 ### IntelliJ
 
 à compléter
+
+## Crédits
+
+- [Asphex](https://www.youtube.com/channel/UCkNpT6kx9V3QYjHy8ZOTfDg/videos) pour le thème musical
 
 ## Auteurs
 
