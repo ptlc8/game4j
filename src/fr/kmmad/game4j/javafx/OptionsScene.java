@@ -23,7 +23,7 @@ public abstract class OptionsScene extends Scene{
 		homeButtonView.setPickOnBounds(true);
 		homeButtonView.setId("homeButton");
 		
-		Label optionTitle = new Label("OPTIONS");
+		Label optionTitle = new Label("Options");
 		optionTitle.setFont(new Font(50));
 		optionTitle.setId("titleOption");
 		
