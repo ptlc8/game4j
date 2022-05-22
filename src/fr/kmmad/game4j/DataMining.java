@@ -51,11 +51,9 @@ public class DataMining{
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(new File(fileName)));
 			String line = reader.readLine();
-			line = line.substring(0, line.length()-2);
 			if (line == null) return null;
 			String[] headers = line.split(",");
 			while ((line = reader.readLine()) != null) {
-				line = line.substring(0, line.length()-2);
 				String[] values = line.split(",");
 				Map<String, String> dataLine = new HashMap<>();
 				for (int i = 0; i < values.length; i++)
@@ -84,7 +82,6 @@ public class DataMining{
 				int l = victoryGame ? 1 : 0;
 				if (tab3D[i][j][l] == 3) {
 					qiHighList.add(tab3D[i][j][l]);
-					System.out.println("ijl "+i+" "+j+" "+l);
 				}else if (tab3D[i][j][l] == 2) {
 					qiMiddleList.add(tab3D[i][j][l]);
 				}else if (tab3D[i][j][l] == 1) {
