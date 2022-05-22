@@ -58,7 +58,7 @@ public class ConsoleMain {
 				break;
 		}
 		sc.close();
-		System.out.println(DataMining.getKnn(game.getObstacleRate(), game.getBonusRate(), game.isVictory()));
+		System.out.println(new DataMining().getQI(game));
 		
 	}
 
