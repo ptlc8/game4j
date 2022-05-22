@@ -1,8 +1,12 @@
 package fr.kmmad.game4j;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class DataMining{
 	
@@ -27,11 +31,17 @@ public class DataMining{
 		int percentageObstacles = game.getPlayer().getNumberBonus()/10;
 		qi = qi + percentageObstacles;
 		
+		
 		try {
-			FileWriter fw = new FileWriter("data.csv",true);
-			fw.write(qi);
-			fw.close();
-		} catch (IOException e) {
+			List<Integer[]> qiList = new ArrayList<Integer[]>();
+			FileReader fr = new FileReader("data.csv");
+			char[]i = new char[10000];
+			fr.read(i);
+			for(char j : i)
+				qiList.add(Integer.parseInt(System.out.print(j)));
+			
+			fr.close();
+		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("echec");
 		

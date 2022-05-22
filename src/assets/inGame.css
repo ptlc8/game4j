@@ -27,7 +27,7 @@
 	-fx-font-size:  20px;
 	-fx-text-alignment: center;
 	-fx-padding: 10px;
-
+	-fx-background-radius: 20;
 	-fx-background-color:  #ffffff;
 }
 
@@ -37,6 +37,7 @@
 }
 #pathVBox CheckBox {
 	-fx-padding: 5;
+	-fx-cursor: hand;
 }
 
 
@@ -49,6 +50,10 @@
 	-fx-alignment:  center;
 	-fx-background-insets:  250px;
 	-fx-background-radius:  20px;
+}
+
+#alertBox Button{
+	-fx-cursor: hand;
 }
 
 #replayVBox, #replayHBox{

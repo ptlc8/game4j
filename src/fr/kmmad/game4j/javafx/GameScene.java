@@ -44,6 +44,7 @@ public abstract class GameScene extends Scene{
 	private VBox alertBox, replayControlsVBox, pathVBox;
 	private Label alertBoucle;
 	private Game4j game4j;
+	private ImageView playerView = new ImageView(Main.rabbitImage);
 	
 	public GameScene(Game game) {
 		super(new VBox(), 1000, 700);
@@ -299,6 +300,8 @@ public abstract class GameScene extends Scene{
 		
 		saveButtonView.setOnMouseClicked(event -> {
 			game4j.addGameSave(game, "uwu"+new Random().nextInt(100));
+			alertText.setText("Game saved !");
+			alertBox.setVisible(true);
 		});
 
 		parent.requestFocus();
@@ -327,7 +330,6 @@ public abstract class GameScene extends Scene{
 				gridInGame.add(cellView, j, i);
 			}
 		}
-		ImageView playerView = new ImageView(Main.rabbitImage);
 		ImageView endView = new ImageView(Main.rabbitHouse);
 		pathVBox.setVisible(game.isFinished());
 		replayControlsVBox.setVisible(game.isFinished());
