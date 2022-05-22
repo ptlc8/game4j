@@ -21,7 +21,7 @@ public abstract class LevelScene extends Scene{
 			switchToHomeScene();
 		});
 		
-		Text titleLevel = new Text("Chose your level");
+		Text titleLevel = new Text("Choose your level");
 		titleLevel.setFont(new Font(70));
 		
 		Button beginnerButton = new Button("Beginner");

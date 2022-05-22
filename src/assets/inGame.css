@@ -20,8 +20,6 @@
 
 #leftPart{
 	-fx-translate-x: 30px;
-	-fx-background-color:  #ffffff;
-	-fx-background-insets:	50px, 0px, 100px, 0px;
 }
 
 #alertBoucle{
@@ -29,6 +27,8 @@
 	-fx-font-size:  20px;
 	-fx-text-alignment: center;
 	-fx-padding: 10px;
+
+	-fx-background-color:  #ffffff;
 }
 
 #pathVBox {
@@ -42,7 +42,6 @@
 
 #rightPart{
 	-fx-translate-x: -30px;
-	-fx-background-color:  #ffffff;
 }
 
 #alertBox{
@@ -54,4 +53,29 @@
 
 #replayVBox, #replayHBox{
 	-fx-alignment:  center;
+	-fx-cursor: hand;
+}
+
+#homeButton{
+	-fx-cursor : hand;
+}
+
+
+#buttonsRight{
+	-fx-spacing: 20;
+}
+
+#viewsRight{
+	-fx-padding: 70 0 0 0;
+	-fx-spacing: 25;
+}
+
+#saveButton, #cancelButton{
+	-fx-cursor: hand;
+	-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 5, 0, 0, 0);
+}
+
+.labelRight{
+	-fx-label-padding: 12;
+	-fx-text-alignment: right;
 }

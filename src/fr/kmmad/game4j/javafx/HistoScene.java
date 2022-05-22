@@ -3,6 +3,7 @@ package fr.kmmad.game4j.javafx;
 import fr.kmmad.game4j.Game;
 import fr.kmmad.game4j.Game4j;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -35,10 +36,10 @@ public abstract class HistoScene extends Scene{
 		Game4j game4j = new Game4j();
 		for(Game game : game4j.getHistory()) {
 			HBox gameHBox = new HBox();
-			Text stateText = new Text();
+			Label stateText = new Label();
 			stateText.setId("state");
 			stateText.getStyleClass().add("elements");
-			Text dateText = new Text(game.getDate()+"");
+			Label dateText = new Label(game.getDate()+"");
 			dateText.setId("date");
 			dateText.getStyleClass().add("elements");
 			if(game.isVictory()) {
@@ -51,7 +52,7 @@ public abstract class HistoScene extends Scene{
 				stateText.setText("Ongoing");
 				gameHBox.getChildren().add(stateText);
 			}
-			Text levelText = new Text();
+			Label levelText = new Label();
 			levelText.setId("level");
 			levelText.getStyleClass().add("elements");
 			if(game.getMap().getSize()<10) {
@@ -61,14 +62,15 @@ public abstract class HistoScene extends Scene{
 			}else{
 				levelText.setText("Normal");
 			}
-			Text movesText = new Text("Moves : "+game.getPath().size());
+			Label movesText = new Label("Moves : "+game.getPath().size());
 			movesText.setId("moves");
 			movesText.getStyleClass().add("elements");
-			Text energyText = new Text("Energy : "+game.getPlayer().getEnergy());
+			Label energyText = new Label("Energy : "+game.getPlayer().getEnergy());
 			energyText.setId("energy");
 			energyText.getStyleClass().add("elements");
 			ImageView replayButtonView = new ImageView(Main.replayImage);
 			replayButtonView.setId("replayButton");
+			replayButtonView.getStyleClass().add("elements");
 			replayButtonView.setPickOnBounds(true);
 			replayButtonView.setOnMouseClicked(event ->{
 				switchToScene(new GameScene(game) {
