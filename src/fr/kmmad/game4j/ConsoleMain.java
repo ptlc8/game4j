@@ -9,8 +9,8 @@ public class ConsoleMain {
 		Game4j game4j = new Game4j();
 		Game game = null;
 		while (true) {
-			System.out.println("1 : Nouvelle partie");
-			System.out.println("2 : Charger une sauvegarde");
+			System.out.println("1 : New game");
+			System.out.println("2 : Load a save");
 			String line = sc.next();
 			if (line.equals("1"))
 				game = new Game(10,5,20);
@@ -19,13 +19,14 @@ public class ConsoleMain {
 			} if (game != null)
 				break;
 		}
-		System.out.println("Contrôles :");
+		System.out.println("Controls :");
 		System.out.println("     ↑     ");
 		System.out.println("     8     ");
 		System.out.println(" ← 4   6 → ");
-		System.out.println("     2      s sauvegarder");
-		System.out.println("     ↓      0 annuler");
-		System.out.println("Nombre de déplacements pour le plus court chemin possible : "+game.getMap().shortPath(game.getMap().getCell(0), game.getMap().getCell(99)).size());
+		System.out.println("     2      s save");
+		System.out.println("     ↓      0 cancel");
+		System.out.println("Number of moves for the shortest path: "+game.getMap().shortPath(game.getStartCell(), game.getEndCell()).size());
+		System.out.println("Number of moves for the shortest path with energy: "+game.getMap().shortPathEnergy(game.getStartCell(), game.getEndCell()).size());
 		game.display();
 		String line;
 		while ((line = sc.next()) != null) {
@@ -49,7 +50,7 @@ public class ConsoleMain {
 				String save = game.createSave();
 				if (save != null) {
 					game4j.addGameSave(game, "save1");
-					System.out.println("Sauvegarde réussi !");
+					System.out.println("Successfully saved !");
 				}
 				break;
 			}
@@ -58,7 +59,7 @@ public class ConsoleMain {
 				break;
 		}
 		sc.close();
-		System.out.println(new DataMining().getQI(game));
+		System.out.println("Your IQ is "+new DataMining().getQI(game));
 		
 	}
 

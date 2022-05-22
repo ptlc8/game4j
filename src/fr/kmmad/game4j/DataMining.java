@@ -18,7 +18,7 @@ public class DataMining{
 	public static final String fileName = "data.csv";
 	
 	public static void main(String[] args) {
-		System.out.println(testData());
+		System.out.println("The data is "+testData()*100+"% reliable");
 	}
 	
 	public static float testData() {
