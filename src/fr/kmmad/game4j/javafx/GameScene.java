@@ -300,6 +300,8 @@ public abstract class GameScene extends Scene{
 		
 		saveButtonView.setOnMouseClicked(event -> {
 			game4j.addGameSave(game, "uwu"+new Random().nextInt(100));
+			alertText.setText("Game saved !");
+			alertBox.setVisible(true);
 		});
 
 		parent.requestFocus();
