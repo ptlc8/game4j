@@ -84,20 +84,20 @@ public class Game implements Serializable {
 		for (int i = 0; i < 10; i++) {
 			for (int j = 0; j < 10; j++) {
 				if (player.getCell() == map.getCell(i, j))
-					System.out.print("* ");
+					System.out.print("│☻");
 				else switch (map.getCell(i, j).getType()) {
 				case BONUS:
-					System.out.print("+ ");
+					System.out.print("│★");
 					break;
 				case EMPTY:
-					System.out.print("_ ");
+					System.out.print("│_");
 					break;
 				case OBSTACLE:
-					System.out.print("X ");
+					System.out.print("│█");
 					break;
 				}
 			}
-			System.out.println("");
+			System.out.println("│");
 		}
 	}
 
