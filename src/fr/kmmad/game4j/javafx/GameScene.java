@@ -34,7 +34,8 @@ import javafx.util.Duration;
 
 public abstract class GameScene extends Scene{
 	
-	private Text energyAmount, cancelAmount, alertText;
+	private Text alertText;
+	private Label energyAmount, cancelAmount;
 	private GridPane gridInGame;
 	private boolean showGamePath = true, showShortestPath = true, showEnergyPath = true;
 	private HBox buttonsRight;
@@ -110,13 +111,23 @@ public abstract class GameScene extends Scene{
 		leftPart.setId("leftPart");
 		
 		//Horizontal box buttons right
+		cancelButtonView.getStyleClass().add("button");
+		saveButtonView.getStyleClass().add("button");
 		buttonsRight = new HBox();
-		buttonsRight.getChildren().add(cancelButtonView);
-		buttonsRight.getChildren().add(saveButtonView);
+		VBox cancelButton = new VBox();
+		cancelButton.getChildren().add(cancelButtonView);
+		cancelButton.setId("cancelButton");
+		VBox saveButton = new VBox();
+		saveButton.getChildren().add(saveButtonView);
+		saveButton.setId("saveButton");
+		buttonsRight.getChildren().add(cancelButton);
+		buttonsRight.getChildren().add(saveButton);
+		buttonsRight.setId("buttonsRight");
 
 		//Text Energy
-		energyAmount = new Text();
+		energyAmount = new Label();
 		energyAmount.setFont(new Font(25));
+		energyAmount.getStyleClass().add("labelRight");
 		
 		//Horizontal box energy
 		HBox energyHBox = new HBox();
@@ -125,20 +136,25 @@ public abstract class GameScene extends Scene{
 
 		
 		//Text Cancel
-		cancelAmount = new Text();
+		cancelAmount = new Label();
 		cancelAmount.setFont(new Font(25));
+		cancelAmount.getStyleClass().add("labelRight");
 		
 		//Horizontal box Cancel
 		HBox cancelHBox = new HBox();
 		cancelHBox.getChildren().add(cancelImageView);
 		cancelHBox.getChildren().add(cancelAmount);
 		
+		VBox viewsRight = new VBox();
+		viewsRight.getChildren().add(energyHBox);
+		viewsRight.getChildren().add(cancelHBox);
+		viewsRight.setId("viewsRight");
+		
 		
 		//Vertical box of the Right part in game
 		VBox rightPart = new VBox();
 		rightPart.getChildren().add(buttonsRight);
-		rightPart.getChildren().add(energyHBox);
-		rightPart.getChildren().add(cancelHBox);
+		rightPart.getChildren().add(viewsRight);
 		rightPart.setId("rightPart");
 		
 		
@@ -236,6 +252,11 @@ public abstract class GameScene extends Scene{
 		alertBox.getChildren().add(alertText);
 		alertBox.getChildren().add(alertButton);
 		alertBox.setVisible(false);
+		
+		saveButtonView.setOnMouseClicked(event -> {
+			alertText.setText("Game saved");
+			alertBox.setVisible(true);
+		});
 		
 		
 		//Pile sur la grille
@@ -340,6 +361,7 @@ public abstract class GameScene extends Scene{
 			gridInGame.add(playerView, game.getPlayer().getCell().getCoordY(), game.getPlayer().getCell().getCoordX());
 			gridInGame.add(endView, game.getMap().getSize()-1, game.getMap().getSize()-1);
 		}
+		
 	}
 	
 	private void drawPath(List<Cell> path, Color color) {
