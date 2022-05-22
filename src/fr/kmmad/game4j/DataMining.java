@@ -102,7 +102,7 @@ public class DataMining{
 	}
 	
 	public String getQI(Game game) {
-		return getKnn(game.getObstacleRate(), game.getBonusRate(), game.isVictory());
+		return getKnn(game.getMap().getObstacles(), game.getMap().getBonus(), game.isVictory());
 	}
 		
 }

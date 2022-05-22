@@ -13,6 +13,8 @@ public class Map2D implements Serializable {
 	private Cell[][] matrix;
 	Random rn = new Random();
 	private int size;
+	private int bonus = 0;
+	private int obstacles = 0;
 
 	public Map2D(int size, int bnsRate, int obsRate) {
 		this.size = size;
@@ -31,8 +33,10 @@ public class Map2D implements Serializable {
 				int rand = rn.nextInt(100) + 1;
 				if(rand<bnsRate) {
 					matrix[i][j] = new Cell(i,j, i*size+j,Type.BONUS);
+					bonus++;
 				}else if(rand<bnsRate+obsRate) {
 					matrix[i][j] = new Cell(i,j, i*size+j,Type.OBSTACLE);
+					obstacles++;
 				}else {
 					matrix[i][j] = new Cell(i,j, i*size+j,Type.EMPTY);
 				}
@@ -192,9 +196,27 @@ public class Map2D implements Serializable {
 		return shortPath;
 	}
 	
+	/**
+	 * @return taille de la carte (largeur et hauteur)
+	 */
 	public int getSize() {
 		return this.size;
 	}
+	
+	/**
+	 * @return pourcentage d'obstacles utilisé pour créer la carte
+	 */
+	public int getObstacles() {
+		return obstacles;
+	}
+	
+	/**
+	 * @return pourcentage de bonus utilisé pour créer la carte
+	 */
+	public int getBonus() {
+		return bonus;
+	}
+	
 }
 
 

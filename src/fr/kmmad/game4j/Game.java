@@ -27,8 +27,6 @@ public class Game implements Serializable {
 	private Map2D map;
 	private Player player;
 	private List<Cell> path;
-	private int bnsRate;
-	private int obsRate;
 	private Date date;
 	
 	/**
@@ -39,8 +37,6 @@ public class Game implements Serializable {
 	 * @param obsRate poucentage d'obstacles sur la carte
 	 */
 	public Game(int size, int bnsRate, int obsRate) {
-		this.obsRate = obsRate;
-		this.bnsRate = bnsRate;
 		date = new Date();
 		map = new Map2D(size, bnsRate, obsRate);
 		player = new Player(map.getCell(0, 0), 10);
@@ -224,20 +220,6 @@ public class Game implements Serializable {
 	 */
 	public Date getDate() {
 		return date;
-	}
-	
-	/**
-	 * @return pourcentage d'obstacles utilisé pour créer la carte
-	 */
-	public int getObstacleRate() {
-		return obsRate;
-	}
-	
-	/**
-	 * @return pourcentage de bonus utilisé pour créer la carte
-	 */
-	public int getBonusRate() {
-		return bnsRate;
 	}
 
 	/**
