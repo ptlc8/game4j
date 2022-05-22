@@ -98,6 +98,15 @@ public class Cell implements Serializable {
 		return -10;
 		}else
 		return -1;
+	}
+	
+	public int getInitialEnergy() {
+		if(type.get(0) == Type.BONUS) {
+			return 9;
+		} else if(type.get(0) == Type.OBSTACLE) {
+			return -10;
+		} else
+			return -1;
 	} 
 	
 	public void setNeighN(Neighbor nn) {

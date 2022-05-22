@@ -36,11 +36,11 @@ public abstract class GameScene extends Scene{
 	
 	private Text energyAmount, cancelAmount, alertText;
 	private GridPane gridInGame;
-	private boolean showGamePath = true, showShortestPath = true;
-	private HBox buttonsRight, shortestHBox, pathHBox;
+	private boolean showGamePath = true, showShortestPath = true, showEnergyPath = true;
+	private HBox buttonsRight;
 	private int replayProgress = 0;
 	private boolean historied = false;
-	private VBox alertBox, replayControlsVBox;
+	private VBox alertBox, replayControlsVBox, pathVBox;
 	private Label alertBoucle;
 	private Game4j game4j;
 	
@@ -78,10 +78,6 @@ public abstract class GameScene extends Scene{
 			showShortestPath = shortestPathCheckBox.isSelected();
 			refresh(game);
 		});
-		shortestHBox = new HBox();
-		shortestHBox.getChildren().add(shortestPathCheckBox);
-		shortestHBox.setId("shortestHBox");
-		
 		
 		CheckBox gamePathCheckBox = new CheckBox("My path");
 		gamePathCheckBox.setSelected(true);
@@ -90,23 +86,26 @@ public abstract class GameScene extends Scene{
 			showGamePath = gamePathCheckBox.isSelected();
 			refresh(game);
 		});
-		pathHBox = new HBox();
-		pathHBox.getChildren().add(gamePathCheckBox);
-		pathHBox.setId("pathHBox");
+		
+		CheckBox energyPathCheckBox = new CheckBox("Energy path");
+		energyPathCheckBox.setSelected(true);
+		energyPathCheckBox.setBackground(new Background(new BackgroundFill(Color.YELLOW, null, null)));
+		energyPathCheckBox.setOnAction(event -> {
+			showEnergyPath = energyPathCheckBox.isSelected();
+			refresh(game);
+		});
+		
+		pathVBox = new VBox(shortestPathCheckBox, energyPathCheckBox, gamePathCheckBox);
+		pathVBox.setId("pathVBox");
 		
 		alertBoucle = new Label("Attention !\nIl y a une boucle !");
 		alertBoucle.setId("alertBoucle");
 		alertBoucle.setVisible(false);
 		
-		VBox checkVBox = new VBox();
-		checkVBox.getChildren().add(shortestHBox);
-		checkVBox.getChildren().add(pathHBox);
-		checkVBox.setId("checkVBox");
-		
 		//Vertical box left part
 		VBox leftPart = new VBox();
 		leftPart.getChildren().add(homeButtonView);
-		leftPart.getChildren().add(checkVBox);
+		leftPart.getChildren().add(pathVBox);
 		leftPart.getChildren().add(alertBoucle);
 		leftPart.setId("leftPart");
 		
@@ -309,8 +308,7 @@ public abstract class GameScene extends Scene{
 		}
 		ImageView playerView = new ImageView(Main.rabbitImage);
 		ImageView endView = new ImageView(Main.rabbitHouse);
-		pathHBox.setVisible(game.isFinished());
-		shortestHBox.setVisible(game.isFinished());
+		pathVBox.setVisible(game.isFinished());
 		replayControlsVBox.setVisible(game.isFinished());
 		List<Cell> loop = game.getLoop();
 		if (loop != null) {
@@ -334,6 +332,8 @@ public abstract class GameScene extends Scene{
 				drawPath(game.getMap().shortPath(game.getStartCell(), game.getEndCell()), Color.LIME);
 			if (showGamePath)
 				drawPath(game.getPath(), Color.CYAN);
+			if (showEnergyPath)
+				drawPath(game.getMap().shortPathEnergy(game.getStartCell(), game.getEndCell()), Color.YELLOW);
 			Cell replayCell = game.getPath().get(replayProgress);
 			gridInGame.add(playerView, replayCell.getCoordY(), replayCell.getCoordX());
 		} else {
@@ -343,6 +343,8 @@ public abstract class GameScene extends Scene{
 	}
 	
 	private void drawPath(List<Cell> path, Color color) {
+		if (path == null)
+			return;
 		int thickness = 16;
 		for (int i = 0; i < path.size(); i++) {
 			Cell cell = path.get(i);

@@ -31,9 +31,12 @@
 	-fx-padding: 10px;
 }
 
-#checkVBox{
+#pathVBox {
 	-fx-translate-x: 20px;
-	-fx-translate-y: 300px;
+	-fx-translate-y: 200px;
+}
+#pathVBox CheckBox {
+	-fx-padding: 5;
 }
 
 

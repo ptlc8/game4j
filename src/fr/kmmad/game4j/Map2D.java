@@ -17,7 +17,8 @@ public class Map2D implements Serializable {
 	public Map2D(int size, int bnsRate, int obsRate) {
 		this.size = size;
 		generateMap(bnsRate, obsRate);
-		while (shortPath(getCell(0,0),getCell(size -1,size -1)) == null) { // s'assurer qu'un plus court chemin existe
+		// s'assurer qu'un plus court chemin existe
+		while (shortPath(getCell(0,0),getCell(size -1,size -1)) == null || shortPathEnergy(getCell(0,0), getCell(size-1,size-1)) == null) {
 			generateMap(bnsRate, obsRate);
 		}
 	}	
@@ -69,9 +70,7 @@ public class Map2D implements Serializable {
 					for (int l=0; l<matrix.length; l++) {
 						if (matrix[i][j]==matrix[k][l]) {
 							matDist[i*size+j][k*size+l]=0;
-						}
-						
-						else {
+						} else {
 							matDist[i*size+j][k*size+l]=matrix[i][j].getDist(matrix[k][l]);
 						}
 					}
@@ -82,11 +81,17 @@ public class Map2D implements Serializable {
 	}
 	
 	public int[][] generateMatEnergy() { // initialisation de la matrice d'énergie 
-		int[][] matEnergy = new int[size][size];
+		int[][] matEnergy = new int[size*size][size*size];
 		for (int i=0; i<matrix.length; i ++) {
-			matEnergy[i]= new int[size];
 			for (int j=0; j<matrix.length; j ++) {
-				matEnergy[i][j]=matrix[i][j].getEnergy();	
+				for (int k=0; k<matrix.length; k ++) {
+					for (int l=0; l<matrix.length; l ++) {
+						if (j==l && (i-k==1 || k-i==1) || i==k && (j-l==1 || l-j==1))
+							matEnergy[i*size+j][k*size+l] = matrix[k][l].getInitialEnergy();
+						else
+							matEnergy[i*size+j][k*size+l] = Integer.MIN_VALUE;
+					}
+				}
 			}
 		}
 		return matEnergy;
@@ -101,7 +106,10 @@ public class Map2D implements Serializable {
 			preced[i] = -1;
 		}
 		distOrigin[c1.getId()]=0;
-		for(int i=0; i<graph.length; i++) {
+		ArrayList<Integer> ids = new ArrayList<>();
+		ids.add(c1.getId());
+		for(int k = 0; k < ids.size(); k++) {
+			int i = ids.get(k);
 			if (!getCell(i).getType().equals(Cell.Type.OBSTACLE)) { // test si la case n'est pas un obstacle
 				for(int j=0; j<graph.length; j++) {
 					if (!getCell(j).getType().equals(Cell.Type.OBSTACLE)) {
@@ -110,6 +118,8 @@ public class Map2D implements Serializable {
 								distOrigin[j]= graph[i][j] + distOrigin[i];
 								preced[j]=i;
 							}
+							if (!ids.contains(j))
+								ids.add(j);
 						}
 					}
 				}
@@ -127,6 +137,56 @@ public class Map2D implements Serializable {
 				idt = preced[idt];
 			}
 		}
+		return shortPath;
+	}
+	
+	public ArrayList<Cell> shortPathEnergy(Cell start, Cell end) {
+		// Initialisation
+		int[][] energies = generateMatEnergy();
+		int[] preced = new int[energies.length];
+		int[] distOrigin = new int[energies.length];
+		for(int i=0; i<energies.length; i++) {
+			distOrigin[i] = Integer.MAX_VALUE;
+			preced[i] = -1;
+		}
+		// Parcours du graphe
+		distOrigin[start.getId()]=0;
+		ArrayList<Integer> ids = new ArrayList<>();
+		ids.add(start.getId());
+		for(int k = 0; k < ids.size(); k++) {
+			int i = ids.get(k);
+			if (!getCell(i).getType().equals(Cell.Type.OBSTACLE)) {
+				for(int j=0; j<energies.length; j++) {
+					if (!getCell(j).getType().equals(Cell.Type.OBSTACLE)) {
+						if (energies[i][j] > Integer.MIN_VALUE) {
+							if (10-energies[i][j] + distOrigin[i] < distOrigin[j]) {
+								distOrigin[j]= 10-energies[i][j] + distOrigin[i];
+								preced[j]=i;
+							}
+							if (!ids.contains(j))
+								ids.add(j);
+						}
+					}
+				}
+			}
+		}
+		// Recupération du chemin
+		ArrayList<Cell> shortPath = new ArrayList<Cell>();
+		shortPath.add(end);
+		int idt = end.getId();
+		while (idt != start.getId()) {
+			if (preced[idt] == -1) {
+				return null;
+			}
+			else {
+				idt = preced[idt];
+				shortPath.add(getCell(idt));
+			}
+		}
+		// Vérification de la positivité continue de l'énergie
+		for (int i = 0; i < shortPath.size(); i++)
+			if (-distOrigin[shortPath.get(i).getId()]+10*(shortPath.size()-i) <= 0)
+				return null;
 		return shortPath;
 	}
 	
