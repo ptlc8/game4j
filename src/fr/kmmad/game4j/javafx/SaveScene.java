@@ -2,7 +2,6 @@ package fr.kmmad.game4j.javafx;
 
 import fr.kmmad.game4j.Game;
 import fr.kmmad.game4j.Game4j;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;

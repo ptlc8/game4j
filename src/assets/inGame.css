@@ -55,3 +55,7 @@
 #replayVBox, #replayHBox{
 	-fx-alignment:  center;
 }
+
+#homeButton{
+	-fx-cursor : hand;
+}

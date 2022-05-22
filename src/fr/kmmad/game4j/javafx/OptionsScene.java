@@ -3,12 +3,14 @@ package fr.kmmad.game4j.javafx;
 import fr.kmmad.game4j.Game4j;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 
 public abstract class OptionsScene extends Scene{
 
@@ -19,55 +21,99 @@ public abstract class OptionsScene extends Scene{
 		
 		ImageView homeButtonView = new ImageView(Main.homeImage);
 		homeButtonView.setPickOnBounds(true);
+		homeButtonView.setId("homeButton");
 		
-		Text optionTitle = new Text("OPTIONS");
+		Label optionTitle = new Label("OPTIONS");
 		optionTitle.setFont(new Font(50));
+		optionTitle.setId("titleOption");
 		
-		Text soundTitle = new Text("Sound");
-		soundTitle.setFont(new Font(50));
-		
-		Text musicTitle = new Text("Music");
+		Label musicTitle = new Label("Music");
 		musicTitle.setFont(new Font(50));
+		musicTitle.getStyleClass().add("title");
 		
 		Slider musicSlider = new Slider();
 		musicSlider.setMin(0);
 		musicSlider.setMax(1);
 		musicSlider.setShowTickLabels(false);
 		musicSlider.setValue(player.getVolume());
+		musicSlider.getStyleClass().add("slider");
 		
 		musicSlider.valueProperty().addListener(event -> {
 			player.setVolume(musicSlider.getValue());
 		});
 		
-		Text effectTitle = new Text("Effects");
+		VBox musicVBox = new VBox();
+		musicVBox.getChildren().add(musicTitle);
+		musicVBox.getChildren().add(musicSlider);
+		musicVBox.getStyleClass().add("boxSlider");
+		
+		Label effectTitle = new Label("Effects");
 		effectTitle.setFont(new Font(50));
+		effectTitle.getStyleClass().add("title");
 		
 		Slider effectSlider = new Slider();
 		effectSlider.setMin(0);
 		effectSlider.setMax(100);
 		effectSlider.setShowTickLabels(false);
+		effectSlider.getStyleClass().add("slider");
 		
-		Text clearHisto = new Text("Clear Histo");
-		clearHisto.setFont(new Font(50));
+		VBox effectVBox = new VBox();
+		musicVBox.getChildren().add(effectTitle);
+		musicVBox.getChildren().add(effectSlider);
+		musicVBox.getStyleClass().add("boxSlider");
 		
-		Text clearSave = new Text("Clear Saves");
-		clearSave.setFont(new Font(50));
+		Button clearHisto = new Button("Clear Histo");
+		clearHisto.getStyleClass().add("button");
 		
+		Button clearSave = new Button("Clear Saves");
+		clearSave.getStyleClass().add("button");
 		
+		VBox buttonVBox = new VBox();
+		buttonVBox.getChildren().add(clearHisto);
+		buttonVBox.getChildren().add(clearSave);
+		buttonVBox.setId("boxButton");
+		
+		Label done = new Label();
+		done.setId("done");
+		Button ok = new Button("OK");
+		ok.setId("ok");
+		VBox okVBox = new VBox();
+		okVBox.getChildren().add(ok);
+		okVBox.setId("okVBox");
+		
+		VBox alert = new VBox();
+		alert.getChildren().add(done);
+		alert.getChildren().add(okVBox);
+		alert.setVisible(false);
+		alert.setId("alert");
+		
+		ok.setOnAction(event ->{
+			alert.setVisible(false);
+		});
+		
+		clearHisto.setOnAction(event -> {
+			done.setText("History cleared");
+			alert.setVisible(true);
+		});
+		
+		clearSave.setOnAction(event -> {
+			done.setText("Saves cleared");
+			alert.setVisible(true);
+		});
 		
 		VBox optionVBox = new VBox();
 		optionVBox.getChildren().add(homeButtonView);
 		optionVBox.getChildren().add(optionTitle);
-		optionVBox.getChildren().add(soundTitle);
-		optionVBox.getChildren().add(musicTitle);
-		optionVBox.getChildren().add(musicSlider);
-		optionVBox.getChildren().add(effectTitle);
-		optionVBox.getChildren().add(effectSlider);
-		optionVBox.getChildren().add(clearHisto);
-		optionVBox.getChildren().add(clearSave);
+		optionVBox.getChildren().add(musicVBox);
+		optionVBox.getChildren().add(effectVBox);
+		optionVBox.getChildren().add(buttonVBox);
 		optionVBox.setAlignment(Pos.CENTER);
 		optionVBox.setId("option");
-		setRoot(optionVBox);
+		
+		StackPane buttonStack = new StackPane();
+		buttonStack.getChildren().add(optionVBox);
+		buttonStack.getChildren().add(alert);
+		setRoot(buttonStack);
 		
 		getStylesheets().add("assets/options.css");
 		

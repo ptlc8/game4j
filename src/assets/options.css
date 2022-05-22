@@ -2,3 +2,56 @@
     -fx-background-image: url("home.gif");
     -fx-background-size:  cover;
 }
+
+#homeButton{
+    -fx-translate-x: -450;
+    -fx-translate-y: -30;
+    -fx-cursor : hand;
+}
+
+#titleOption{
+    -fx-translate-y: -50;
+}
+
+.boxSlider{
+    -fx-padding: 0 100 50 100;
+    -fx-alignment: center;
+}
+
+.title{
+    -fx-label-padding: 50 100 10 100;
+}
+
+.slider{
+    -fx-cursor : hand;
+}
+
+#boxButton{
+    -fx-padding: 10 300 0 300;
+    -fx-spacing: 20;
+}
+
+.button{
+    -fx-background-color: grey;
+    -fx-text-fill: black;
+    -fx-cursor : hand;
+    -fx-max-width: Infinity;
+    -fx-font-size:  40px;
+}
+
+#alert{
+    -fx-alignment:  center;
+    -fx-padding:  250px;
+    -fx-background-radius:  20px;
+    -fx-background-insets:  250px;
+    -fx-background-color:  #ffffff;
+}
+
+#done{
+    -fx-font-size: 40;
+
+}
+
+#okVBox{
+    -fx-padding: 20 150 0 150;
+}
