@@ -1,7 +1,6 @@
 package fr.kmmad.game4j.javafx;
 
 import fr.kmmad.game4j.*;
-
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 
@@ -41,7 +40,6 @@ public abstract class GameEventHandler{
     	}
     	refresh(game);
     }
-    
     
  
     public void cancel(MouseEvent event) {

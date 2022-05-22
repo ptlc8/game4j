@@ -62,7 +62,7 @@ public abstract class OptionsScene extends Scene{
 		musicVBox.getChildren().add(effectSlider);
 		musicVBox.getStyleClass().add("boxSlider");
 		
-		Button clearHisto = new Button("Clear Histo");
+		Button clearHisto = new Button("Clear History");
 		clearHisto.getStyleClass().add("button");
 		
 		Button clearSave = new Button("Clear Saves");
