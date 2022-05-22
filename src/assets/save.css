@@ -31,8 +31,10 @@
 }
 
 .elements{
-    -fx-fill: #ff0000;
+    -fx-label-padding: 10;
 }
 
-
+#replayButton{
+    -fx-cursor : hand;
+}
 

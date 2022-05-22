@@ -2,7 +2,9 @@ package fr.kmmad.game4j.javafx;
 
 import fr.kmmad.game4j.Game;
 import fr.kmmad.game4j.Game4j;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -36,23 +38,10 @@ public abstract class SaveScene extends Scene{
 		Game4j game4j = new Game4j();
 		for(Game game : game4j.getAllSaves()) {
 			HBox gameHBox = new HBox();
-			Text stateText = new Text();
-			stateText.setId("state");
-			stateText.getStyleClass().add("elements");
-			Text dateText = new Text(game.getDate()+"");
+			Label dateText = new Label(game.getDate()+"");
 			dateText.setId("date");
 			dateText.getStyleClass().add("elements");
-			if(game.isVictory()) {
-				stateText.setText("Victory");
-				gameHBox.getChildren().add(stateText);
-			}else if(game.isDefeat()) {
-				stateText.setText("Defeat");
-				gameHBox.getChildren().add(stateText);
-			}else {
-				stateText.setText("Ongoing");
-				gameHBox.getChildren().add(stateText);
-			}
-			Text levelText = new Text();
+			Label levelText = new Label();
 			levelText.setId("level");
 			levelText.getStyleClass().add("elements");
 			if(game.getMap().getSize()<10) {
@@ -62,17 +51,17 @@ public abstract class SaveScene extends Scene{
 			}else{
 				levelText.setText("Normal");
 			}
-			Text movesText = new Text("Moves : "+game.getPath().size());
+			Label movesText = new Label("Moves : "+game.getPath().size());
 			movesText.setId("moves");
 			movesText.getStyleClass().add("elements");
-			Text energyText = new Text("Energy : "+game.getPlayer().getEnergy());
+			Label energyText = new Label("Energy : "+game.getPlayer().getEnergy());
 			energyText.setId("energy");
 			energyText.getStyleClass().add("elements");
-			ImageView saveButtonView = new ImageView(Main.replayImage);
-			saveButtonView.setId("replayButton");
-			saveButtonView.getStyleClass().add("elements");
-			saveButtonView.setPickOnBounds(true);
-			saveButtonView.setOnMouseClicked(event ->{
+			ImageView replayButtonView = new ImageView(Main.replayImage);
+			replayButtonView.setId("replayButton");
+			replayButtonView.getStyleClass().add("elements");
+			replayButtonView.setPickOnBounds(true);
+			replayButtonView.setOnMouseClicked(event ->{
 				switchToScene(new GameScene(game) {
 					@Override
 					public void switchToHomeScene() {
@@ -84,7 +73,7 @@ public abstract class SaveScene extends Scene{
 			gameHBox.getChildren().add(levelText);
 			gameHBox.getChildren().add(movesText);
 			gameHBox.getChildren().add(energyText);
-			gameHBox.getChildren().add(saveButtonView);
+			gameHBox.getChildren().add(replayButtonView);
 			gameHBox.setId("gameHBox");
 			scrollVBox.getChildren().add(gameHBox);
 			scrollVBox.setId("scroll");
