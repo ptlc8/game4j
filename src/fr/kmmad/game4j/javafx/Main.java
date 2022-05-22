@@ -8,6 +8,7 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 
 public class Main extends Application {
 	
@@ -31,7 +32,8 @@ public class Main extends Application {
 	@Override
 	public void start(Stage stage) throws Exception {
 		
-		String ssoundFrigidaire = new File("bin/assets/lapin-carottes.mp3").toURI().toString();
+		URL frigidaireUrl = ClassLoader.getSystemResource("assets/lapin-carottes.mp3");
+		String ssoundFrigidaire = frigidaireUrl.getProtocol()+":"+frigidaireUrl.getPath().toString();
 		Media soundFrigidaire = new Media(ssoundFrigidaire);
 		MediaPlayer playerFrigidaire = new MediaPlayer(soundFrigidaire);
 		playerFrigidaire.setCycleCount(MediaPlayer.INDEFINITE);
