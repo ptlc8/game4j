@@ -18,6 +18,7 @@ package fr.kmmad.game4j;
 public class Credentials {
 	static final String DB_USERNAME = "nom d'utilisateur mysql ici";
 	static final String DB_PASSWORD = "mot de passe mysql à mettre ici";
+	static final short DB_PORT = 3306;
 }
 ```
 - Télécharger le [SDK JavaFX](https://gluonhq.com/products/javafx/) correspondant à votre environnement
