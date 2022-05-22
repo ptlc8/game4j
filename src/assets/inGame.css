@@ -52,6 +52,10 @@
 	-fx-background-radius:  20px;
 }
 
+#alertBox Text{
+	-fx-text-alignment: center;
+}
+
 #alertBox Button{
 	-fx-cursor: hand;
 }

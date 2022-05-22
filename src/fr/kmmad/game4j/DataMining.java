@@ -93,11 +93,11 @@ public class DataMining{
 		int b = qiMiddleList.size();
 		int c = qiLowList.size();
 		if (a > b && a > c ) {
-			return ("QI High");
+			return ("High IQ");
 		}else if(b > a && b>c) {
-			return ("QI Middle");
+			return ("Middle IQ");
 		}else {
-			return ("QI Low");
+			return ("Low IQ");
 		}
 	}
 	

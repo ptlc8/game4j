@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Random;
 import fr.kmmad.game4j.Cell;
 import fr.kmmad.game4j.Cell.Type;
+import fr.kmmad.game4j.DataMining;
 import javafx.concurrent.ScheduledService;
 import javafx.concurrent.Task;
 import javafx.geometry.HPos;
@@ -44,6 +45,7 @@ public abstract class GameScene extends Scene{
 	private VBox alertBox, replayControlsVBox, pathVBox;
 	private Label alertBoucle;
 	private Game4j game4j;
+	private DataMining iqMining;
 	private ImageView playerView = new ImageView(Main.rabbitImage);
 	
 	public GameScene(Game game) {
@@ -51,6 +53,7 @@ public abstract class GameScene extends Scene{
 		
 		historied = game.isFinished();
 		game4j = new Game4j();
+		iqMining = new DataMining();
 		
 		Text inGameText = new Text("Go home !");
 		inGameText.setId("inGameText");
@@ -343,11 +346,12 @@ public abstract class GameScene extends Scene{
 				historied = true;
 				game4j.addGameHistory(game);
 				buttonsRight.setVisible(false);
+				String iq = iqMining.getQI(game);
 				if(game.isVictory()) {
-					alertText.setText("Well done !");
+					alertText.setText("Well done !\n"+iq);
 					alertBox.setVisible(true);
 				}else if(game.isDefeat()) {
-					alertText.setText("OH noooo ! You loose...");
+					alertText.setText("OH noooo ! You loose...\n"+iq);
 					alertBox.setVisible(true);
 				}
 			}
