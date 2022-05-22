@@ -31,23 +31,25 @@ public class Map2D implements Serializable {
 				int rand = rn.nextInt(100) + 1;
 				if(rand<bnsRate) {
 					matrix[i][j] = new Cell(i,j, i*size+j,Type.BONUS);
-				}else if(bnsRate<rand && rand<bnsRate+obsRate) {
+				}else if(rand<bnsRate+obsRate) {
 					matrix[i][j] = new Cell(i,j, i*size+j,Type.OBSTACLE);
 				}else {
 					matrix[i][j] = new Cell(i,j, i*size+j,Type.EMPTY);
 				}
 			}
 		}
+		matrix[0][0] = new Cell(0,0, 0, Type.EMPTY);
+		matrix[size-1][size-1] = new Cell(0,0, 0, Type.EMPTY);
 		for (int i=0; i<matrix.length; i ++) {
 			for (int j=0; j<matrix.length; j ++) {
 				if (i > 0)
-					matrix[i][j].setNeighN(new Neighbor(matrix[i-1][j], 1));
+					matrix[i][j].setNeighN(new Neighbor(matrix[i-1][j], new Random().nextInt(10)));
 				if (j > 0)
-					matrix[i][j].setNeighW(new Neighbor(matrix[i][j-1], 1));
+					matrix[i][j].setNeighW(new Neighbor(matrix[i][j-1], new Random().nextInt(10)));
 				if (i < size-1)
-					matrix[i][j].setNeighS(new Neighbor(matrix[i+1][j], 1));
+					matrix[i][j].setNeighS(new Neighbor(matrix[i+1][j], new Random().nextInt(10)));
 				if (j < size-1)
-					matrix[i][j].setNeighE(new Neighbor(matrix[i][j+1], 1));
+					matrix[i][j].setNeighE(new Neighbor(matrix[i][j+1], new Random().nextInt(10)));
 			}
 		}
 	}
