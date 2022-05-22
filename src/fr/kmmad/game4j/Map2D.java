@@ -39,7 +39,7 @@ public class Map2D implements Serializable {
 			}
 		}
 		matrix[0][0] = new Cell(0,0, 0, Type.EMPTY);
-		matrix[size-1][size-1] = new Cell(0,0, 0, Type.EMPTY);
+		matrix[size-1][size-1] = new Cell(size-1,size-1, size*size-1, Type.EMPTY);
 		for (int i=0; i<matrix.length; i ++) {
 			for (int j=0; j<matrix.length; j ++) {
 				if (i > 0)
